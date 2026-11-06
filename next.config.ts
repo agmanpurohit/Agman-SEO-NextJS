@@ -8,19 +8,14 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.1.213"],
   images: { formats: ["image/avif", "image/webp"] },
   poweredByHeader: false,
-  // One canonical host: https://agmanrajpurohit.com. The old Vercel address and the
-  // www version both redirect there permanently, keeping the path.
+  // The old Vercel address redirects to the canonical domain, keeping the path.
+  // www ↔ non-www is deliberately NOT handled here: that choice lives in Vercel → Settings →
+  // Domains. Doing it in both places creates a redirect loop if the two ever disagree.
   async redirects() {
     return [
       {
         source: "/:path*",
         has: [{ type: "host", value: "agmanrajpurohit.vercel.app" }],
-        destination: "https://agmanrajpurohit.com/:path*",
-        permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.agmanrajpurohit.com" }],
         destination: "https://agmanrajpurohit.com/:path*",
         permanent: true,
       },

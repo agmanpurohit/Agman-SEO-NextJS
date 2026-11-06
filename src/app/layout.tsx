@@ -4,6 +4,7 @@ import "./globals.css";
 import { site } from "@/content/site";
 import { personJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { GoogleTag } from "@/components/seo/GoogleTag";
 import { TransitionProvider } from "@/components/shell/TransitionProvider";
 import { SmoothScroll } from "@/components/shell/SmoothScroll";
 import { Preloader } from "@/components/shell/Preloader";
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" dir="ltr" className={`${archivo.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        <GoogleTag />
         <JsonLd data={personJsonLd()} />
       </head>
       <body>
