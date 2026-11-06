@@ -1,0 +1,347 @@
+@import "tailwindcss";
+
+/* ───────────── Design tokens ─────────────
+   Ember on black. The accent is a signal, not a theme: use it for one thing per view. */
+@theme {
+  --color-ink: #0a0a0b;
+  --color-ink-2: #111113;
+  --color-ink-3: #17171a;
+  --color-line: #26262b;
+  --color-line-2: #3a3a40;
+  --color-bone: #ece8e1;
+  --color-bone-dim: #aca79e;
+  --color-mute: #7d786f;
+  --color-ember: #ff5a1f;
+  --color-ember-soft: #ff8a5c;
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --breakpoint-xs: 380px;
+  --breakpoint-3xl: 1800px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+:root {
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --header-h: 4.5rem;
+  --dur-fast: 0.25s;
+  --dur-mid: 0.6s;
+  --dur-slow: 1.1s;
+  color-scheme: dark;
+}
+
+/* ───────────── Base ───────────── */
+html {
+  background: var(--color-ink);
+  color: var(--color-bone);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scrollbar-color: var(--color-line-2) var(--color-ink);
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-x: clip;
+  min-height: 100svh;
+}
+
+::selection {
+  background: var(--color-ember);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+}
+
+/* ───────────── Layout ───────────── */
+.wrap {
+  width: 100%;
+  padding-inline: var(--gutter);
+  margin-inline: auto;
+  max-width: 1760px;
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 1rem;
+}
+@media (min-width: 768px) {
+  .grid-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+}
+
+/* Each section pads top and bottom, so the gap between two sections is double this. */
+.section {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.hairline {
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* ───────────── Typography ─────────────
+   Archivo's width axis is the signature: headlines stretch and condense with scroll. */
+/* Sized so the longest hero word ("ENGINEERED.") always fits its line. */
+.t-display {
+  font-weight: 800;
+  font-stretch: 88%;
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  font-size: 13vw;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .t-display {
+    font-stretch: 112%;
+    font-size: min(10.4vw, 15rem);
+  }
+}
+.t-h1 {
+  font-weight: 700;
+  font-stretch: 100%;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  font-size: clamp(2.75rem, 8.4vw, 9rem);
+}
+.t-h2 {
+  font-weight: 650;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  font-size: clamp(2.1rem, 5.2vw, 5.25rem);
+}
+.t-h3 {
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+}
+.t-lead {
+  font-size: clamp(1.1rem, 1.55vw, 1.45rem);
+  line-height: 1.5;
+  color: var(--color-bone);
+  font-weight: 400;
+}
+.t-body {
+  color: var(--color-bone-dim);
+  line-height: 1.65;
+}
+.t-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-bone-dim);
+  font-weight: 400;
+}
+.t-mono {
+  font-family: var(--font-mono);
+}
+.ember {
+  color: var(--color-ember);
+}
+
+/* Lines produced by SplitText get masked so words rise from below a baseline. */
+.split-line {
+  overflow: clip;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* ───────────── Controls ───────────── */
+.btn {
+  --h: 3.5rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  height: var(--h);
+  padding-inline: 1.6rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform 0.55s var(--ease-out-expo);
+}
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: translateY(0);
+}
+.btn-primary {
+  background: var(--color-bone);
+  color: var(--color-ink);
+}
+.btn-primary::before {
+  background: var(--color-ember);
+}
+.btn-ghost {
+  border: 1px solid var(--color-line-2);
+  color: var(--color-bone);
+}
+.btn-ghost::before {
+  background: var(--color-bone);
+}
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  color: var(--color-ink);
+  border-color: var(--color-bone);
+}
+.btn .btn-arrow {
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.link-u {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.5s var(--ease-out-expo);
+}
+.link-u:hover,
+.link-u:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ───────────── Grain ───────────── */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: grain 1s steps(4) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-1%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ───────────── Preloader ─────────────
+   Server-rendered so there is no flash of content. An inline script marks returning
+   visitors (same session) so it never shows twice; a CSS timeout removes it if JS fails. */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--color-ink);
+  display: grid;
+  place-items: center;
+  animation: preloader-failsafe 0.6s ease 6s forwards;
+}
+html[data-seen] .preloader {
+  display: none;
+}
+@keyframes preloader-failsafe {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ───────────── Page transition ───────────── */
+.pt {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* ───────────── Custom cursor (fine pointers only) ───────────── */
+.cursor {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor .cursor {
+    display: block;
+  }
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+  html.has-cursor input,
+  html.has-cursor textarea,
+  html.has-cursor select {
+    cursor: text !important;
+  }
+}
+
+/* ───────────── Utilities ───────────── */
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Things GSAP will reveal start hidden only when JS is running and motion is allowed. */
+html.js:not(.reduced) [data-reveal] {
+  opacity: 0;
+}
+
+/* ───────────── Reduced motion ───────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .grain {
+    animation: none;
+  }
+}
