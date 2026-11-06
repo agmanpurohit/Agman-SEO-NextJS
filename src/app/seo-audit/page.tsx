@@ -1,4 +1,4 @@
-import { pageMeta, breadcrumbJsonLd } from "@/lib/seo";
+import { pageMeta, breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { AuditHero } from "@/components/audit/AuditHero";
 import { Reveal, SplitReveal } from "@/components/ui/motion";
@@ -6,12 +6,11 @@ import { CHECKS } from "@/lib/audit/checks-meta";
 import { CATEGORIES, CATEGORY_META } from "@/lib/audit/types";
 import { site } from "@/content/site";
 
-export const metadata = pageMeta({
-  title: "Free Website SEO Audit Tool — Technical, On-Page & Speed Check",
-  description:
-    "Free SEO audit tool by Agman Rajpurohit. Crawls up to 100 pages and checks technical SEO, on-page SEO, content, Core Web Vitals, mobile, images, internal links and structured data. No sign-up.",
-  path: "/seo-audit",
-});
+const TITLE = "Free Website SEO Audit Tool";
+const DESCRIPTION =
+  "Run a free SEO check on your website. It crawls up to 100 pages, flags technical, on-page, speed and mobile issues, and tells you how to fix them.";
+
+export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/seo-audit", socialTitle: "Free SEO audit: see what's holding your site back" });
 
 const CAT_COPY: Record<string, string> = {
   technical: "HTTPS, redirects, status codes, robots.txt, sitemaps, canonicals, indexability, orphan pages, hreflang and JavaScript rendering.",
@@ -39,7 +38,10 @@ const appLd = {
   operatingSystem: "Any",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   creator: { "@id": `${site.url}/#person` },
-  description: "Crawls a website and audits technical SEO, on-page SEO, content, performance, mobile, images, internal links and structured data.",
+  isAccessibleForFree: true,
+  browserRequirements: "Requires JavaScript",
+  featureList: CATEGORIES.map((c) => CATEGORY_META[c].label).join(", "),
+  description: "Crawls up to 100 pages of a website and checks technical SEO, on-page SEO, content, speed, mobile, images, internal links and structured data.",
 };
 
 export default function SeoAuditPage() {
@@ -47,6 +49,7 @@ export default function SeoAuditPage() {
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "SEO Audit", path: "/seo-audit" }])} />
       <JsonLd data={appLd} />
+      <JsonLd data={webPageJsonLd({ name: TITLE, description: DESCRIPTION, path: "/seo-audit" })} />
       <AuditHero />
 
       <section aria-labelledby="checks-title" className="section border-t border-line">

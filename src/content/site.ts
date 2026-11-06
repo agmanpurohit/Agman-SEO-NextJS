@@ -12,7 +12,7 @@ export const site = {
   name: "Agman Rajpurohit",
   firstName: "Agman",
   lastName: "Rajpurohit",
-  url: env(process.env.NEXT_PUBLIC_SITE_URL, "https://agmanrajpurohit.vercel.app").replace(/\/$/, ""),
+  url: env(process.env.NEXT_PUBLIC_SITE_URL, "https://agmanrajpurohit.com").replace(/\/$/, ""),
   role: "SEO & Digital Marketing Specialist",
   tagline: "Visibility, engineered.",
   disciplines: ["SEO", "GEO", "AEO", "Google Ads", "Meta Ads", "Web Development"],

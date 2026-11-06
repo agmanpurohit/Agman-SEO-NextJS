@@ -1,4 +1,4 @@
-import { pageMeta, breadcrumbJsonLd } from "@/lib/seo";
+import { pageMeta, breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";
 import { WorkExplorer } from "@/components/work/WorkExplorer";
@@ -7,12 +7,11 @@ import { Closing } from "@/components/home/Closing";
 import { cases } from "@/content/work";
 import { site } from "@/content/site";
 
-export const metadata = pageMeta({
-  title: "Work — SEO, Local SEO, GEO & Paid Media Case Studies",
-  description:
-    "Case studies from Agman Rajpurohit for NCSGX, Academy Dental, Smile Republic Orthodontics, Sunnyview Dental and more: dental and healthcare SEO, local search, international SEO for financial services, ecommerce, WordPress development and Google & Meta Ads.",
-  path: "/work",
-});
+const TITLE = "SEO Case Studies and Results";
+const DESCRIPTION =
+  "Real SEO results for dental clinics, a four-market finance site and local businesses, with the Search Console and GA4 screenshots to prove them.";
+
+export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/work", socialTitle: "SEO case studies by Agman Rajpurohit" });
 
 const itemList = {
   "@context": "https://schema.org",
@@ -38,6 +37,7 @@ export default function WorkPage() {
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Work", path: "/work" }])} />
       <JsonLd data={itemList} />
+      <JsonLd data={webPageJsonLd({ type: "CollectionPage", name: TITLE, description: DESCRIPTION, path: "/work" })} />
       <PageHero
         index="03"
         title="Work"

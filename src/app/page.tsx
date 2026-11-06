@@ -1,4 +1,5 @@
-import { pageMeta } from "@/lib/seo";
+import { pageMeta, webPageJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Hero } from "@/components/home/Hero";
 import { IndexBand } from "@/components/home/IndexBand";
 import { Approach } from "@/components/home/Approach";
@@ -9,19 +10,22 @@ import { JourneyPreview } from "@/components/home/JourneyPreview";
 import { Closing } from "@/components/home/Closing";
 import { AuditTeaser } from "@/components/home/AuditTeaser";
 
-export const metadata = {
-  ...pageMeta({
-    title: "Agman Rajpurohit — SEO & Digital Marketing Specialist in Dubai",
-    description:
-      "Dubai-based SEO and digital marketing specialist. Technical, local and ecommerce SEO, GEO and AEO for AI search, Google Ads, Meta Ads and WordPress development. Available immediately.",
-    path: "/",
-  }),
-  title: { absolute: "Agman Rajpurohit — SEO & Digital Marketing Specialist in Dubai" },
-};
+const TITLE = "Agman Rajpurohit | SEO Specialist in Dubai";
+const DESCRIPTION =
+  "I'm Agman, an SEO specialist in Dubai. I grow organic traffic for clinics, finance brands and local businesses, and I can start a new role right away.";
+
+export const metadata = pageMeta({
+  title: TITLE,
+  absoluteTitle: true,
+  description: DESCRIPTION,
+  path: "/",
+  socialTitle: "Agman Rajpurohit, SEO specialist in Dubai",
+});
 
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={webPageJsonLd({ type: "ProfilePage", name: TITLE, description: DESCRIPTION, path: "/" })} />
       <Hero />
       <IndexBand />
       <Approach />

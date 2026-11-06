@@ -30,28 +30,22 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — SEO & Digital Marketing Specialist in Dubai`,
-    template: `%s — ${site.name}`,
+    default: `${site.name} | SEO Specialist in Dubai`,
+    template: `%s | ${site.name}`,
   },
   description:
-    "Agman Rajpurohit is a Dubai-based SEO and digital marketing specialist: technical, local and ecommerce SEO, GEO and AEO for AI search, Google Ads, Meta Ads and WordPress development.",
+    "I'm Agman, an SEO specialist based in Dubai. I help businesses get found on Google and in AI answers, and I build the WordPress fixes myself.",
   applicationName: site.name,
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
-  keywords: [
-    "Agman Rajpurohit",
-    "SEO specialist Dubai",
-    "Digital Marketing Executive Dubai",
-    "GEO specialist",
-    "AEO",
-    "Technical SEO",
-    "Local SEO",
-    "Google Ads",
-    "Meta Ads",
-    "WordPress developer",
-  ],
+  publisher: site.name,
+  category: "SEO and digital marketing",
   formatDetection: { telephone: false, email: false, address: false },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
 };
 
 export const viewport: Viewport = {

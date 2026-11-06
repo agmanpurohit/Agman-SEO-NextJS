@@ -1,4 +1,4 @@
-import { pageMeta, breadcrumbJsonLd } from "@/lib/seo";
+import { pageMeta, breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -6,19 +6,13 @@ import { Reveal } from "@/components/ui/motion";
 import { LocalTime } from "@/components/ui/LocalTime";
 import { site } from "@/content/site";
 
-export const metadata = pageMeta({
-  title: "Contact — Hire an SEO & Digital Marketing Specialist in Dubai",
-  description:
-    "Contact Agman Rajpurohit about SEO and digital marketing roles in the UAE, or freelance SEO, web development, Google Ads and Meta Ads projects. Based in Dubai, available immediately.",
-  path: "/contact",
-});
+const TITLE = "Hire an SEO Specialist in Dubai";
+const DESCRIPTION =
+  "Hiring for SEO in the UAE, or need help with your website? Send a message, call or WhatsApp me. I'm based in Dubai and available to start now.";
 
-const contactPage = {
-  "@context": "https://schema.org",
-  "@type": "ContactPage",
-  url: `${site.url}/contact`,
-  about: { "@id": `${site.url}/#person` },
-};
+export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/contact", socialTitle: "Contact Agman Rajpurohit" });
+
+const contactPage = webPageJsonLd({ type: "ContactPage", name: TITLE, description: DESCRIPTION, path: "/contact" });
 
 export default function ContactPage() {
   return (

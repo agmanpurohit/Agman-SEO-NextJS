@@ -8,6 +8,24 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.1.213"],
   images: { formats: ["image/avif", "image/webp"] },
   poweredByHeader: false,
+  // One canonical host: https://agmanrajpurohit.com. The old Vercel address and the
+  // www version both redirect there permanently, keeping the path.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "agmanrajpurohit.vercel.app" }],
+        destination: "https://agmanrajpurohit.com/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.agmanrajpurohit.com" }],
+        destination: "https://agmanrajpurohit.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
@@ -17,6 +35,12 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
         ],
+      },
+      // Preview deployments live on *.vercel.app; keep them out of search results.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "(?<sub>.*)\\.vercel\\.app" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];
   },

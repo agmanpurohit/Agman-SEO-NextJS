@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { logo_mark } from "@/components/brand/logo-paths";
 
-export const alt = "Agman Rajpurohit — SEO & Digital Marketing Specialist, Dubai";
+export const alt = "Agman Rajpurohit, SEO specialist in Dubai";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

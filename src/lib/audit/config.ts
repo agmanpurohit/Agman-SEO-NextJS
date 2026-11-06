@@ -21,7 +21,7 @@ export const auditConfig = {
   maxImageChecks: 25,
   userAgent:
     process.env.AUDIT_USER_AGENT ||
-    `AgmanSEOAuditBot/1.0 (+${(process.env.NEXT_PUBLIC_SITE_URL || "https://agmanrajpurohit.vercel.app").replace(/\/$/, "")}/seo-audit)`,
+    `AgmanSEOAuditBot/1.0 (+${(process.env.NEXT_PUBLIC_SITE_URL || "https://agmanrajpurohit.com").replace(/\/$/, "")}/seo-audit)`,
   /** Audits per IP per 24h and per audited domain per hour. */
   ipDailyLimit: int(process.env.AUDIT_IP_DAILY_LIMIT, 10, 1, 1000),
   domainHourlyLimit: int(process.env.AUDIT_DOMAIN_HOURLY_LIMIT, 3, 1, 100),

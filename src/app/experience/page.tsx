@@ -1,4 +1,4 @@
-import { pageMeta, breadcrumbJsonLd } from "@/lib/seo";
+import { pageMeta, breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";
 import { Timeline } from "@/components/experience/Timeline";
@@ -8,12 +8,11 @@ import { Closing } from "@/components/home/Closing";
 import { capabilities, tools, education, certifications } from "@/content/experience";
 import { site } from "@/content/site";
 
-export const metadata = pageMeta({
-  title: "Experience — SEO Executive & Digital Marketing",
-  description:
-    "Agman Rajpurohit's career in SEO and digital marketing: NCS GX, MediaNV and Diya Infotech, plus freelance Google Ads, Meta Ads and web projects. Capabilities, tools, education and certifications.",
-  path: "/experience",
-});
+const TITLE = "SEO Experience and Career";
+const DESCRIPTION =
+  "My SEO work at NCS GX, MediaNV and Diya Infotech, from 25+ agency client sites and 100+ dental builds to international SEO for a finance brand.";
+
+export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/experience", socialTitle: "Agman Rajpurohit's SEO experience" });
 
 const toolGroups = Array.from(new Set(tools.map((t) => t.group)));
 
@@ -21,6 +20,7 @@ export default function ExperiencePage() {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Experience", path: "/experience" }])} />
+      <JsonLd data={webPageJsonLd({ type: "AboutPage", name: TITLE, description: DESCRIPTION, path: "/experience" })} />
       <PageHero
         index="02"
         title="Experience"
