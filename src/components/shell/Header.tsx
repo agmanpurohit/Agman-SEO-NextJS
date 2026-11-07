@@ -8,8 +8,15 @@ import { nav, site, primaryLocation, auditTool } from "@/content/site";
 import { TLink } from "@/components/ui/TLink";
 import { Logo } from "@/components/brand/Logo";
 import { Magnetic } from "@/components/ui/Magnetic";
+import { ToolsMenu } from "@/components/shell/ToolsMenu";
+import { tools, TOOLS_HUB } from "@/content/tools";
 
-const isActive = (pathname: string, href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+const isActive = (pathname: string, href: string) => {
+  if (href === "/") return pathname === "/";
+  // The audit lives at /seo-audit but belongs to the Free SEO Tools section.
+  if (href === TOOLS_HUB.href) return pathname.startsWith(href) || pathname.startsWith("/seo-audit");
+  return pathname.startsWith(href);
+};
 
 export function Header() {
   const pathname = usePathname();
@@ -106,6 +113,8 @@ export function Header() {
             <ul ref={list} className="relative flex items-center gap-1">
               {nav.map((n) => {
                 const active = isActive(pathname, n.href);
+                const cls = `group/nav relative flex items-baseline gap-1.5 whitespace-nowrap px-2.5 py-2 transition-colors duration-300 xl:px-3.5 ${active ? "text-bone" : "text-bone-dim hover:text-bone"}`;
+                if (n.href === TOOLS_HUB.href) return <ToolsMenu key={n.href} active={active} index={n.index} label={n.label} className={cls} />;
                 return (
                   <li key={n.href}>
                     <TLink
@@ -177,7 +186,7 @@ export function Header() {
         className="fixed inset-0 z-[79] flex flex-col bg-ink-2 pt-[var(--header-h)] lg:hidden"
         style={{ visibility: "hidden", clipPath: "inset(0% 0% 100% 0%)" }}
       >
-        <nav aria-label="Mobile" className="wrap flex flex-1 flex-col justify-center">
+        <nav aria-label="Mobile" className="wrap flex min-h-0 flex-1 flex-col justify-center-safe overflow-y-auto overscroll-contain py-4" data-lenis-prevent>
           <ul className="flex flex-col gap-1">
             {nav.map((n) => {
               const active = isActive(pathname, n.href);
@@ -195,6 +204,17 @@ export function Header() {
                     </span>
                     <span className={`t-label ${active ? "ember" : ""}`}>{n.index}</span>
                   </TLink>
+                  {n.href === TOOLS_HUB.href && (
+                    <ul data-m-fade className="flex flex-wrap gap-x-4 gap-y-2 pb-4">
+                      {tools.map((t) => (
+                        <li key={t.slug}>
+                          <TLink href={t.href} tabIndex={open ? 0 : -1} aria-current={pathname === t.href ? "page" : undefined} className={`text-sm ${pathname === t.href ? "text-ember" : "text-bone-dim hover:text-bone"}`}>
+                            {t.name}
+                          </TLink>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               );
             })}

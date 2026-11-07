@@ -7,7 +7,18 @@
 - [Home](https://agmanrajpurohit.com/): who Agman is, how he works, verified results and selected projects.
 - [Experience](https://agmanrajpurohit.com/experience): roles at NCS GX, MediaNV and Diya Infotech, freelance work, tools, education and certifications.
 - [Work](https://agmanrajpurohit.com/work): case studies for dental and healthcare clinics, a multi-country finance website, local businesses and more, with Search Console and GA4 screenshots.
-- [Free SEO audit](https://agmanrajpurohit.com/seo-audit): a free tool that crawls up to 100 pages of a website and reports technical, on-page, content, speed, mobile, image, linking and structured data issues.
+- [Blog](https://agmanrajpurohit.com/blog): practical articles on SEO, local search and AI search.
+- [Free SEO tools](https://agmanrajpurohit.com/free-seo-tools): all of Agman's free tools in one place. No sign-up.
+
+## Free SEO tools
+
+- [Website SEO audit](https://agmanrajpurohit.com/seo-audit): crawls up to 100 pages of a website and reports technical, on-page, content, speed, mobile, image, linking and structured data issues.
+- [Keyword density checker](https://agmanrajpurohit.com/free-seo-tools/keyword-density-checker): counts words and 2–3 word phrases in pasted text or a live URL, and checks a focus keyword.
+- [Meta tag generator](https://agmanrajpurohit.com/free-seo-tools/meta-tag-generator): builds title, description, robots, canonical, Open Graph and X tags with live previews.
+- [SERP snippet preview](https://agmanrajpurohit.com/free-seo-tools/serp-snippet-preview): pixel-accurate preview of a Google result on desktop and mobile.
+- [Schema markup generator](https://agmanrajpurohit.com/free-seo-tools/schema-markup-generator): JSON-LD for Article, LocalBusiness, Organization, Person, Product, FAQ, Breadcrumb, Event and WebSite.
+- [Robots.txt generator](https://agmanrajpurohit.com/free-seo-tools/robots-txt-generator): robots.txt with presets and separate controls for AI training and AI search crawlers.
+- [XML sitemap generator](https://agmanrajpurohit.com/free-seo-tools/sitemap-generator): crawls a site (up to 250 pages, respecting robots.txt) or takes a URL list, and skips noindex, redirected and broken pages.
 - [Contact](https://agmanrajpurohit.com/contact): email, phone and WhatsApp for Dubai and Ahmedabad, plus a contact form.
 
 ## Key facts

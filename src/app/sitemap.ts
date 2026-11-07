@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
 import { absUrl } from "@/lib/seo";
 import { listLivePosts } from "@/lib/blog/db";
+import { tools, TOOLS_HUB } from "@/content/tools";
 
 /**
  * Indexable pages only, on the canonical domain. URLs match each page's canonical exactly.
@@ -14,6 +15,8 @@ const PAGES: { path: string; priority: number; changeFrequency: MetadataRoute.Si
   { path: "/", priority: 1, changeFrequency: "monthly", images: [`${site.url}${site.photo}`] },
   { path: "/work", priority: 0.9, changeFrequency: "monthly" },
   { path: "/seo-audit", priority: 0.9, changeFrequency: "monthly" },
+  { path: TOOLS_HUB.href, priority: 0.9, changeFrequency: "monthly" },
+  ...tools.filter((t) => t.href !== "/seo-audit").map((t) => ({ path: t.href, priority: 0.8, changeFrequency: "monthly" as const })),
   { path: "/blog", priority: 0.8, changeFrequency: "weekly" },
   { path: "/experience", priority: 0.8, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.7, changeFrequency: "yearly" },

@@ -47,7 +47,7 @@ const appLd = {
 export default function SeoAuditPage() {
   return (
     <>
-      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "SEO Audit", path: "/seo-audit" }])} />
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Free SEO Tools", path: "/free-seo-tools" }, { name: "Website SEO Audit", path: "/seo-audit" }])} />
       <JsonLd data={appLd} />
       <JsonLd data={webPageJsonLd({ name: TITLE, description: DESCRIPTION, path: "/seo-audit" })} />
       <AuditHero />
