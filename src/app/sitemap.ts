@@ -8,7 +8,7 @@ import { listLivePosts } from "@/lib/blog/db";
  * Admin, API and individual audit result pages are deliberately left out (they're noindex).
  * Blog posts are included automatically once published (unless set to noindex or canonicalised elsewhere).
  */
-export const revalidate = 3600;
+export const revalidate = 300;
 
 const PAGES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; images?: string[] }[] = [
   { path: "/", priority: 1, changeFrequency: "monthly", images: [`${site.url}${site.photo}`] },

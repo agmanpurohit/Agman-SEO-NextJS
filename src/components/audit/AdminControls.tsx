@@ -39,6 +39,26 @@ export function AdminLogin() {
   );
 }
 
+export function ClearCacheButton() {
+  const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
+  return (
+    <button
+      type="button"
+      className="btn btn-ghost !h-11"
+      disabled={state === "busy"}
+      title="Rebuild every page with the latest content on its next visit"
+      onClick={async () => {
+        setState("busy");
+        const res = await fetch("/api/admin/revalidate", { method: "POST" }).catch(() => null);
+        setState(res?.ok ? "done" : "error");
+        setTimeout(() => setState("idle"), 4000);
+      }}
+    >
+      <span aria-live="polite">{state === "busy" ? "Clearing…" : state === "done" ? "Cache cleared ✓" : state === "error" ? "Couldn't clear, try again" : "Clear cache"}</span>
+    </button>
+  );
+}
+
 export function AdminLogout() {
   const router = useRouter();
   return (

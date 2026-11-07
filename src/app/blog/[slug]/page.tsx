@@ -11,8 +11,9 @@ import { Cover, PostCard, fmtDate } from "@/components/blog/PostCard";
 import { TableOfContents } from "@/components/blog/TableOfContents";
 import { ShareLinks } from "@/components/blog/ShareLinks";
 import { site } from "@/content/site";
+import { asset } from "@/lib/asset";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 export const dynamicParams = true;
 
 const abs = (u: string | null) => (!u ? null : u.startsWith("/") ? `${site.url}${u}` : u);
@@ -138,7 +139,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {post.excerpt && <p className="t-lead mt-6 max-w-[46rem] text-bone-dim">{post.excerpt}</p>}
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-y border-line py-4">
             <div className="flex items-center gap-3">
-              <Image src={site.photo} alt="" width={40} height={40} className="h-10 w-10 rounded-full object-cover object-top grayscale" />
+              <Image src={asset(site.photo)} alt="" width={40} height={40} className="h-10 w-10 rounded-full object-cover object-top grayscale" />
               <div className="leading-tight">
                 <span className="block text-sm font-medium text-bone">{site.name}</span>
                 <span className="t-label !text-[0.62rem]">{site.role}</span>
@@ -218,7 +219,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
               {/* Author */}
               <aside className="flex flex-col gap-5 border border-line p-6 sm:flex-row sm:items-start" aria-label="About the author">
-                <Image src={site.photo} alt={`${site.name}`} width={88} height={88} className="h-[88px] w-[88px] shrink-0 rounded-full object-cover object-top grayscale" />
+                <Image src={asset(site.photo)} alt={`${site.name}`} width={88} height={88} className="h-[88px] w-[88px] shrink-0 rounded-full object-cover object-top grayscale" />
                 <div>
                   <p className="t-label">Written by</p>
                   <p className="mt-1 text-xl font-semibold text-bone">{site.name}</p>

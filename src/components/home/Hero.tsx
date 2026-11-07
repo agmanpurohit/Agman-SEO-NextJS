@@ -7,6 +7,7 @@ import { useStage } from "@/components/ui/motion";
 import { ButtonA, ButtonLink } from "@/components/ui/Buttons";
 import { hero } from "@/content/home";
 import { site } from "@/content/site";
+import { asset } from "@/lib/asset";
 
 /**
  * The opening shot. A low-key portrait lit by a movable "studio light" (the pointer on
@@ -89,7 +90,7 @@ export function Hero() {
         style={{ ["--lx" as string]: "52%", ["--ly" as string]: "38%" }}
       >
         <Image
-          src={site.photo}
+          src={asset(site.photo)}
           alt="Portrait of Agman Rajpurohit"
           fill
           priority
@@ -98,7 +99,7 @@ export function Hero() {
           style={{ filter: "brightness(0.62) contrast(1.05)" }}
         />
         <Image
-          src={site.photo}
+          src={asset(site.photo)}
           alt=""
           aria-hidden="true"
           fill

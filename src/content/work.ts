@@ -4,6 +4,8 @@
  * Figures come from Search Console, GA4, Google Business Profile and client records
  * supplied by Agman. Nothing is estimated. Where a field is unknown, it is left out.
  */
+import { asset } from "@/lib/asset";
+
 export type Tag =
   | "Dental & Healthcare"
   | "Local SEO"
@@ -48,19 +50,19 @@ export type Client = {
 };
 
 const clients = {
-  ncsgx: { name: "NCSGX", logo: { src: "/images/clients/ncsgx.png", w: 800, h: 221, plate: "light" } },
-  academy: { name: "Academy Dental", logo: { src: "/images/clients/academy-dental.png", w: 747, h: 200, plate: "light" } },
-  smile: { name: "Smile Republic Orthodontics", logo: { src: "/images/clients/smile-republic.png", w: 340, h: 98, plate: "light" } },
-  sunnyview: { name: "Sunnyview Dental", logo: { src: "/images/clients/sunnyview-dental.jpg", w: 480, h: 311, plate: "light" } },
-  oasis: { name: "Oasis Skincare Clinic", logo: { src: "/images/clients/oasis-skincare.png", w: 228, h: 96, plate: "dark" } },
-  boldBody: { name: "Bold Body Arts", logo: { src: "/images/clients/bold-body-arts.jpg", w: 1080, h: 1080, plate: "light", scale: 3 } },
+  ncsgx: { name: "NCSGX", logo: { src: asset("/images/clients/ncsgx.png"), w: 800, h: 221, plate: "light" } },
+  academy: { name: "Academy Dental", logo: { src: asset("/images/clients/academy-dental.png"), w: 747, h: 200, plate: "light" } },
+  smile: { name: "Smile Republic Orthodontics", logo: { src: asset("/images/clients/smile-republic.png"), w: 340, h: 98, plate: "light" } },
+  sunnyview: { name: "Sunnyview Dental", logo: { src: asset("/images/clients/sunnyview-dental.jpg"), w: 480, h: 311, plate: "light" } },
+  oasis: { name: "Oasis Skincare Clinic", logo: { src: asset("/images/clients/oasis-skincare.png"), w: 228, h: 96, plate: "dark" } },
+  boldBody: { name: "Bold Body Arts", logo: { src: asset("/images/clients/bold-body-arts.jpg"), w: 1080, h: 1080, plate: "light", scale: 3 } },
 } satisfies Record<string, Client>;
 
 export type Shot = { src: string; w: number; h: number; label: string; caption: string };
 /** A group of screenshots shown under one tab (a market, or a report type). */
 export type Evidence = { market: string; summary: string; shots: Shot[] };
 
-const shot = (file: string, w: number, h: number, label: string, caption: string): Shot => ({ src: `/images/work/${file}`, w, h, label, caption });
+const shot = (file: string, w: number, h: number, label: string, caption: string): Shot => ({ src: asset(`/images/work/${file}`), w, h, label, caption });
 
 export type CaseStudy = {
   slug: string;
@@ -163,9 +165,9 @@ export const cases: CaseStudy[] = [
       market,
       summary,
       shots: [
-        { src: `/images/work/fin-${slug}-gsc.png`, w: gsc[0], h: gsc[1], label: "Search Console · Performance", caption: "Last 3 months compared with the previous 3 months." },
-        { src: `/images/work/fin-${slug}-ai.png`, w: ai[0], h: ai[1], label: "Search Console · Generative AI features", caption: "Impressions in AI-generated search features, same periods." },
-        { src: `/images/work/fin-${slug}-ga4.png`, w: ga4[0], h: ga4[1], label: "GA4 · Reports snapshot", caption: ga4Caption },
+        { src: asset(`/images/work/fin-${slug}-gsc.png`), w: gsc[0], h: gsc[1], label: "Search Console · Performance", caption: "Last 3 months compared with the previous 3 months." },
+        { src: asset(`/images/work/fin-${slug}-ai.png`), w: ai[0], h: ai[1], label: "Search Console · Generative AI features", caption: "Impressions in AI-generated search features, same periods." },
+        { src: asset(`/images/work/fin-${slug}-ga4.png`), w: ga4[0], h: ga4[1], label: "GA4 · Reports snapshot", caption: ga4Caption },
       ],
     })),
     reportsWall: true,

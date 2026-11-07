@@ -13,6 +13,7 @@ import { Atmosphere } from "@/components/shell/Atmosphere";
 import { Header } from "@/components/shell/Header";
 import { Footer } from "@/components/shell/Footer";
 import { AuditBand } from "@/components/audit/AuditBand";
+import { VersionWatch } from "@/components/shell/VersionWatch";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuditBand />
           <Footer />
           <Cursor />
+          <VersionWatch />
           <div className="grain" aria-hidden="true" />
         </TransitionProvider>
       </body>

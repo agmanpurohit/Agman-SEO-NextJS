@@ -10,12 +10,16 @@ export function derive(input: PostInput): Derived {
   return { contentHtml: html, toc, wordCount: wordCount(input.contentMd), readingMinutes: readingMinutes(input.contentMd), seoScore: analysePost(input).score };
 }
 
-/** Refresh every public page a post can appear on. */
-export function revalidateBlog(...slugs: (string | null | undefined)[]) {
-  revalidatePath("/blog");
-  for (const s of slugs) if (s) revalidatePath(`/blog/${s}`);
+/** Refresh every cached page on the site (blog list, posts, sitemap, feed and the rest). */
+export function revalidateSite() {
+  revalidatePath("/", "layout");
   revalidatePath("/sitemap.xml");
   revalidatePath("/blog/feed.xml");
+}
+
+/** After a post is saved or deleted. Old slugs are covered too, so their redirects take effect. */
+export function revalidateBlog(..._slugs: (string | null | undefined)[]) {
+  revalidateSite();
 }
 
 export class SlugTakenError extends Error {}

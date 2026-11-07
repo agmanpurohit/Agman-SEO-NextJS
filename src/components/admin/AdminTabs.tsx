@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AdminLogout } from "@/components/audit/AdminControls";
+import { AdminLogout, ClearCacheButton } from "@/components/audit/AdminControls";
 
 /** Shared header for the admin area: section tabs + sign out. */
 export function AdminTabs({ active, title, actions }: { active: "leads" | "blog"; title: string; actions?: React.ReactNode }) {
@@ -24,6 +24,7 @@ export function AdminTabs({ active, title, actions }: { active: "leads" | "blog"
       </div>
       <div className="flex flex-wrap items-center gap-3">
         {actions}
+        <ClearCacheButton />
         <AdminLogout />
       </div>
     </div>
