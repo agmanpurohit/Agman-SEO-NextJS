@@ -40,6 +40,8 @@ export function Closing({ label = closing.label, headline = closing.headline, bo
                   l
                 )}
               </span>
+              {/* Lines are separate blocks visually; the space keeps words apart for screen readers and AI agents. */}
+              {i < headline.length - 1 && " "}
             </span>
           ))}
         </h2>

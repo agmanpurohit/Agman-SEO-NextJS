@@ -43,7 +43,7 @@ export function Hero() {
     if (reduced) return;
 
     const lines = gsap.utils.toArray<HTMLElement>("[data-hero-line]");
-    const splits = lines.map((l) => SplitText.create(l, { type: "chars", charsClass: "inline-block" }));
+    const splits = lines.map((l) => SplitText.create(l, { type: "chars", charsClass: "inline-block", aria: "none" }));
     const chars = splits.flatMap((s) => s.chars);
 
     const tl = gsap.timeline({ defaults: { ease: "cine" } });
@@ -147,7 +147,7 @@ export function Hero() {
 
           <div className="grid-12 mt-6 gap-y-6 md:mt-8">
             <h1 id="hero-title" className="col-span-4 md:col-span-4" data-hero-fade>
-              <span className="block text-xl font-semibold tracking-tight md:text-2xl">{site.name}</span>
+              <span className="block text-xl font-semibold tracking-tight md:text-2xl">{site.name}</span>{" "}
               <span className="t-label mt-1 block">{site.role}</span>
               <span className="sr-only"> — {site.tagline}</span>
             </h1>

@@ -105,7 +105,7 @@ function Row({
           onFocus={onFocus}
           className="group flex w-full items-center gap-4 py-6 text-left md:gap-8 md:py-8"
         >
-          <span className="t-label w-8 shrink-0 ember">{d.index}</span>
+          <span aria-hidden="true" className="t-label w-8 shrink-0 ember">{d.index}</span>
           <span className="grid h-10 w-10 shrink-0 place-items-center md:hidden">
             <DisciplineIcon id={d.id} active={open} className="w-full text-bone" />
           </span>

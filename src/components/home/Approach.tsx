@@ -12,7 +12,7 @@ export function Approach() {
   useStage(root, (reduced) => {
     if (reduced) return;
     const p = root.current!.querySelector<HTMLElement>("[data-scrub]")!;
-    const split = SplitText.create(p, { type: "words" });
+    const split = SplitText.create(p, { type: "words", aria: "none" }); // plain word spans stay readable; aria-label isn't allowed on <p>
     gsap.fromTo(
       split.words,
       { opacity: 0.14 },

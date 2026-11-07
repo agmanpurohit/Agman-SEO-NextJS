@@ -101,6 +101,8 @@ export function SplitReveal<T extends ElementType = "h2">({
     gsap.set(el, { opacity: 1 });
     if (reduced) return;
     const split = SplitText.create(el, {
+      // aria-label is only valid on elements that can be named (headings etc.), not on <p>/<span>.
+      aria: /^h[1-6]$/i.test(el.tagName) ? "auto" : "none",
       type: type === "lines" ? "lines" : type === "words" ? "lines,words" : "lines,words,chars",
       mask: "lines",
       linesClass: "split-line",

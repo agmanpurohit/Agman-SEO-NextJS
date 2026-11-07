@@ -25,7 +25,7 @@ export function PageHero({
   const root = useRef<HTMLElement>(null);
   useStage(root, (reduced) => {
     if (reduced) return;
-    const split = SplitText.create("[data-ph-title]", { type: "chars", charsClass: "inline-block" });
+    const split = SplitText.create("[data-ph-title]", { type: "chars", charsClass: "inline-block", aria: "none" });
     const tl = gsap.timeline();
     tl.from(split.chars, { yPercent: 105, duration: 1.3, stagger: 0.035 }, 0)
       .from("[data-ph-fade]", { autoAlpha: 0, y: 24, duration: 1, stagger: 0.08 }, 0.4)
