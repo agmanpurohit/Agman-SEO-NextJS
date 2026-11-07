@@ -5,7 +5,7 @@ import { getPostById, listCategories } from "@/lib/blog/db";
 import { AdminLogin } from "@/components/audit/AdminControls";
 import { PostEditor } from "@/components/admin/PostEditor";
 
-export const metadata: Metadata = { title: "Edit post", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Edit post" };
 export const dynamic = "force-dynamic";
 
 export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {

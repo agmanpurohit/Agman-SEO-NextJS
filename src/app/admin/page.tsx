@@ -4,7 +4,7 @@ import { listLeads, leadTotals, type LeadFilter } from "@/lib/audit/leads";
 import { AdminLogin } from "@/components/audit/AdminControls";
 import { AdminTabs } from "@/components/admin/AdminTabs";
 
-export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Admin" };
 export const dynamic = "force-dynamic";
 
 const scoreTone = (s: number | null) => (s == null ? "text-mute" : s >= 80 ? "text-[#4fd18b]" : s >= 50 ? "text-[#f0b64a]" : "text-ember");

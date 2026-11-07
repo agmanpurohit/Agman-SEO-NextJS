@@ -7,7 +7,7 @@ import { AdminLogin } from "@/components/audit/AdminControls";
 import { AdminTabs } from "@/components/admin/AdminTabs";
 import { DeletePostButton } from "@/components/admin/DeletePostButton";
 
-export const metadata: Metadata = { title: "Blog dashboard", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Blog dashboard" };
 export const dynamic = "force-dynamic";
 
 const scoreTone = (s: number) => (s >= 80 ? "text-[#4fd18b]" : s >= 50 ? "text-[#f0b64a]" : "text-ember");

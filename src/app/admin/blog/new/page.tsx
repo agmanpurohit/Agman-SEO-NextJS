@@ -5,7 +5,7 @@ import { emptyPost } from "@/lib/blog/types";
 import { AdminLogin } from "@/components/audit/AdminControls";
 import { PostEditor } from "@/components/admin/PostEditor";
 
-export const metadata: Metadata = { title: "New post", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "New post" };
 export const dynamic = "force-dynamic";
 
 export default async function NewPostPage() {

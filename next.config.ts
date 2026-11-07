@@ -91,8 +91,10 @@ const nextConfig: NextConfig = {
     return [
       { source: "/:path*", headers: securityHeaders },
       // Admin pages and API answers are never stored by browsers or shared caches.
-      { source: "/admin/:path*", headers: [{ key: "Cache-Control", value: "private, no-store" }, { key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/admin/:path*", headers: [{ key: "Cache-Control", value: "private, no-store" }, { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive, nosnippet, noimageindex" }] },
       { source: "/api/admin/:path*", headers: [{ key: "Cache-Control", value: "private, no-store" }] },
+      // API responses are data, never search results (blog images under /api/blog/media stay indexable).
+      { source: "/api/:path((?!blog/media/).*)", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       // Preview deployments live on *.vercel.app; keep them out of search results.
       {
         source: "/:path*",
