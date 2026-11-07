@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { isAdmin } from "@/lib/audit/admin-auth";
 import { listLeads, leadTotals, type LeadFilter } from "@/lib/audit/leads";
-import { AdminLogin, AdminLogout } from "@/components/audit/AdminControls";
+import { AdminLogin } from "@/components/audit/AdminControls";
+import { AdminTabs } from "@/components/admin/AdminTabs";
 
 export const metadata: Metadata = { title: "Admin", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
@@ -23,13 +24,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
   return (
     <section className="wrap pt-[calc(var(--header-h)+2.5rem)] pb-20">
-      <div className="flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <p className="t-label ember">Admin</p>
-          <h1 className="t-h2 mt-2">SEO audit leads</h1>
-        </div>
-        <AdminLogout />
-      </div>
+      <AdminTabs active="leads" title="SEO audit leads" />
 
       <dl className="mt-8 grid grid-cols-2 gap-px border border-line bg-line md:grid-cols-4">
         {[

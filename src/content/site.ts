@@ -52,6 +52,7 @@ export const nav = [
   { href: "/work", label: "Work", index: "03" },
   { href: "/contact", label: "Contact", index: "04" },
   { href: "/seo-audit", label: "SEO Audit", index: "05" },
+  { href: "/blog", label: "Blog", index: "06" },
 ] as const;
 
 /** The free audit tool: linked from the header, a homepage section and a band on every page. */

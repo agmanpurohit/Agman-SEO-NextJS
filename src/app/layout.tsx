@@ -41,6 +41,8 @@ export const metadata: Metadata = {
   creator: site.name,
   publisher: site.name,
   category: "SEO and digital marketing",
+  // Lets feed readers find the blog's RSS feed from any page.
+  alternates: { types: { "application/rss+xml": [{ url: "/blog/feed.xml", title: "Agman Rajpurohit Blog" }] } },
   formatDetection: { telephone: false, email: false, address: false },
   robots: {
     index: true,

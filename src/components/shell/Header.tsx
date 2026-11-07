@@ -99,7 +99,7 @@ export function Header() {
         <div className="wrap flex h-[var(--header-h)] items-center justify-between">
           <TLink href="/" aria-label="Agman Rajpurohit — home" className="relative z-[2] flex items-center gap-3" data-cursor="Home">
             <Logo variant="mark" title={null} className="h-7 w-auto text-bone md:h-8" />
-            <span className="t-label hidden !text-bone lg:inline">Agman Rajpurohit</span>
+            <span className="t-label hidden !text-bone xl:inline">Agman Rajpurohit</span>
           </TLink>
 
           <nav aria-label="Primary" className="hidden lg:block">
@@ -111,7 +111,7 @@ export function Header() {
                     <TLink
                       href={n.href}
                       aria-current={active ? "page" : undefined}
-                      className={`group/nav relative flex items-baseline gap-1.5 px-3.5 py-2 transition-colors duration-300 ${active ? "text-bone" : "text-bone-dim hover:text-bone"}`}
+                      className={`group/nav relative flex items-baseline gap-1.5 whitespace-nowrap px-2.5 py-2 transition-colors duration-300 xl:px-3.5 ${active ? "text-bone" : "text-bone-dim hover:text-bone"}`}
                     >
                       <span className="t-label !text-[0.6rem] ember opacity-70">{n.index}</span>
                       <span className="relative block overflow-hidden text-[0.95rem] font-medium">
@@ -128,7 +128,7 @@ export function Header() {
             </ul>
           </nav>
 
-          <div className="hidden items-center gap-5 lg:flex">
+          <div className="hidden items-center gap-5 xl:flex">
             <span className="t-label hidden items-center gap-2 2xl:flex">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
