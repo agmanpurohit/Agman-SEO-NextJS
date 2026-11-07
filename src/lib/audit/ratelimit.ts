@@ -7,8 +7,21 @@ export function hashIp(ip: string) {
   return createHash("sha256").update(`${process.env.ADMIN_SESSION_SECRET ?? "salt"}:${ip}`).digest("hex").slice(0, 32);
 }
 
+/** Visitor IP. On Vercel these headers are set by the platform and can't be spoofed by the client. */
 export function clientIp(req: Request) {
-  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
+  return (
+    req.headers.get("x-real-ip")?.trim() ||
+    req.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "unknown"
+  );
+}
+
+/** Current count for a key in this window, without adding to it. */
+export async function currentCount(key: string, windowSeconds: number): Promise<number> {
+  const windowStart = new Date(Math.floor(Date.now() / (windowSeconds * 1000)) * windowSeconds * 1000).toISOString();
+  const rows = (await sql()`SELECT count FROM rate_limits WHERE key = ${key} AND window_start = ${windowStart}`) as { count: number }[];
+  return rows[0]?.count ?? 0;
 }
 
 /**

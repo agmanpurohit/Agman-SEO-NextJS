@@ -29,10 +29,17 @@ export function checkPassword(input: string) {
   return safeEqual(sign(`pw:${input}`), sign(`pw:${pw}`));
 }
 
+/**
+ * Sessions are signed together with a fingerprint of the current password, so changing
+ * ADMIN_PASSWORD (or ADMIN_SESSION_SECRET) in Vercel instantly signs out every device.
+ */
+const pwTag = () => createHmac("sha256", secret()).update(`pwtag:${process.env.ADMIN_PASSWORD ?? ""}`).digest("base64url").slice(0, 16);
+const signSession = (payload: string) => sign(`${payload}|${pwTag()}`);
+
 export function makeSession() {
   const exp = Math.floor(Date.now() / 1000) + TTL_SECONDS;
   const payload = `admin.${exp}`;
-  return { value: `${payload}.${sign(payload)}`, maxAge: TTL_SECONDS };
+  return { value: `${payload}.${signSession(payload)}`, maxAge: TTL_SECONDS };
 }
 
 export function verifySession(value: string | undefined | null) {
@@ -42,7 +49,7 @@ export function verifySession(value: string | undefined | null) {
   const payload = value.slice(0, i);
   const sig = value.slice(i + 1);
   try {
-    if (!safeEqual(sig, sign(payload))) return false;
+    if (!process.env.ADMIN_PASSWORD || !safeEqual(sig, signSession(payload))) return false;
   } catch {
     return false;
   }

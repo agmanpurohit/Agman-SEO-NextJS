@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { overLimit, clientIp, hashIp } from "@/lib/audit/ratelimit";
+import { ensureSchema } from "@/lib/audit/db";
 
 /**
  * Contact form endpoint. Validates input, filters bots (honeypot + minimum fill time),
@@ -19,17 +21,9 @@ export const runtime = "nodejs";
 
 const INQUIRY_TYPES = ["Job opportunity", "Freelance project", "Digital marketing services", "Website development", "Collaboration", "Other"] as const;
 
-const WINDOW_MS = 10 * 60 * 1000;
+// 5 messages per visitor per 10 minutes, counted in the database so it holds across serverless instances.
 const MAX_PER_WINDOW = 5;
-const hits = new Map<string, number[]>();
-
-function rateLimited(ip: string) {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > MAX_PER_WINDOW;
-}
+const WINDOW_SECONDS = 600;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -64,8 +58,14 @@ export async function POST(req: Request) {
   if (message.length < 20) errors.message = "Please write at least a couple of sentences (20+ characters).";
   if (Object.keys(errors).length) return NextResponse.json({ ok: false, errors }, { status: 422 });
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (rateLimited(ip)) {
+  let limited = false;
+  try {
+    await ensureSchema();
+    limited = await overLimit(`contact:${hashIp(clientIp(req))}`, MAX_PER_WINDOW, WINDOW_SECONDS);
+  } catch (err) {
+    console.error("contact rate limit unavailable", err);
+  }
+  if (limited) {
     return NextResponse.json({ ok: false, error: "Too many messages in a short time. Please try again later or email directly." }, { status: 429 });
   }
 
@@ -97,7 +97,7 @@ export async function POST(req: Request) {
       }),
     });
     if (!res.ok) {
-      console.error("Resend error", res.status, await res.text());
+      console.error("Resend error", res.status);
       return NextResponse.json({ ok: false, error: "send_failed" }, { status: 502 });
     }
   } catch (err) {
