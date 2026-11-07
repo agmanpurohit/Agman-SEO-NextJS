@@ -89,6 +89,14 @@ export function ToolShell({ copy, children }: { copy: ToolCopy; children: ReactN
 
       <section aria-label={`${tool.name} tool`} className="wrap mt-10 md:mt-14">
         {children}
+        <p className="mt-4 max-w-[52rem] text-xs leading-relaxed text-mute">
+          Privacy: what you enter in this tool is saved with your IP address and approximate location, so I can see how the tools are used and stop abuse. It&apos;s never shared or sold, and
+          it&apos;s deleted automatically after 12 months. To have it removed sooner, email{" "}
+          <a href={`mailto:${site.email}`} className="text-bone-dim underline underline-offset-2 hover:text-bone">
+            {site.email}
+          </a>
+          .
+        </p>
       </section>
 
       <section aria-labelledby="how-title" className="section">

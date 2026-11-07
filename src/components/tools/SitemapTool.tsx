@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
+import { logAction, sessionId } from "@/lib/tools/track";
 import { CodeOutput, Field, Panel, Segmented, Select, SmallButton, TextArea, TextInput, Toggle } from "./ui";
 
 type Page = { url: string; depth: number; lastmod?: string; include: boolean };
@@ -42,7 +43,7 @@ export function SitemapTool() {
     setSkipped([]);
     setStats(null);
     try {
-      const r = await fetch("/api/tools/sitemap-crawl", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: site, max: Number(max) }) });
+      const r = await fetch("/api/tools/sitemap-crawl", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: site, max: Number(max), sid: sessionId() }) });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || "The crawl failed.");
       setPages((j.pages as Omit<Page, "include">[]).map((p) => ({ ...p, include: true })));
@@ -65,6 +66,7 @@ export function SitemapTool() {
       ),
     ];
     setPages(urls.map((url) => ({ url, depth: depthOf(url), include: true })));
+    if (urls.length) logAction("sitemap-generator", "paste-urls", `Pasted ${urls.length} URLs · ${urls[0]}`, { mode: "paste", count: urls.length, urls: urls.slice(0, 250) });
     setSkipped([]);
     setStats(null);
     setError(urls.length ? "" : "No valid URLs found. Each one must start with http:// or https://");
@@ -240,7 +242,14 @@ export function SitemapTool() {
           </div>
 
           <div className="space-y-6 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">
-            <CodeOutput code={xml} title="sitemap.xml" filename="sitemap.xml" mime="application/xml" minRows={14} />
+            <CodeOutput
+              code={xml}
+              title="sitemap.xml"
+              filename="sitemap.xml"
+              mime="application/xml"
+              minRows={14}
+              onAction={(act) => logAction("sitemap-generator", act, `${included.length} URLs in sitemap · ${included[0]?.url ?? ""}`, { mode, site: site || null, included: included.length, urls: included.slice(0, 250).map((p) => p.url), lastmod, withFreq, withPriority })}
+            />
             <Panel title="Next steps">
               <ol className="list-decimal space-y-2 pl-5 text-sm text-bone-dim marker:text-ember">
                 <li>Upload the file to your site's root so it opens at /sitemap.xml.</li>

@@ -44,7 +44,7 @@ const copy: ToolCopy = {
     { q: "How is keyword density calculated?", a: "Density is the number of times a word or phrase appears, multiplied by the number of words in it, divided by the total word count, times 100. So a two-word phrase used 10 times in a 1,000-word article has a density of 2%." },
     { q: "Can keyword density hurt my rankings?", a: "Very high density can. If a phrase is repeated so often that the text reads unnaturally, Google may see it as keyword stuffing, which goes against its spam policies. Low density rarely hurts on its own, but it can mean the page doesn't make its topic clear." },
     { q: "Why does the URL check show different text from my page?", a: "We read the HTML your server sends, and remove navigation, headers, footers, forms and scripts so only the main content is counted. Content that only appears after JavaScript runs won't be included. You can edit the extracted text before analysing it." },
-    { q: "Do you store the text I paste?", a: "No. Pasted text is analysed in your browser and never leaves your device. When you check a URL, the page is fetched once to extract its text and nothing is saved." },
+    { q: "Do you store the text I paste?", a: "Yes. The analysis runs in your browser, but what you enter (or the URL you check) is saved with your IP address and approximate location, so I can see how the tools are used and stop abuse. It is never shared or sold, and it is deleted automatically after 12 months. Email me if you want it removed sooner." },
   ],
 };
 

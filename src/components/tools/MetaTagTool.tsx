@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import { CodeOutput, Field, Panel, Segmented, Select, TextArea, TextInput, Toggle, escapeHtml } from "./ui";
 import { SerpCard, type Device } from "./serp";
+import { logAction, useToolLog } from "@/lib/tools/track";
+
 
 type S = {
   title: string;
@@ -107,6 +109,10 @@ export function MetaTagTool() {
   const [device, setDevice] = useState<Device>("desktop");
   const set = <K extends keyof S>(k: K) => (v: S[K]) => setS((p) => ({ ...p, [k]: v }));
   const code = useMemo(() => build(s), [s]);
+  // Usage log for the admin panel: every field the visitor filled in, plus the generated code.
+  const logSummary = [s.title, s.canonical].filter((x) => x.trim()).join(" · ") || s.description.slice(0, 80);
+  const logData = { ...s, code };
+  useToolLog("meta-tag-generator", { summary: logSummary, data: logData }, Boolean(s.title.trim() || s.description.trim()));
   const urlOk = !s.canonical || /^https?:\/\/[^\s]+\.[^\s]+/.test(s.canonical);
   const imgOk = !s.image || /^https?:\/\//.test(s.image);
   let host = "example.com";
@@ -226,7 +232,7 @@ export function MetaTagTool() {
             </div>
           </div>
         </Panel>
-        <CodeOutput code={code} title="Paste inside <head>" minRows={10} />
+        <CodeOutput code={code} title="Paste inside <head>" minRows={10} onAction={(a) => logAction("meta-tag-generator", a, logSummary, logData)} />
       </div>
     </div>
   );

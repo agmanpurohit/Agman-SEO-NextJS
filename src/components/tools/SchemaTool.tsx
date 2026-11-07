@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { logAction, useToolLog } from "@/lib/tools/track";
 import { CodeOutput, Field, Panel, Select, SmallButton, TextArea, TextInput, Toggle } from "./ui";
 
 type FieldDef = {
@@ -351,6 +352,12 @@ export function SchemaTool() {
     return { code: wrap ? `<script type="application/ld+json">\n${json}\n</script>` : json, missing, warnings };
   }, [type, v, faq, crumbs, wrap, def]);
 
+  // Usage log: schema type, the fields filled in and the generated JSON-LD.
+  const filled = Object.values(v).some((x) => x.trim()) || faq.some((f) => f.q.trim() || f.a.trim()) || crumbs.slice(1).some((c) => c.name.trim());
+  const logSummary = `${def.label}${v.name || v.headline ? `: ${v.name || v.headline}` : ""}`;
+  const logData = { type, fields: v, ...(def.list === "faq" ? { faq } : {}), ...(def.list === "crumbs" ? { crumbs } : {}), missingRequired: missing, code };
+  useToolLog("schema-markup-generator", { summary: logSummary, data: logData }, filled);
+
   const control = (f: FieldDef, id: string) => {
     const common = { id, value: v[f.key] ?? "", placeholder: f.placeholder };
     if (f.kind === "textarea") return <TextArea {...common} rows={3} onChange={(e) => setV(f.key, e.target.value)} />;
@@ -445,7 +452,7 @@ export function SchemaTool() {
       </div>
 
       <div className="space-y-6 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">
-        <CodeOutput code={code} title="JSON-LD" filename={`${type.toLowerCase()}-schema.${wrap ? "html" : "json"}`} mime={wrap ? "text/html" : "application/json"} minRows={14} extra={<Toggle checked={wrap} onChange={setWrap} label="Wrap in <script>" />} />
+        <CodeOutput code={code} title="JSON-LD" filename={`${type.toLowerCase()}-schema.${wrap ? "html" : "json"}`} mime={wrap ? "text/html" : "application/json"} minRows={14} extra={<Toggle checked={wrap} onChange={setWrap} label="Wrap in <script>" />} onAction={(a) => logAction("schema-markup-generator", a, logSummary, logData)} />
         <Panel title="Validation">
           {missing.length === 0 && warnings.length === 0 ? (
             <p className="text-sm text-bone-dim">

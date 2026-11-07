@@ -5,6 +5,7 @@ import { normaliseLink } from "@/lib/audit/parse";
 import { fetchRobots, makeRobotsChecker } from "@/lib/audit/discover";
 import { overLimit, clientIp, hashIp } from "@/lib/audit/ratelimit";
 import { ensureSchema } from "@/lib/audit/db";
+import { logToolUse } from "@/lib/tools/log-request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,13 +21,15 @@ type Skipped = { url: string; reason: string };
 /**
  * Sitemap generator crawl: follows internal links from the start URL (same host only),
  * obeys robots.txt, and keeps only indexable 200 HTML pages whose canonical is themselves.
- * SSRF-safe fetching, rate-limited, time-boxed. Nothing is stored.
+ * SSRF-safe fetching, rate-limited, time-boxed. The crawl is recorded in the tool-usage log.
  */
 export async function POST(req: Request) {
   let input = "";
   let max = 100;
+  let sid: unknown;
   try {
     const b = await req.json();
+    sid = b.sid;
     input = typeof b.url === "string" ? b.url.slice(0, 2048) : "";
     max = Math.min(250, Math.max(10, Number(b.max) || 100));
   } catch {
@@ -117,6 +120,13 @@ export async function POST(req: Request) {
     }
 
     const unique = [...new Map(found.map((f) => [f.url, f])).values()].sort((a, b) => a.depth - b.depth || a.url.localeCompare(b.url));
+    await logToolUse(req, {
+      tool: "sitemap-generator",
+      sessionId: sid,
+      action: "crawl",
+      summary: `Crawled ${origin} · ${Math.min(unique.length, max)} pages found`,
+      data: { mode: "crawl", site: origin, maxPages: max, pagesFound: Math.min(unique.length, max), skipped: skipped.length, timedOut, urls: unique.slice(0, 250).map((u) => u.url) },
+    });
     return NextResponse.json(
       {
         origin,

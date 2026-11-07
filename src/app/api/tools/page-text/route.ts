@@ -3,6 +3,7 @@ import { load } from "cheerio";
 import { safeFetch, normaliseUrl, UnsafeUrlError } from "@/lib/audit/net";
 import { overLimit, clientIp, hashIp } from "@/lib/audit/ratelimit";
 import { ensureSchema } from "@/lib/audit/db";
+import { logToolUse } from "@/lib/tools/log-request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,13 +13,16 @@ const clean = (s: string) => s.replace(/\s+/g, " ").trim();
 
 /**
  * Keyword density checker: fetches one public page (SSRF-safe, size and time capped) and
- * returns its readable text plus title, meta description and H1s. Nothing is stored.
+ * returns its readable text plus title, meta description and H1s. The check is recorded
+ * in the tool-usage log (URL, page title, visitor IP) for the admin panel.
  */
 export async function POST(req: Request) {
   let url = "";
+  let sid: unknown;
   try {
     const b = await req.json();
     url = typeof b.url === "string" ? b.url.slice(0, 2048) : "";
+    sid = b.sid;
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
@@ -65,6 +69,14 @@ export async function POST(req: Request) {
       $(el).append(" \n ");
     });
     const text = body.text().replace(/[ \t]+/g, " ").replace(/\s*\n\s*/g, "\n").trim().slice(0, 200_000);
+
+    await logToolUse(req, {
+      tool: "keyword-density-checker",
+      sessionId: sid,
+      action: "fetch-url",
+      summary: `URL: ${r.finalUrl}`,
+      data: { url: r.finalUrl, pageTitle: title, metaDescription, h1, pageWords: text.split(/\s+/).filter(Boolean).length },
+    });
 
     return NextResponse.json(
       { finalUrl: r.finalUrl, title, metaDescription, h1, text, truncated: r.truncated },

@@ -37,7 +37,7 @@ export default function FreeSeoToolsPage() {
         aside={<p className="t-label">{tools.length} tools · All free</p>}
       >
         <h2 className="sr-only">Free SEO tools</h2>
-        <p>The same checks and generators I reach for in client work, cleaned up so anyone can use them. Most run entirely in your browser, and nothing you type is stored.</p>
+        <p>The same checks and generators I reach for in client work, cleaned up so anyone can use them. There's no account and no sign-up. What you enter is saved with your IP address to see how the tools are used and prevent abuse, and it's never shared or sold.</p>
       </PageHero>
 
       <section aria-label="All tools" className="wrap pb-20 md:pb-28">

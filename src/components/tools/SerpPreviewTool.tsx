@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Field, Panel, Segmented, TextArea, TextInput, Toggle } from "./ui";
+import { logAction, useToolLog } from "@/lib/tools/track";
 import { DESC_FONT, LIMITS, PixelMeter, SerpCard, TITLE_FONT, textWidth, useMeasureReady, type Device } from "./serp";
 
 const today = () => new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -21,6 +22,19 @@ export function SerpPreviewTool() {
   const titlePx = ready ? textWidth(title, TITLE_FONT[device]) : 0;
   const descPx = ready ? textWidth(desc, DESC_FONT) : 0;
   const kw = keyword.trim().toLowerCase();
+
+  // Usage log: the snippet the visitor is testing. The form starts with an example, so
+  // nothing is logged until they change it.
+  const initialSnippet = useRef(JSON.stringify({ title, desc, url, siteName, keyword }));
+  const changed = JSON.stringify({ title, desc, url, siteName, keyword }) !== initialSnippet.current;
+  useToolLog(
+    "serp-snippet-preview",
+    {
+      summary: [title, url].filter(Boolean).join(" · "),
+      data: { title, description: desc, url, siteName, keyword, device, showDate, titlePx, descPx, titleTooLong: titlePx > lim.title, descTooLong: descPx > lim.desc },
+    },
+    changed,
+  );
 
   const checks = [
     { ok: titlePx > 0 && titlePx <= lim.title, text: titlePx > lim.title ? "Title is wider than Google shows, so the end will be cut off." : titlePx === 0 ? "Add a title." : "Title fits without being cut off." },

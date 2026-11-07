@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AdminLogout, ClearCacheButton } from "@/components/audit/AdminControls";
 
 /** Shared header for the admin area: section tabs + sign out. */
-export function AdminTabs({ active, title, actions }: { active: "leads" | "blog"; title: string; actions?: React.ReactNode }) {
+export function AdminTabs({ active, title, actions }: { active: "leads" | "blog" | "tools"; title: string; actions?: React.ReactNode }) {
   const tab = (key: string, href: string, label: string) => (
     <Link
       href={href}
@@ -15,10 +15,11 @@ export function AdminTabs({ active, title, actions }: { active: "leads" | "blog"
   return (
     <div className="flex flex-wrap items-end justify-between gap-6">
       <div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="t-label ember mr-2">Admin</span>
           {tab("leads", "/admin", "Audit leads")}
           {tab("blog", "/admin/blog", "Blog")}
+          {tab("tools", "/admin/tools", "Tool usage")}
         </div>
         <h1 className="t-h2 mt-4">{title}</h1>
       </div>

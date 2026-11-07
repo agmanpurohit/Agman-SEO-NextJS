@@ -2,6 +2,9 @@
 
 import { useMemo, useState, type FormEvent } from "react";
 import { CopyButton, Field, Panel, Segmented, SmallButton, Stat, TextArea, TextInput, Toggle } from "./ui";
+import { logAction, sessionId, useToolLog } from "@/lib/tools/track";
+
+const TOOL = "keyword-density-checker";
 
 const STOP = new Set(
   "a about above after again against all am an and any are aren't as at be because been before being below between both but by can can't cannot could couldn't did didn't do does doesn't doing don't down during each few for from further get got had hadn't has hasn't have haven't having he he'd he'll he's her here here's hers herself him himself his how how's i i'd i'll i'm i've if in into is isn't it it's its itself just let's me more most mustn't my myself no nor not now of off on once only or other ought our ours ourselves out over own same shan't she she'd she'll she's should shouldn't so some such than that that's the their theirs them themselves then there there's these they they'd they'll they're they've this those through to too under until up us very was wasn't we we'd we'll we're we've were weren't what what's when when's where where's which while who who's whom why why's will with won't would wouldn't you you'd you'll you're you've your yours yourself yourselves also may might must shall one two new like use used using via per etc us".split(
@@ -67,12 +70,26 @@ export function KeywordDensityTool() {
   const focusDensity = res.total ? ((focusCount * focusWords) / res.total) * 100 : 0;
   const max = res.rows[0]?.count ?? 1;
 
+  // Usage log (shown in the admin panel): what was analysed and the headline results.
+  const logSummary = `${page ? `URL: ${page.finalUrl}` : `Pasted text`} · ${res.total} words${focus.trim() ? ` · focus “${focus.trim()}” ${focusDensity.toFixed(2)}%` : ""}`;
+  const logData = {
+    mode,
+    url: page?.finalUrl ?? null,
+    words: res.total,
+    focusKeyword: focus.trim() || null,
+    focusCount,
+    focusDensity: Number(focusDensity.toFixed(2)),
+    topKeywords: res.rows.slice(0, 10).map((r) => `${r.phrase} (${r.count})`),
+    text: text.slice(0, 15_000),
+  };
+  useToolLog(TOOL, { summary: logSummary, data: logData }, text.trim().length > 0);
+
   async function fetchPage(e: FormEvent) {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const r = await fetch("/api/tools/page-text", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url }) });
+      const r = await fetch("/api/tools/page-text", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url, sid: sessionId() }) });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || "Couldn't fetch that page.");
       setText(j.text);
@@ -168,7 +185,7 @@ export function KeywordDensityTool() {
                   { value: "3", label: "3 words" },
                 ]}
               />
-              <CopyButton text={res.rows.length ? csv : ""} label="Copy CSV" />
+              <CopyButton text={res.rows.length ? csv : ""} label="Copy CSV" onCopied={() => logAction(TOOL, "copy-csv", logSummary, logData)} />
             </div>
           }
         >

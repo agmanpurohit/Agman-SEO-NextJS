@@ -102,7 +102,7 @@ export function SmallButton({ children, onClick, variant = "ghost", disabled, ty
   );
 }
 
-export function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
+export function CopyButton({ text, label = "Copy", onCopied }: { text: string; label?: string; onCopied?: () => void }) {
   const [done, setDone] = useState(false);
   return (
     <SmallButton
@@ -119,6 +119,7 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
           ta.remove();
         }
         setDone(true);
+        onCopied?.();
         setTimeout(() => setDone(false), 1800);
       }}
     >
@@ -127,7 +128,7 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
   );
 }
 
-export function DownloadButton({ text, filename, mime = "text/plain", label = "Download" }: { text: string; filename: string; mime?: string; label?: string }) {
+export function DownloadButton({ text, filename, mime = "text/plain", label = "Download", onDownloaded }: { text: string; filename: string; mime?: string; label?: string; onDownloaded?: () => void }) {
   return (
     <SmallButton
       disabled={!text}
@@ -137,6 +138,7 @@ export function DownloadButton({ text, filename, mime = "text/plain", label = "D
         a.href = url;
         a.download = filename;
         a.click();
+        onDownloaded?.();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
       }}
     >
@@ -146,15 +148,15 @@ export function DownloadButton({ text, filename, mime = "text/plain", label = "D
 }
 
 /** Read-only code output with copy (and optional download). */
-export function CodeOutput({ code, title = "Your code", filename, mime, minRows = 8, extra }: { code: string; title?: string; filename?: string; mime?: string; minRows?: number; extra?: ReactNode }) {
+export function CodeOutput({ code, title = "Your code", filename, mime, minRows = 8, extra, onAction }: { code: string; title?: string; filename?: string; mime?: string; minRows?: number; extra?: ReactNode; onAction?: (action: "copy" | "download") => void }) {
   return (
     <Panel
       title={title}
       actions={
         <div className="flex flex-wrap gap-2">
           {extra}
-          <CopyButton text={code} />
-          {filename && <DownloadButton text={code} filename={filename} mime={mime} />}
+          <CopyButton text={code} onCopied={() => onAction?.("copy")} />
+          {filename && <DownloadButton text={code} filename={filename} mime={mime} onDownloaded={() => onAction?.("download")} />}
         </div>
       }
     >

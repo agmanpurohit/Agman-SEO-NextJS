@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { logAction, useToolLog } from "@/lib/tools/track";
 import { CodeOutput, Field, Panel, Segmented, SmallButton, TextArea, TextInput, Toggle } from "./ui";
 
 type Preset = { id: string; label: string; hint: string; disallow: string[]; allow?: string[] };
@@ -87,6 +88,12 @@ export function RobotsTool() {
     return out.join("\n") + "\n";
   }, [policy, presets, disallow, allow, delay, blocked, sitemaps, comment]);
 
+  // Usage log: the visitor's choices and the generated file, once they change the default.
+  const initialCode = useRef(code);
+  const logSummary = `${policy === "block" ? "Block all" : `Allow · ${presets.length} preset rule${presets.length === 1 ? "" : "s"}`} · ${blocked.length} AI bot${blocked.length === 1 ? "" : "s"} blocked${lines(sitemaps)[0] ? ` · ${lines(sitemaps)[0]}` : ""}`;
+  const logData = { policy, presets, customDisallow: lines(disallow), customAllow: lines(allow), blockedBots: blocked, sitemaps: lines(sitemaps), crawlDelay: delay || null, code };
+  useToolLog("robots-txt-generator", { summary: logSummary, data: logData }, code !== initialCode.current);
+
   const toggleIn = (list: string[], v: string, on: boolean) => (on ? [...new Set([...list, v])] : list.filter((x) => x !== v));
 
   return (
@@ -161,7 +168,7 @@ export function RobotsTool() {
       </div>
 
       <div className="space-y-6 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">
-        <CodeOutput code={code} title="robots.txt" filename="robots.txt" minRows={12} />
+        <CodeOutput code={code} title="robots.txt" filename="robots.txt" minRows={12} onAction={(a) => logAction("robots-txt-generator", a, logSummary, logData)} />
         <Panel title={issues.length ? `Check before you upload (${issues.length})` : "Check before you upload"}>
           {issues.length ? (
             <ul className="space-y-2.5">
