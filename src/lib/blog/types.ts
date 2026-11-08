@@ -2,13 +2,18 @@
 
 export type PostStatus = "draft" | "published";
 
+/** How the post body is written. "html" covers both the visual editor and raw HTML code. */
+export type ContentFormat = "markdown" | "html";
+
 export type FaqItem = { q: string; a: string };
 
 export type PostInput = {
   title: string;
   slug: string;
   excerpt: string;
+  /** The post body as written, in `contentFormat` (field name kept from when only Markdown existed). */
   contentMd: string;
+  contentFormat: ContentFormat;
   coverImage: string | null;
   coverAlt: string;
   category: string;
@@ -24,6 +29,8 @@ export type PostInput = {
   ogDescription: string;
   ogImage: string | null;
   faq: FaqItem[];
+  /** Extra JSON-LD added to the page, as pasted (with or without <script> tags). */
+  customSchema: string;
   status: PostStatus;
   /** ISO date; a future date with status "published" schedules the post. */
   publishedAt: string | null;
@@ -54,6 +61,7 @@ export const emptyPost = (): PostInput => ({
   slug: "",
   excerpt: "",
   contentMd: "",
+  contentFormat: "html",
   coverImage: null,
   coverAlt: "",
   category: "",
@@ -69,6 +77,7 @@ export const emptyPost = (): PostInput => ({
   ogDescription: "",
   ogImage: null,
   faq: [],
+  customSchema: "",
   status: "draft",
   publishedAt: null,
   featured: false,

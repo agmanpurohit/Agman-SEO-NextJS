@@ -1,4 +1,5 @@
 import type { PostInput } from "./types";
+import { contentFacts } from "./content";
 
 /**
  * On-page SEO analysis for a draft post, run live in the dashboard and stored as a score
@@ -8,21 +9,8 @@ export type SeoCheck = { id: string; label: string; status: "good" | "ok" | "bad
 
 const words = (s: string) => (s.toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? []);
 
-/** Plain text from markdown (good enough for counting and keyword checks). */
-export function mdToText(md: string) {
-  return md
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`[^`]*`/g, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/^#{1,6}\s+/gm, "")
-    .replace(/[*_>~|#-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-export const wordCount = (md: string) => words(mdToText(md)).length;
-export const readingMinutes = (md: string) => Math.max(1, Math.round(wordCount(md) / 225));
+// Word counting and text extraction live in ./content so they work for Markdown and HTML alike.
+export { mdToText, wordCount, readingMinutes } from "./content";
 
 const includesPhrase = (hay: string, phrase: string) => {
   const p = phrase.trim().toLowerCase();
@@ -43,18 +31,19 @@ export const effectiveMetaDescription = (p: Pick<PostInput, "metaDescription" | 
 
 export function analysePost(p: PostInput, siteHost = "agmanrajpurohit.com"): { score: number; checks: SeoCheck[] } {
   const kw = p.focusKeyword.trim().toLowerCase();
-  const text = mdToText(p.contentMd);
+  const facts = contentFacts(p.contentMd, p.contentFormat ?? "markdown");
+  const text = facts.text;
   const wc = words(text).length;
   const metaTitle = effectiveMetaTitle(p);
   const metaDesc = effectiveMetaDescription(p);
-  const firstPara = mdToText(p.contentMd.split(/\n\s*\n/).find((b) => b.trim() && !/^#/.test(b.trim())) ?? "");
-  const headings = [...p.contentMd.matchAll(/^(#{2,3})\s+(.+)$/gm)].map((m) => ({ level: m[1].length, text: m[2] }));
-  const h1InBody = /^#\s+/m.test(p.contentMd);
-  const links = [...p.contentMd.matchAll(/\[[^\]]*\]\(([^)\s]+)/g)].map((m) => m[1]);
+  const firstPara = facts.firstParagraph;
+  const headings = facts.headings;
+  const h1InBody = facts.h1InBody;
+  const links = facts.links;
   const internal = links.filter((l) => l.startsWith("/") || l.includes(siteHost)).length;
   const external = links.length - internal;
-  const images = [...p.contentMd.matchAll(/!\[([^\]]*)\]\(/g)];
-  const imagesNoAlt = images.filter((m) => !m[1].trim()).length;
+  const images = facts.images;
+  const imagesNoAlt = images.filter((m) => !m.alt.trim()).length;
   const density = kw && wc ? (text.toLowerCase().split(kw).length - 1) / wc * 100 : 0;
   const read = flesch(text);
 
@@ -76,8 +65,8 @@ export function analysePost(p: PostInput, siteHost = "agmanrajpurohit.com"): { s
   add("desc-len", "Meta description length", !dl ? "bad" : dl >= 120 && dl <= 160 ? "good" : "ok", dl ? `${dl} characters (aim for 120–160).` : "Write a description or an excerpt.", 2);
   add("slug", "Clean URL", !p.slug ? "bad" : p.slug.length <= 75 && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(p.slug) ? "good" : "ok", p.slug ? `${p.slug.length} characters` : "Set a URL slug.");
   add("length", "Content length", wc >= 900 ? "good" : wc >= 400 ? "ok" : "bad", `${wc} words${wc < 400 ? " — most posts that rank cover the topic in more depth." : ""}`, 2);
-  add("headings", "Subheadings (H2/H3)", headings.filter((h) => h.level === 2).length >= 2 ? "good" : headings.length ? "ok" : "bad", headings.length ? `${headings.filter((h) => h.level === 2).length} H2, ${headings.filter((h) => h.level === 3).length} H3` : "Break the post into sections with ## headings.");
-  add("h1", "Single H1", h1InBody ? "bad" : "good", h1InBody ? "The post title is already the H1 — use ## for sections, not #." : "The title is the only H1.");
+  add("headings", "Subheadings (H2/H3)", headings.filter((h) => h.level === 2).length >= 2 ? "good" : headings.length ? "ok" : "bad", headings.length ? `${headings.filter((h) => h.level === 2).length} H2, ${headings.filter((h) => h.level === 3).length} H3` : "Break the post into sections with H2 headings.");
+  add("h1", "Single H1", h1InBody ? "bad" : "good", h1InBody ? p.contentFormat === "html" ? "The post title is already the H1. Use Heading 2 for sections (body H1s are shown as H2)." : "The post title is already the H1 — use ## for sections, not #." : "The title is the only H1.");
   add("internal", "Internal links", internal >= 2 ? "good" : internal === 1 ? "ok" : "bad", `${internal} link(s) to your own pages (e.g. /seo-audit, /work).`);
   add("external", "Outbound links", external >= 1 ? "good" : "ok", external ? `${external} link(s) to other sites.` : "Citing a credible source can support the post.");
   add("cover", "Cover image with alt text", p.coverImage && p.coverAlt.trim() ? "good" : p.coverImage ? "bad" : "ok", p.coverImage ? (p.coverAlt.trim() ? "Cover and alt text set." : "Describe the cover image in the alt text.") : "A cover image improves sharing and the blog grid.");

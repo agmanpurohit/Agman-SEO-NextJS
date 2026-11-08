@@ -441,3 +441,20 @@ html.js:not(.reduced) [data-reveal] {
 .blog-prose td { border-bottom: 1px solid var(--color-line); padding: 0.65em 0.9em; text-align: left; }
 .blog-prose th { color: var(--color-bone); font-weight: 600; background: var(--color-ink-2); }
 .blog-prose input[type="checkbox"] { accent-color: var(--color-ember); margin-right: 0.5em; }
+
+/* ── Blog dashboard: visual editor ── */
+.visual-editor:focus { outline: none; }
+.visual-editor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: var(--color-mute);
+  pointer-events: none;
+}
+.visual-editor img { cursor: pointer; }
+.visual-editor img.ProseMirror-selectednode { outline: 2px solid var(--color-ember); outline-offset: 2px; }
+.visual-editor table { display: table; table-layout: fixed; width: 100%; }
+.visual-editor th, .visual-editor td { position: relative; min-width: 4em; vertical-align: top; border: 1px solid var(--color-line-2); }
+.visual-editor th > p, .visual-editor td > p { margin: 0; }
+.visual-editor .selectedCell::after { content: ""; position: absolute; inset: 0; background: rgb(255 90 31 / 0.15); pointer-events: none; }
+.visual-editor a { cursor: text; }

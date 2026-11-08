@@ -1,13 +1,14 @@
 import "server-only";
 import { revalidatePath } from "next/cache";
-import { renderMarkdown } from "./markdown";
-import { analysePost, readingMinutes, wordCount } from "./seo-analysis";
+import { renderContent } from "./markdown";
+import { analysePost } from "./seo-analysis";
+import { readingMinutes, wordCount } from "./content";
 import { savePost, slugTaken, deletePost, type Derived } from "./db";
 import type { Post, PostInput } from "./types";
 
 export function derive(input: PostInput): Derived {
-  const { html, toc } = renderMarkdown(input.contentMd);
-  return { contentHtml: html, toc, wordCount: wordCount(input.contentMd), readingMinutes: readingMinutes(input.contentMd), seoScore: analysePost(input).score };
+  const { html, toc } = renderContent(input.contentMd, input.contentFormat);
+  return { contentHtml: html, toc, wordCount: wordCount(input.contentMd, input.contentFormat), readingMinutes: readingMinutes(input.contentMd, input.contentFormat), seoScore: analysePost(input).score };
 }
 
 /** Refresh every cached page on the site (blog list, posts, sitemap, feed and the rest). */

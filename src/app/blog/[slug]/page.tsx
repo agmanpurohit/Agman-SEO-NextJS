@@ -7,11 +7,12 @@ import { breadcrumbJsonLd, absUrl } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TLink } from "@/components/ui/TLink";
 import { ButtonLink } from "@/components/ui/Buttons";
-import { Cover, PostCard, fmtDate } from "@/components/blog/PostCard";
+import { COVER_ASPECT, Cover, PostCard, fmtDate } from "@/components/blog/PostCard";
 import { TableOfContents } from "@/components/blog/TableOfContents";
 import { ShareLinks } from "@/components/blog/ShareLinks";
 import { site } from "@/content/site";
 import { asset } from "@/lib/asset";
+import { parseCustomSchema } from "@/lib/blog/custom-schema";
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -116,6 +117,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <JsonLd data={articleLd} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }, { name: post.title, path: `/blog/${post.slug}` }])} />
       {faqLd && <JsonLd data={faqLd} />}
+      {/* Custom JSON-LD added in the dashboard (validated on save; skipped if it ever fails to parse). */}
+      {(() => {
+        const custom = parseCustomSchema(post.customSchema);
+        return custom.ok ? custom.blocks.map((b, i) => <JsonLd key={`custom-${i}`} data={b} />) : null;
+      })()}
 
       <article className="pt-[calc(var(--header-h)+2.5rem)] md:pt-[calc(var(--header-h)+4rem)]">
         {/* Header */}
@@ -161,7 +167,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {post.coverImage && (
           <div className="wrap mt-10">
-            <Cover src={post.coverImage} alt={post.coverAlt || post.title} sizes="(min-width: 1760px) 1650px, 100vw" priority className="aspect-[16/8] border border-line" />
+            <Cover src={post.coverImage} alt={post.coverAlt || post.title} sizes="(min-width: 1760px) 1650px, 100vw" priority className={`${COVER_ASPECT} border border-line`} />
           </div>
         )}
 

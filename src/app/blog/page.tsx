@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/motion";
 import { ButtonLink } from "@/components/ui/Buttons";
 import { TLink } from "@/components/ui/TLink";
 import { BlogExplorer } from "@/components/blog/BlogExplorer";
-import { Cover, fmtDate } from "@/components/blog/PostCard";
+import { COVER_ASPECT, Cover, fmtDate } from "@/components/blog/PostCard";
 import { listLivePosts } from "@/lib/blog/db";
 import type { PostSummary } from "@/lib/blog/types";
 import { site } from "@/content/site";
@@ -96,7 +96,7 @@ export default async function BlogPage() {
             {/* Featured */}
             <Reveal as="article" className="group mb-16 md:mb-20">
               <TLink href={`/blog/${featured.slug}`} className="grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:items-center" data-cursor="Read">
-                <Cover src={featured.coverImage} alt={featured.coverAlt || featured.title} sizes="(min-width: 1024px) 58vw, 100vw" priority className="aspect-[16/9] border border-line transition-colors duration-500 group-hover:border-ember/60" />
+                <Cover src={featured.coverImage} alt={featured.coverAlt || featured.title} sizes="(min-width: 1024px) 58vw, 100vw" priority className={`${COVER_ASPECT} border border-line transition-colors duration-500 group-hover:border-ember/60`} />
                 <div>
                   <p className="t-label flex flex-wrap gap-x-3">
                     <span className="ember">{featured.featured ? "Featured" : "Latest"}</span>

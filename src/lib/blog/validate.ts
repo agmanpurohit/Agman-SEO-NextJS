@@ -1,5 +1,7 @@
 import "server-only";
 import { slugify, type PostInput } from "./types";
+import { parseCustomSchema, CUSTOM_SCHEMA_MAX } from "./custom-schema";
+import { htmlToText } from "./content";
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const list = (v: unknown, maxItems: number, maxLen: number) =>
@@ -38,7 +40,9 @@ export function parsePostInput(body: Record<string, unknown>): { input: PostInpu
     title,
     slug,
     excerpt: str(body.excerpt, 400),
-    contentMd: typeof body.contentMd === "string" ? body.contentMd.slice(0, 200_000) : "",
+    contentMd: typeof body.contentMd === "string" ? body.contentMd.slice(0, 300_000) : "",
+    contentFormat: body.contentFormat === "html" ? "html" : "markdown",
+    customSchema: typeof body.customSchema === "string" ? body.customSchema.trim().slice(0, CUSTOM_SCHEMA_MAX + 1) : "",
     coverImage: url(body.coverImage) || null,
     coverAlt: str(body.coverAlt, 250),
     category: str(body.category, 60),
@@ -62,8 +66,11 @@ export function parsePostInput(body: Record<string, unknown>): { input: PostInpu
   const errors: Record<string, string> = {};
   if (title.length < 3) errors.title = "Give the post a title.";
   if (!slug) errors.slug = "The URL slug can’t be empty.";
+  const schema = parseCustomSchema(input.customSchema);
+  if (!schema.ok) errors.customSchema = `Custom schema: ${schema.error}`;
   if (status === "published") {
-    if (!input.contentMd.trim()) errors.contentMd = "Write some content before publishing.";
+    const hasContent = input.contentFormat === "html" ? htmlToText(input.contentMd).length > 0 || /<img\b/i.test(input.contentMd) : !!input.contentMd.trim();
+    if (!hasContent) errors.contentMd = "Write some content before publishing.";
     if (input.coverImage && !input.coverAlt) errors.coverAlt = "Add alt text for the cover image.";
   }
   return { input, errors };

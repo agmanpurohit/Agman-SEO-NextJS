@@ -42,6 +42,9 @@ export function ensureBlogSchema() {
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
       )`;
       await q`CREATE INDEX IF NOT EXISTS blog_posts_live ON blog_posts (status, published_at DESC)`;
+      // Added later: body format (markdown | html) and custom JSON-LD. Existing posts stay Markdown.
+      await q`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS content_format TEXT NOT NULL DEFAULT 'markdown'`;
+      await q`ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS custom_schema TEXT NOT NULL DEFAULT ''`;
       // Old slugs keep working: a renamed post's previous URLs 308-redirect to the new one.
       await q`CREATE TABLE IF NOT EXISTS blog_redirects (
         old_slug TEXT PRIMARY KEY,
@@ -74,6 +77,8 @@ function toPost(r: Row): Post {
     title: r.title as string,
     excerpt: r.excerpt as string,
     contentMd: r.content_md as string,
+    contentFormat: r.content_format === "html" ? "html" : "markdown",
+    customSchema: (r.custom_schema as string) ?? "",
     contentHtml: r.content_html as string,
     toc: (r.toc as TocItem[]) ?? [],
     coverImage: (r.cover_image as string) ?? null,
@@ -169,7 +174,8 @@ export async function savePost(input: PostInput, d: Derived, id?: number): Promi
     const before = (await q`SELECT slug FROM blog_posts WHERE id = ${id}`) as { slug: string }[];
     if (!before.length) throw new Error("not_found");
     rows = (await q`UPDATE blog_posts SET
-      slug = ${v.slug}, title = ${v.title}, excerpt = ${v.excerpt}, content_md = ${v.contentMd}, content_html = ${d.contentHtml},
+      slug = ${v.slug}, title = ${v.title}, excerpt = ${v.excerpt}, content_md = ${v.contentMd}, content_format = ${v.contentFormat},
+      custom_schema = ${v.customSchema}, content_html = ${d.contentHtml},
       toc = ${v.toc}::jsonb, cover_image = ${v.coverImage}, cover_alt = ${v.coverAlt}, category = ${v.category}, tags = ${v.tags}::text[],
       focus_keyword = ${v.focusKeyword}, secondary_keywords = ${v.secondaryKeywords}::text[], meta_title = ${v.metaTitle},
       meta_description = ${v.metaDescription}, canonical_url = ${v.canonicalUrl}, noindex = ${v.noindex}, nofollow = ${v.nofollow},
@@ -182,10 +188,10 @@ export async function savePost(input: PostInput, d: Derived, id?: number): Promi
       await q`DELETE FROM blog_redirects WHERE old_slug = ${v.slug}`;
     }
   } else {
-    rows = (await q`INSERT INTO blog_posts (slug, title, excerpt, content_md, content_html, toc, cover_image, cover_alt, category, tags,
+    rows = (await q`INSERT INTO blog_posts (slug, title, excerpt, content_md, content_format, custom_schema, content_html, toc, cover_image, cover_alt, category, tags,
       focus_keyword, secondary_keywords, meta_title, meta_description, canonical_url, noindex, nofollow, og_title, og_description,
       og_image, faq, status, published_at, featured, word_count, reading_minutes, seo_score)
-      VALUES (${v.slug}, ${v.title}, ${v.excerpt}, ${v.contentMd}, ${d.contentHtml}, ${v.toc}::jsonb, ${v.coverImage}, ${v.coverAlt},
+      VALUES (${v.slug}, ${v.title}, ${v.excerpt}, ${v.contentMd}, ${v.contentFormat}, ${v.customSchema}, ${d.contentHtml}, ${v.toc}::jsonb, ${v.coverImage}, ${v.coverAlt},
       ${v.category}, ${v.tags}::text[], ${v.focusKeyword}, ${v.secondaryKeywords}::text[], ${v.metaTitle}, ${v.metaDescription},
       ${v.canonicalUrl}, ${v.noindex}, ${v.nofollow}, ${v.ogTitle}, ${v.ogDescription}, ${v.ogImage}, ${v.faq}::jsonb, ${v.status},
       ${v.publishedAt}, ${v.featured}, ${d.wordCount}, ${d.readingMinutes}, ${d.seoScore}) RETURNING *`) as Row[];

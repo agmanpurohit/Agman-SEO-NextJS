@@ -3,11 +3,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { analysePost, effectiveMetaDescription, effectiveMetaTitle, readingMinutes, wordCount } from "@/lib/blog/seo-analysis";
+import dynamic from "next/dynamic";
+import { analysePost, effectiveMetaDescription, effectiveMetaTitle } from "@/lib/blog/seo-analysis";
+import { readingMinutes, wordCount } from "@/lib/blog/content";
+import { parseCustomSchema, AUTO_SCHEMA_TYPES } from "@/lib/blog/custom-schema";
 import { slugify, isScheduled, type PostInput, type FaqItem } from "@/lib/blog/types";
 import { DeletePostButton } from "./DeletePostButton";
 
 const SITE = "agmanrajpurohit.com";
+
+// The visual editor is only needed in the dashboard and only in the browser.
+const VisualEditor = dynamic(() => import("./VisualEditor").then((m) => m.VisualEditor), {
+  ssr: false,
+  loading: () => <div className="min-h-[60vh] p-5 text-sm text-mute">Loading editor…</div>,
+});
+
+type Mode = "visual" | "html" | "markdown";
 
 type Props = { id?: number; initial: PostInput; categories: string[] };
 
@@ -17,6 +28,9 @@ export function PostEditor({ id, initial, categories }: Props) {
   const [p, setP] = useState<PostInput>(initial);
   const [slugTouched, setSlugTouched] = useState(!!id);
   const [view, setView] = useState<"write" | "split" | "preview">("split");
+  // Visual and HTML edit the same HTML source; Markdown is its own format.
+  const [mode, setMode] = useState<Mode>(initial.contentFormat === "markdown" ? "markdown" : "visual");
+  const [converting, setConverting] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
   const [saving, setSaving] = useState<"" | "draft" | "publish">("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -36,17 +50,18 @@ export function PostEditor({ id, initial, categories }: Props) {
   }, [slugTouched]);
 
   const analysis = useMemo(() => analysePost(p), [p]);
-  const wc = useMemo(() => wordCount(p.contentMd), [p.contentMd]);
+  const wc = useMemo(() => wordCount(p.contentMd, p.contentFormat), [p.contentMd, p.contentFormat]);
+  const schema = useMemo(() => parseCustomSchema(p.customSchema), [p.customSchema]);
 
   // Live preview, rendered by the same server-side renderer as the public page.
   useEffect(() => {
-    if (view === "write") return;
+    if (view === "write" || mode === "visual") return;
     const t = setTimeout(async () => {
-      const res = await fetch("/api/admin/blog/preview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contentMd: p.contentMd }) });
+      const res = await fetch("/api/admin/blog/preview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contentMd: p.contentMd, contentFormat: p.contentFormat }) });
       if (res.ok) setPreviewHtml((await res.json()).html);
     }, 350);
     return () => clearTimeout(t);
-  }, [p.contentMd, view]);
+  }, [p.contentMd, p.contentFormat, view, mode]);
 
   // Warn before leaving with unsaved changes.
   useEffect(() => {
@@ -104,6 +119,40 @@ export function PostEditor({ id, initial, categories }: Props) {
       return null;
     }
     return data.url as string;
+  }
+
+  // ── format switching ──
+  // Visual ⇄ HTML: same source, nothing to convert. To or from Markdown: convert the content.
+  async function switchMode(next: Mode) {
+    if (next === mode || converting) return;
+    const hasContent = p.contentMd.trim().length > 0;
+    if (next === "markdown") {
+      if (hasContent) {
+        if (!window.confirm("Convert this post to Markdown? Headings, lists, links, images and tables are kept; custom HTML styling may be simplified.")) return;
+        setConverting(true);
+        const { default: TurndownService } = await import("turndown");
+        const td = new TurndownService({ headingStyle: "atx", bulletListMarker: "-", codeBlockStyle: "fenced", emDelimiter: "*" });
+        td.keep(["table", "u", "sup", "sub", "mark"]);
+        set("contentMd", td.turndown(p.contentMd));
+        setConverting(false);
+      }
+      set("contentFormat", "markdown");
+    } else {
+      if (p.contentFormat === "markdown" && hasContent) {
+        setConverting(true);
+        const res = await fetch("/api/admin/blog/preview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contentMd: p.contentMd, contentFormat: "markdown" }) });
+        setConverting(false);
+        if (!res.ok) return setNotice({ tone: "err", text: "Couldn’t convert the content. Please try again." });
+        // Strip the display-only extras the renderer adds (heading anchors, ids, lazy-loading).
+        const doc = new DOMParser().parseFromString((await res.json()).html, "text/html");
+        doc.querySelectorAll("a.heading-anchor").forEach((a) => a.remove());
+        doc.querySelectorAll("[id],[loading],[decoding]").forEach((el) => ["id", "loading", "decoding"].forEach((k) => el.removeAttribute(k)));
+        doc.querySelectorAll("a[target]").forEach((a) => { a.removeAttribute("target"); a.removeAttribute("rel"); });
+        set("contentMd", doc.body.innerHTML.trim());
+      }
+      set("contentFormat", "html");
+    }
+    setMode(next);
   }
 
   // ── markdown toolbar ──
@@ -227,75 +276,140 @@ export function PostEditor({ id, initial, categories }: Props) {
 
           {/* Editor */}
           <div className="border border-line">
-            <div className="flex flex-wrap items-center gap-1 border-b border-line bg-ink-2 px-2 py-1.5">
-              {[
-                ["H2", () => linePrefix("## "), "Section heading"],
-                ["H3", () => linePrefix("### "), "Sub-heading"],
-                ["B", () => wrap("**"), "Bold"],
-                ["I", () => wrap("*"), "Italic"],
-                ["Link", () => wrap("[", "](https://)", "link text"), "Link"],
-                ["• List", () => linePrefix("- "), "Bulleted list"],
-                ["1. List", () => linePrefix("1. "), "Numbered list"],
-                ["Quote", () => linePrefix("> "), "Quote"],
-                ["Code", () => wrap("`"), "Inline code"],
-                ["Table", () => insert("\n\n| Column | Column |\n| --- | --- |\n| Cell | Cell |\n\n"), "Table"],
-                ["—", () => insert("\n\n---\n\n"), "Divider"],
-              ].map(([t, fn, title]) => (
-                <button key={t as string} type="button" title={title as string} onClick={fn as () => void} className="rounded px-2.5 py-1.5 text-xs text-bone-dim transition-colors hover:bg-ink-3 hover:text-bone">
-                  {t as string}
-                </button>
-              ))}
-              <button type="button" title="Upload and insert an image" onClick={() => fileBody.current?.click()} className="rounded px-2.5 py-1.5 text-xs text-bone-dim hover:bg-ink-3 hover:text-bone">
-                {uploading === "body" ? "Uploading…" : "Image"}
-              </button>
-              <input
-                ref={fileBody}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
-                className="hidden"
-                onChange={async (e) => {
-                  const f = e.target.files?.[0];
-                  e.target.value = "";
-                  if (!f) return;
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-ink px-3 py-2">
+              <div className="flex items-center gap-2">
+                <span className="t-label">Write in</span>
+                <div className="flex rounded border border-line-2 p-0.5" role="radiogroup" aria-label="Content format">
+                  {([
+                    ["visual", "Visual"],
+                    ["html", "HTML"],
+                    ["markdown", "Markdown"],
+                  ] as const).map(([m, label]) => (
+                    <button
+                      key={m}
+                      type="button"
+                      role="radio"
+                      aria-checked={mode === m}
+                      disabled={converting}
+                      onClick={() => switchMode(m)}
+                      className={`rounded px-3 py-1 text-xs ${mode === m ? "bg-bone text-ink" : "text-bone-dim hover:text-bone"}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                {converting && <span className="text-xs text-mute">Converting…</span>}
+              </div>
+              <span className="text-xs text-mute">
+                {mode === "visual" ? "Paste straight from Google Docs, Word or ChatGPT: formatting is kept." : mode === "html" ? "Paste or write HTML. Scripts, styles and iframes are removed on save." : "Markdown syntax: ## heading, **bold**, [link](url)."}
+              </span>
+            </div>
+
+            {mode === "visual" ? (
+              <VisualEditor
+                value={p.contentMd}
+                onChange={(html) => set("contentMd", html)}
+                uploading={uploading === "body"}
+                onUploadImage={async (file) => {
                   setUploading("body");
-                  const url = await upload(f);
+                  const url = await upload(file);
                   setUploading("");
-                  if (url) insert(`\n\n![Describe this image](${url} "Optional caption")\n\n`);
+                  return url;
                 }}
               />
-              <div className="ml-auto flex rounded border border-line-2 p-0.5">
-                {(["write", "split", "preview"] as const).map((v) => (
-                  <button key={v} type="button" onClick={() => setView(v)} className={`rounded px-2.5 py-1 text-xs capitalize ${view === v ? "bg-bone text-ink" : "text-bone-dim hover:text-bone"}`}>
-                    {v}
+            ) : (
+              <>
+                <div className="flex flex-wrap items-center gap-1 border-b border-line bg-ink-2 px-2 py-1.5">
+                  {(mode === "markdown"
+                    ? [
+                        ["H2", () => linePrefix("## "), "Section heading"],
+                        ["H3", () => linePrefix("### "), "Sub-heading"],
+                        ["B", () => wrap("**"), "Bold"],
+                        ["I", () => wrap("*"), "Italic"],
+                        ["Link", () => wrap("[", "](https://)", "link text"), "Link"],
+                        ["• List", () => linePrefix("- "), "Bulleted list"],
+                        ["1. List", () => linePrefix("1. "), "Numbered list"],
+                        ["Quote", () => linePrefix("> "), "Quote"],
+                        ["Code", () => wrap("`"), "Inline code"],
+                        ["Table", () => insert("\n\n| Column | Column |\n| --- | --- |\n| Cell | Cell |\n\n"), "Table"],
+                        ["—", () => insert("\n\n---\n\n"), "Divider"],
+                      ]
+                    : [
+                        ["H2", () => wrap("<h2>", "</h2>", "Section heading"), "Section heading"],
+                        ["H3", () => wrap("<h3>", "</h3>", "Sub-heading"), "Sub-heading"],
+                        ["P", () => wrap("<p>", "</p>", "Paragraph"), "Paragraph"],
+                        ["B", () => wrap("<strong>", "</strong>"), "Bold"],
+                        ["I", () => wrap("<em>", "</em>"), "Italic"],
+                        ["Link", () => wrap('<a href="https://">', "</a>", "link text"), "Link"],
+                        ["• List", () => insert("\n<ul>\n  <li>Item</li>\n  <li>Item</li>\n</ul>\n"), "Bulleted list"],
+                        ["1. List", () => insert("\n<ol>\n  <li>Step</li>\n  <li>Step</li>\n</ol>\n"), "Numbered list"],
+                        ["Quote", () => wrap("<blockquote><p>", "</p></blockquote>", "Quote"), "Quote"],
+                        ["Code", () => wrap("<code>", "</code>", "code"), "Inline code"],
+                        ["Table", () => insert("\n<table>\n  <thead><tr><th>Column</th><th>Column</th></tr></thead>\n  <tbody><tr><td>Cell</td><td>Cell</td></tr></tbody>\n</table>\n"), "Table"],
+                        ["—", () => insert("\n<hr />\n"), "Divider"],
+                      ]
+                  ).map(([t, fn, title]) => (
+                    <button key={t as string} type="button" title={title as string} onClick={fn as () => void} className="rounded px-2.5 py-1.5 text-xs text-bone-dim transition-colors hover:bg-ink-3 hover:text-bone">
+                      {t as string}
+                    </button>
+                  ))}
+                  <button type="button" title="Upload and insert an image" onClick={() => fileBody.current?.click()} className="rounded px-2.5 py-1.5 text-xs text-bone-dim hover:bg-ink-3 hover:text-bone">
+                    {uploading === "body" ? "Uploading…" : "Image"}
                   </button>
-                ))}
-              </div>
-            </div>
-            <div className={`grid ${view === "split" ? "lg:grid-cols-2" : ""}`}>
-              {view !== "preview" && (
-                <textarea
-                  ref={textarea}
-                  aria-label="Post content (Markdown)"
-                  value={p.contentMd}
-                  onChange={(e) => set("contentMd", e.target.value)}
-                  data-lenis-prevent
-                  spellCheck
-                  placeholder={"Start writing in Markdown…\n\n## A section heading\n\nA paragraph with **bold** text and a [link](/seo-audit)."}
-                  className="t-mono min-h-[60vh] w-full resize-y bg-ink p-5 text-[0.92rem] leading-7 text-bone outline-none"
-                />
-              )}
-              {view !== "write" && (
-                <div data-lenis-prevent className={`min-h-[60vh] overflow-auto bg-ink-2/40 p-5 ${view === "split" ? "max-h-[75vh] border-t border-line lg:border-t-0 lg:border-l" : ""}`}>
-                  {p.title && <h1 className="mb-4 text-3xl font-semibold tracking-tight">{p.title}</h1>}
-                  {previewHtml ? <div className="blog-prose" dangerouslySetInnerHTML={{ __html: previewHtml }} /> : <p className="t-body text-sm">The preview appears here as you write.</p>}
+                  <input
+                    ref={fileBody}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const f = e.target.files?.[0];
+                      e.target.value = "";
+                      if (!f) return;
+                      setUploading("body");
+                      const url = await upload(f);
+                      setUploading("");
+                      if (url) insert(mode === "markdown" ? `\n\n![Describe this image](${url} "Optional caption")\n\n` : `\n<figure>\n  <img src="${url}" alt="Describe this image" />\n  <figcaption>Optional caption</figcaption>\n</figure>\n`);
+                    }}
+                  />
+                  <div className="ml-auto flex rounded border border-line-2 p-0.5">
+                    {(["write", "split", "preview"] as const).map((v) => (
+                      <button key={v} type="button" onClick={() => setView(v)} className={`rounded px-2.5 py-1 text-xs capitalize ${view === v ? "bg-bone text-ink" : "text-bone-dim hover:text-bone"}`}>
+                        {v}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
-            </div>
+                <div className={`grid ${view === "split" ? "lg:grid-cols-2" : ""}`}>
+                  {view !== "preview" && (
+                    <textarea
+                      ref={textarea}
+                      aria-label={mode === "html" ? "Post content (HTML)" : "Post content (Markdown)"}
+                      value={p.contentMd}
+                      onChange={(e) => set("contentMd", e.target.value)}
+                      data-lenis-prevent
+                      spellCheck={mode === "markdown"}
+                      placeholder={
+                        mode === "html"
+                          ? '<p>Paste or write your HTML here…</p>\n\n<h2>A section heading</h2>\n<p>A paragraph with <strong>bold</strong> text and a <a href="/seo-audit">link</a>.</p>'
+                          : "Start writing in Markdown…\n\n## A section heading\n\nA paragraph with **bold** text and a [link](/seo-audit)."
+                      }
+                      className="t-mono min-h-[60vh] w-full resize-y bg-ink p-5 text-[0.92rem] leading-7 text-bone outline-none"
+                    />
+                  )}
+                  {view !== "write" && (
+                    <div data-lenis-prevent className={`min-h-[60vh] overflow-auto bg-ink-2/40 p-5 ${view === "split" ? "max-h-[75vh] border-t border-line lg:border-t-0 lg:border-l" : ""}`}>
+                      {p.title && <h1 className="mb-4 text-3xl font-semibold tracking-tight">{p.title}</h1>}
+                      {previewHtml ? <div className="blog-prose" dangerouslySetInnerHTML={{ __html: previewHtml }} /> : <p className="t-body text-sm">The preview appears here as you write.</p>}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
             <div className="flex flex-wrap justify-between gap-2 border-t border-line px-4 py-2 text-xs text-mute">
               <span>
-                {wc} words · {readingMinutes(p.contentMd)} min read
+                {wc} words · {readingMinutes(p.contentMd, p.contentFormat)} min read
               </span>
-              <span>Markdown supported · Ctrl+S to save</span>
+              <span>{mode === "visual" ? "Visual editor" : mode === "html" ? "HTML" : "Markdown"} · Ctrl+S to save</span>
             </div>
           </div>
           {err("contentMd")}
@@ -393,7 +507,7 @@ export function PostEditor({ id, initial, categories }: Props) {
             </label>
             <input id="coverAlt" value={p.coverAlt} onChange={(e) => set("coverAlt", e.target.value)} className={input} placeholder="Describe what the image shows" />
             {err("coverAlt")}
-            <p className="mt-1 text-xs text-mute">Best size: 1600×900 (16:9), under 400 KB. WebP is ideal.</p>
+            <p className="mt-1 text-xs text-mute">Best size: 1200×630 (the standard share-image shape), under 400 KB. WebP is ideal. Other shapes are shown whole, never cropped.</p>
           </Panel>
 
           <Panel title="Social sharing">
@@ -454,6 +568,60 @@ export function PostEditor({ id, initial, categories }: Props) {
                 <span className="block text-xs text-mute">Rarely needed.</span>
               </span>
             </label>
+          </Panel>
+
+          <Panel title="Custom schema (JSON-LD)">
+            <p className="mb-2 text-xs leading-relaxed text-mute">
+              Added to this post on top of the automatic {AUTO_SCHEMA_TYPES.filter((t) => t !== "FAQPage" || p.faq.length).join(", ")} schema. Paste JSON, or full{" "}
+              <code className="text-bone-dim">&lt;script type=&quot;application/ld+json&quot;&gt;</code> blocks (several are fine).
+            </p>
+            <textarea
+              id="customSchema"
+              aria-label="Custom schema JSON-LD"
+              rows={9}
+              value={p.customSchema}
+              onChange={(e) => set("customSchema", e.target.value)}
+              data-lenis-prevent
+              spellCheck={false}
+              placeholder={'{\n  "@context": "https://schema.org",\n  "@type": "HowTo",\n  "name": "…"\n}'}
+              className={`${input} t-mono resize-y text-xs leading-5`}
+            />
+            {p.customSchema.trim() &&
+              (schema.ok ? (
+                <div className="mt-2 space-y-1 text-xs">
+                  <p className="text-[#4fd18b]">
+                    ✓ Valid JSON-LD · {schema.blocks.length} block{schema.blocks.length === 1 ? "" : "s"}
+                    {schema.types.length ? ` · ${schema.types.join(", ")}` : ""}
+                  </p>
+                  {schema.types.filter((t) => AUTO_SCHEMA_TYPES.includes(t) && (t !== "FAQPage" || p.faq.length)).map((t) => (
+                    <p key={t} className="text-[#f0b64a]">
+                      {t} is already added automatically. Two {t} blocks can confuse Google; remove one.
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 text-xs text-ember-soft">✕ {schema.error}</p>
+              ))}
+            {err("customSchema")}
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+              {schema.ok && schema.blocks.length > 0 && (
+                <button
+                  type="button"
+                  className="text-bone-dim hover:text-bone"
+                  onClick={() => set("customSchema", schema.blocks.map((b) => `<script type="application/ld+json">\n${JSON.stringify(b, null, 2)}\n</script>`).join("\n\n"))}
+                >
+                  Tidy formatting
+                </button>
+              )}
+              <a href="/free-seo-tools/schema-markup-generator" target="_blank" rel="noopener noreferrer" className="text-bone-dim hover:text-bone">
+                Schema generator ↗
+              </a>
+              {id && p.status === "published" && !scheduled && (
+                <a href={`https://search.google.com/test/rich-results?url=${encodeURIComponent(`https://${SITE}/blog/${p.slug}`)}`} target="_blank" rel="noopener noreferrer" className="text-bone-dim hover:text-bone">
+                  Test in Google ↗
+                </a>
+              )}
+            </div>
           </Panel>
 
           {id && (
