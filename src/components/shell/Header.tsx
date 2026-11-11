@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { lockScroll } from "@/lib/scroll";
-import { nav, site, primaryLocation, auditTool } from "@/content/site";
+import { nav, site, auditTool } from "@/content/site";
 import { TLink } from "@/components/ui/TLink";
 import { Logo } from "@/components/brand/Logo";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { ToolsMenu } from "@/components/shell/ToolsMenu";
 import { tools, TOOLS_HUB } from "@/content/tools";
+import { useSite } from "@/components/shell/SiteSettingsProvider";
 
 const isActive = (pathname: string, href: string) => {
   if (href === "/") return pathname === "/";
@@ -19,6 +20,7 @@ const isActive = (pathname: string, href: string) => {
 };
 
 export function Header() {
+  const liveSite = useSite();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const bar = useRef<HTMLElement>(null);
@@ -143,7 +145,7 @@ export function Header() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ember" />
               </span>
-              {site.availability} · {primaryLocation.city}
+              {liveSite.availability} · {liveSite.locations[0].city}
             </span>
             <Magnetic>
               <TLink href={auditTool.href} className="btn btn-primary !h-11 !px-5" data-cursor="Audit">
@@ -221,14 +223,16 @@ export function Header() {
           </ul>
         </nav>
         <div data-m-fade className="wrap flex flex-col gap-3 pb-10">
-          <a href={`mailto:${site.email}`} tabIndex={open ? 0 : -1} className="text-lg text-bone">
-            {site.email}
+          <a href={`mailto:${liveSite.email}`} tabIndex={open ? 0 : -1} className="text-lg text-bone">
+            {liveSite.email}
           </a>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <a href={primaryLocation.whatsapp ?? "#"} tabIndex={open ? 0 : -1} className="t-label !text-bone" target="_blank" rel="noopener noreferrer">
-              WhatsApp
-            </a>
-            <a href={site.linkedin} tabIndex={open ? 0 : -1} className="t-label !text-bone" target="_blank" rel="noopener noreferrer">
+            {liveSite.locations[0].whatsapp && (
+              <a href={liveSite.locations[0].whatsapp} tabIndex={open ? 0 : -1} className="t-label !text-bone" target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>
+            )}
+            <a href={liveSite.linkedin} tabIndex={open ? 0 : -1} className="t-label !text-bone" target="_blank" rel="noopener noreferrer">
               LinkedIn
             </a>
             <a href={site.cv} tabIndex={open ? 0 : -1} className="t-label !text-bone" download>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { AdminLogout, ClearCacheButton } from "@/components/audit/AdminControls";
 
 /** Shared header for the admin area: section tabs + sign out. */
-export function AdminTabs({ active, title, actions }: { active: "leads" | "blog" | "tools" | "seo"; title: string; actions?: React.ReactNode }) {
+export function AdminTabs({ active, title, actions }: { active: "leads" | "blog" | "tools" | "seo" | "media" | "settings"; title: string; actions?: React.ReactNode }) {
   const tab = (key: string, href: string, label: string) => (
     <Link
       href={href}
@@ -20,6 +20,8 @@ export function AdminTabs({ active, title, actions }: { active: "leads" | "blog"
           {tab("leads", "/admin", "Audit leads")}
           {tab("blog", "/admin/blog", "Blog")}
           {tab("seo", "/admin/seo", "SEO")}
+          {tab("media", "/admin/media", "Media")}
+          {tab("settings", "/admin/settings", "Settings")}
           {tab("tools", "/admin/tools", "Tool usage")}
         </div>
         <h1 className="t-h2 mt-4">{title}</h1>

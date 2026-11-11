@@ -81,7 +81,7 @@ export function webPageJsonLd({
 }
 
 /** Person + WebSite structured data, describing Agman as one consistent entity. */
-export function personJsonLd() {
+export function personJsonLd(live: { email: string; linkedin: string; locations: readonly { phone: string }[] } = site) {
   const id = `${site.url}/#person`;
   return {
     "@context": "https://schema.org",
@@ -99,11 +99,11 @@ export function personJsonLd() {
         mainEntityOfPage: { "@id": `${site.url}/#webpage` },
         workLocation: { "@type": "Place", name: "Dubai, United Arab Emirates" },
         image: `${site.url}${site.photo}`,
-        email: `mailto:${site.email}`,
-        telephone: site.locations[0].phone.replace(/\s/g, ""),
+        email: `mailto:${live.email}`,
+        telephone: live.locations[0].phone.replace(/\s/g, ""),
         nationality: { "@type": "Country", name: "India" },
         address: { "@type": "PostalAddress", addressLocality: "Dubai", addressCountry: "AE" },
-        sameAs: [site.linkedin],
+        sameAs: [live.linkedin],
         knowsAbout: [
           "Search Engine Optimization",
           "Technical SEO",

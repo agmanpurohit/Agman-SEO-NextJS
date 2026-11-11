@@ -11,12 +11,11 @@ import Script from "next/script";
  * Never loads on /admin pages, and a browser that has opened /admin stays excluded
  * (so the owner's own visits aren't counted). /?analytics=on re-enables it for that browser.
  *
- * The container ID can be overridden with NEXT_PUBLIC_GTM_ID.
+ * The container ID is set in Admin → Settings (default from NEXT_PUBLIC_GTM_ID or GTM-TKHSB426).
  */
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID?.trim() || "GTM-TKHSB426";
 const LIVE_HOSTS = ["agmanrajpurohit.com", "www.agmanrajpurohit.com"];
 
-const snippet = `
+const snippet = (GTM_ID: string) => `
 (function(){
   if (${JSON.stringify(LIVE_HOSTS)}.indexOf(location.hostname) === -1) return;
   var p = location.pathname, KEY = 'ar-no-track';
@@ -40,11 +39,13 @@ const snippet = `
   document.head.appendChild(s);
 })();`;
 
-export function GoogleTag() {
+export function GoogleTag({ gtmId }: { gtmId: string }) {
+  const GTM_ID = gtmId.trim();
+  // Empty in Admin → Settings turns tracking off.
   if (!/^GTM-[A-Z0-9]+$/.test(GTM_ID)) return null;
   return (
     <Script id="google-tag" strategy="afterInteractive">
-      {snippet}
+      {snippet(GTM_ID)}
     </Script>
   );
 }

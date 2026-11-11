@@ -14,6 +14,7 @@ import { site } from "@/content/site";
 import { asset } from "@/lib/asset";
 import { parseCustomSchema } from "@/lib/blog/custom-schema";
 import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { getSite } from "@/lib/site/settings";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -73,6 +74,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const live = await getSite();
   const { slug } = await params;
   const post = await load(slug);
   if (!post) {
@@ -240,7 +242,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <TLink href="/work" className="link-u text-bone">
                       Case studies
                     </TLink>
-                    <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="link-u text-bone">
+                    <a href={live.linkedin} target="_blank" rel="noopener noreferrer" className="link-u text-bone">
                       LinkedIn ↗
                     </a>
                   </div>

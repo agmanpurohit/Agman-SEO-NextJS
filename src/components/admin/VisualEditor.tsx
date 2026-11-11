@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import { TableKit } from "@tiptap/extension-table";
 import { Placeholder } from "@tiptap/extensions";
+import { MediaPicker } from "./media/MediaPicker";
 
 /**
  * Word-processor style editor for blog posts (stores HTML). Pasting from Google Docs, Word,
@@ -22,6 +23,7 @@ type Props = {
 export function VisualEditor({ value, onChange, onUploadImage, uploading }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const lastEmitted = useRef(value);
+  const [libraryOpen, setLibraryOpen] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -80,7 +82,13 @@ export function VisualEditor({ value, onChange, onUploadImage, uploading }: Prop
 
   return (
     <div>
-      <Toolbar editor={editor} onImage={() => fileRef.current?.click()} uploading={uploading} />
+      <Toolbar editor={editor} onImage={() => fileRef.current?.click()} onLibrary={() => setLibraryOpen(true)} uploading={uploading} />
+      <MediaPicker
+        open={libraryOpen}
+        onClose={() => setLibraryOpen(false)}
+        title="Insert an image"
+        onPick={(m) => editor.chain().focus().setImage({ src: m.url, alt: m.alt }).run()}
+      />
       <input
         ref={fileRef}
         type="file"
@@ -126,7 +134,7 @@ function cleanPastedHtml(html: string) {
   return doc.body.innerHTML;
 }
 
-function Toolbar({ editor, onImage, uploading }: { editor: Editor; onImage: () => void; uploading: boolean }) {
+function Toolbar({ editor, onImage, onLibrary, uploading }: { editor: Editor; onImage: () => void; onLibrary: () => void; uploading: boolean }) {
   const c = () => editor.chain().focus();
   const inTable = editor.isActive("table");
   const btn = (label: string, title: string, run: () => void, active = false, disabled = false) => (
@@ -180,6 +188,7 @@ function Toolbar({ editor, onImage, uploading }: { editor: Editor; onImage: () =
       {btn("—", "Divider", () => c().setHorizontalRule().run())}
       {sep("s3")}
       {btn(uploading ? "Uploading…" : "Image", "Upload and insert an image", onImage, false, uploading)}
+      {btn("Library", "Insert an image from the media library", onLibrary)}
       {editor.isActive("image") && btn("Alt text", "Edit image alt text", editAlt)}
       {btn("Table", "Insert table", () => c().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), inTable, inTable)}
       {inTable && (

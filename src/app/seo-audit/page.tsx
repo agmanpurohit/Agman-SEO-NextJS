@@ -8,6 +8,7 @@ import { site } from "@/content/site";
 import { ServicesStrip } from "@/components/services/ServicesStrip";
 import { withSeo } from "@/lib/site/seo";
 import { PageSchema } from "@/components/seo/PageSchema";
+import { getSite } from "@/lib/site/settings";
 
 const TITLE = "Free Website SEO Audit Tool";
 const DESCRIPTION =
@@ -47,7 +48,8 @@ const appLd = {
   description: "Crawls up to 100 pages of a website and checks technical SEO, on-page SEO, content, speed, mobile, images, internal links and structured data.",
 };
 
-export default function SeoAuditPage() {
+export default async function SeoAuditPage() {
+  const live = await getSite();
   return (
     <>
       <PageSchema path={"/seo-audit"} />
@@ -158,8 +160,8 @@ export default function SeoAuditPage() {
             <p>
               You can see your results without giving any details. If you request the PDF report, your name and email are stored with the audit so the report can be sent and so Agman
               can follow up about it. Marketing emails are only sent if you tick the separate opt-in. To have your data deleted, email{" "}
-              <a href={`mailto:${site.email}`} className="link-u text-bone">
-                {site.email}
+              <a href={`mailto:${live.email}`} className="link-u text-bone">
+                {live.email}
               </a>
               .
             </p>

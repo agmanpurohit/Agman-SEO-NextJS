@@ -15,6 +15,10 @@ import { Header } from "@/components/shell/Header";
 import { Footer } from "@/components/shell/Footer";
 import { AuditBand } from "@/components/audit/AuditBand";
 import { VersionWatch } from "@/components/shell/VersionWatch";
+import { getSiteSettings } from "@/lib/site/settings";
+import { resolveSite } from "@/lib/site/settings-shared";
+import { SiteSettingsProvider } from "@/components/shell/SiteSettingsProvider";
+import { AnnouncementBar } from "@/components/shell/AnnouncementBar";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -61,16 +65,18 @@ export const viewport: Viewport = {
 // Runs before paint: flags JS, reduced motion and returning visitors (skip the loader).
 const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');var r=matchMedia('(prefers-reduced-motion: reduce)').matches;if(r){d.classList.add('reduced');d.setAttribute('data-seen','')}try{if(sessionStorage.getItem('ar-seen'))d.setAttribute('data-seen','')}catch(e){}})();`;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
   return (
     <html lang="en" dir="ltr" className={`${archivo.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
-        <GoogleTag />
+        <GoogleTag gtmId={settings.gtmId} />
         <Clarity />
-        <JsonLd data={personJsonLd()} />
+        <JsonLd data={personJsonLd(resolveSite(settings))} />
       </head>
       <body>
+        <SiteSettingsProvider settings={settings}>
         <TransitionProvider>
           <Preloader />
           <SmoothScroll />
@@ -84,7 +90,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Cursor />
           <VersionWatch />
           <div className="grain" aria-hidden="true" />
+          <AnnouncementBar />
         </TransitionProvider>
+        </SiteSettingsProvider>
       </body>
     </html>
   );

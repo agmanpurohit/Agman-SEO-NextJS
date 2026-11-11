@@ -9,6 +9,8 @@ import { readingMinutes, wordCount } from "@/lib/blog/content";
 import { parseCustomSchema, AUTO_SCHEMA_TYPES } from "@/lib/blog/custom-schema";
 import { slugify, isScheduled, type PostInput, type FaqItem } from "@/lib/blog/types";
 import { DeletePostButton } from "./DeletePostButton";
+import { MediaPicker } from "./media/MediaPicker";
+import type { Picked } from "./media/MediaBrowser";
 
 const SITE = "agmanrajpurohit.com";
 
@@ -39,6 +41,8 @@ export function PostEditor({ id, initial, categories }: Props) {
   const [uploading, setUploading] = useState<"" | "cover" | "body" | "og">("");
   const textarea = useRef<HTMLTextAreaElement>(null);
   const fileBody = useRef<HTMLInputElement>(null);
+  // Which field the media library dialog is choosing for (null = closed).
+  const [picker, setPicker] = useState<null | "cover" | "og" | "body">(null);
 
   const set = useCallback(<K extends keyof PostInput>(k: K, v: PostInput[K]) => {
     setP((prev) => {
@@ -197,8 +201,21 @@ export function PostEditor({ id, initial, categories }: Props) {
   const metaTitle = effectiveMetaTitle(p);
   const metaDesc = effectiveMetaDescription(p);
 
+  // A file chosen in the media library: its saved alt text comes along with it.
+  function applyPicked(m: Picked) {
+    if (picker === "cover") {
+      set("coverImage", m.url);
+      if (!p.coverAlt.trim() && m.alt) set("coverAlt", m.alt);
+    } else if (picker === "og") set("ogImage", m.url);
+    else if (picker === "body") {
+      const alt = m.alt || "Describe this image";
+      insert(mode === "markdown" ? `\n\n![${alt}](${m.url})\n\n` : `\n<figure>\n  <img src="${m.url}" alt="${alt.replace(/"/g, "&quot;")}" />\n</figure>\n`);
+    }
+  }
+
   return (
     <div className="pb-24">
+      <MediaPicker open={picker !== null} onClose={() => setPicker(null)} onPick={applyPicked} title={picker === "cover" ? "Choose a cover image" : picker === "og" ? "Choose a social image" : "Insert an image"} />
       {/* Top bar */}
       <div className="sticky top-0 z-30 -mx-[var(--gutter)] mb-8 border-b border-line bg-ink/90 px-[var(--gutter)] py-3 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3">
@@ -356,6 +373,9 @@ export function PostEditor({ id, initial, categories }: Props) {
                   <button type="button" title="Upload and insert an image" onClick={() => fileBody.current?.click()} className="rounded px-2.5 py-1.5 text-xs text-bone-dim hover:bg-ink-3 hover:text-bone">
                     {uploading === "body" ? "Uploading…" : "Image"}
                   </button>
+                  <button type="button" title="Insert an image from the media library" onClick={() => setPicker("body")} className="rounded px-2.5 py-1.5 text-xs text-bone-dim hover:bg-ink-3 hover:text-bone">
+                    Library
+                  </button>
                   <input
                     ref={fileBody}
                     type="file"
@@ -501,6 +521,7 @@ export function PostEditor({ id, initial, categories }: Props) {
                 if (url) set("coverImage", url);
               }}
               onClear={() => set("coverImage", null)}
+              onLibrary={() => setPicker("cover")}
             />
             <label className={`${label} mt-3`} htmlFor="coverAlt">
               Alt text
@@ -544,6 +565,7 @@ export function PostEditor({ id, initial, categories }: Props) {
                 if (url) set("ogImage", url);
               }}
               onClear={() => set("ogImage", null)}
+              onLibrary={() => setPicker("og")}
               emptyText="Uses the cover image (1200×630 works best)"
             />
           </Panel>
@@ -690,7 +712,7 @@ function TagInput({ value, onChange, placeholder }: { value: string[]; onChange:
   );
 }
 
-function ImageField({ value, onUpload, onClear, uploading, compact, emptyText = "Drop an image here or click to upload" }: { value: string | null; onUpload: (f: File) => void; onClear: () => void; uploading: boolean; compact?: boolean; emptyText?: string }) {
+function ImageField({ value, onUpload, onClear, onLibrary, uploading, compact, emptyText = "Drop an image here or click to upload" }: { value: string | null; onUpload: (f: File) => void; onClear: () => void; onLibrary?: () => void; uploading: boolean; compact?: boolean; emptyText?: string }) {
   const ref = useRef<HTMLInputElement>(null);
   const [over, setOver] = useState(false);
   return (
@@ -703,6 +725,11 @@ function ImageField({ value, onUpload, onClear, uploading, compact, emptyText = 
             <button type="button" onClick={() => ref.current?.click()} className="rounded bg-ink/80 px-2.5 py-1 text-xs text-bone backdrop-blur">
               Replace
             </button>
+            {onLibrary && (
+              <button type="button" onClick={onLibrary} className="rounded bg-ink/80 px-2.5 py-1 text-xs text-bone backdrop-blur">
+                Library
+              </button>
+            )}
             <button type="button" onClick={onClear} className="rounded bg-ink/80 px-2.5 py-1 text-xs text-ember-soft backdrop-blur">
               Remove
             </button>
@@ -726,6 +753,11 @@ function ImageField({ value, onUpload, onClear, uploading, compact, emptyText = 
           className={`grid w-full place-items-center rounded border border-dashed px-4 text-center text-xs transition-colors ${compact ? "h-24" : "aspect-video"} ${over ? "border-ember text-bone" : "border-line-2 text-mute hover:border-bone hover:text-bone"}`}
         >
           {uploading ? "Uploading…" : emptyText}
+        </button>
+      )}
+      {!value && onLibrary && (
+        <button type="button" onClick={onLibrary} className="mt-2 text-xs text-bone-dim underline underline-offset-2 hover:text-bone">
+          Choose from media library
         </button>
       )}
       <input

@@ -8,6 +8,7 @@ import { site } from "@/content/site";
 import { ServicesStrip } from "@/components/services/ServicesStrip";
 import { withSeo } from "@/lib/site/seo";
 import { PageSchema } from "@/components/seo/PageSchema";
+import { getSite } from "@/lib/site/settings";
 
 const TITLE = "Hire an SEO Specialist in Dubai";
 const DESCRIPTION =
@@ -17,7 +18,8 @@ export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, descripti
 
 const contactPage = webPageJsonLd({ type: "ContactPage", name: TITLE, description: DESCRIPTION, path: "/contact" });
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const live = await getSite();
   return (
     <>
       <PageSchema path={"/contact"} />
@@ -54,12 +56,12 @@ export default function ContactPage() {
 
             <div className="border-t border-line py-6">
               <p className="t-label">Email</p>
-              <a href={`mailto:${site.email}`} className="link-u mt-2 inline-block text-xl break-all text-bone" data-cursor="Email">
-                {site.email}
+              <a href={`mailto:${live.email}`} className="link-u mt-2 inline-block text-xl break-all text-bone" data-cursor="Email">
+                {live.email}
               </a>
             </div>
 
-            {site.locations.map((l) => (
+            {live.locations.map((l) => (
               <div key={l.city} className="border-t border-line py-6">
                 <div className="flex items-baseline justify-between">
                   <p className="t-label">
@@ -84,7 +86,7 @@ export default function ContactPage() {
               <p className="t-label">Elsewhere</p>
               <ul className="mt-3 flex flex-col gap-2">
                 <li>
-                  <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="link-u text-lg text-bone">
+                  <a href={live.linkedin} target="_blank" rel="noopener noreferrer" className="link-u text-lg text-bone">
                     LinkedIn ↗
                   </a>
                 </li>
@@ -98,7 +100,7 @@ export default function ContactPage() {
 
             <div className="border-t border-line py-6">
               <p className="t-label">Availability</p>
-              <p className="mt-2 text-bone">{site.availabilityLong}</p>
+              <p className="mt-2 text-bone">{live.availabilityLong}</p>
             </div>
           </Reveal>
         </div>

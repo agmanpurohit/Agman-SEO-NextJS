@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SerpCard } from "@/components/tools/serp";
 import { parseCustomSchema } from "@/lib/blog/custom-schema";
+import { MediaPicker } from "@/components/admin/media/MediaPicker";
 
 type Form = {
   title: string;
@@ -73,6 +74,7 @@ export function SeoPageEditor({ path, label, initial }: { path: string; label: s
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [libraryOpen, setLibraryOpen] = useState(false);
   const set = <K extends keyof Form>(k: K, v: Form[K]) => setF((p) => ({ ...p, [k]: v }));
   const schema = useMemo(() => parseCustomSchema(f.customSchema), [f.customSchema]);
 
@@ -174,8 +176,14 @@ export function SeoPageEditor({ path, label, initial }: { path: string; label: s
           <Field label="Social description" count={f.ogDescription.length} max={200}>
             <textarea className={`${input} resize-y`} rows={2} value={f.ogDescription} onChange={(e) => set("ogDescription", e.target.value)} placeholder={live?.ogDescription} />
           </Field>
-          <Field label="Share image URL" hint="1200 × 630. Upload images in the blog editor's media, or use a full https:// URL.">
-            <input className={input} value={f.ogImage} onChange={(e) => set("ogImage", e.target.value)} placeholder={live?.ogImage} inputMode="url" />
+          <Field label="Share image URL" hint="1200 × 630 works everywhere. Pick one from the media library or paste a full https:// URL.">
+            <div className="flex gap-2">
+              <input className={input} value={f.ogImage} onChange={(e) => set("ogImage", e.target.value)} placeholder={live?.ogImage} inputMode="url" />
+              <button type="button" onClick={() => setLibraryOpen(true)} className="shrink-0 rounded border border-line-2 px-3 text-xs text-bone hover:border-bone">
+                Library
+              </button>
+            </div>
+            <MediaPicker open={libraryOpen} onClose={() => setLibraryOpen(false)} title="Choose a share image" onPick={(m) => set("ogImage", m.url)} />
             {err("ogImage")}
           </Field>
         </section>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { site } from "@/content/site";
 import { Magnetic } from "@/components/ui/Magnetic";
+import { useSite } from "@/components/shell/SiteSettingsProvider";
 
 const TYPES = ["Job opportunity", "Freelance project", "Digital marketing services", "Website development", "Collaboration", "Other"];
 
@@ -24,6 +25,7 @@ function validate(v: Record<string, string>): Errors {
 
 /** Contact form with inline validation, honeypot, loading and honest result states. */
 export function ContactForm() {
+  const liveSite = useSite();
   const [values, setValues] = useState({ name: "", email: "", subject: "", inquiry: "", message: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -200,8 +202,8 @@ export function ContactForm() {
         {status === "error" && (
           <p className="border-l border-ember pl-4 text-bone">
             {serverMsg || "Something went wrong while sending."} You can also email me directly at{" "}
-            <a className="underline" href={`mailto:${site.email}`}>
-              {site.email}
+            <a className="underline" href={`mailto:${liveSite.email}`}>
+              {liveSite.email}
             </a>
             .
           </p>
@@ -209,13 +211,18 @@ export function ContactForm() {
         {status === "unconfigured" && (
           <p className="border-l border-ember pl-4 text-bone">
             The form can&apos;t send messages just yet. Please email me directly at{" "}
-            <a className="underline" href={`mailto:${site.email}?subject=${encodeURIComponent(values.subject)}`}>
-              {site.email}
-            </a>{" "}
-            or message me on{" "}
-            <a className="underline" href={site.locations[0].whatsapp!} target="_blank" rel="noopener noreferrer">
-              WhatsApp
+            <a className="underline" href={`mailto:${liveSite.email}?subject=${encodeURIComponent(values.subject)}`}>
+              {liveSite.email}
             </a>
+            {liveSite.locations[0].whatsapp && (
+              <>
+                {" "}
+                or message me on{" "}
+                <a className="underline" href={liveSite.locations[0].whatsapp} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
+              </>
+            )}
             .
           </p>
         )}

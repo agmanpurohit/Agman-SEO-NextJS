@@ -3,19 +3,21 @@ import { markets, services, servicePath, marketPath } from "@/content/services";
 import { TLink } from "@/components/ui/TLink";
 import { Logo } from "@/components/brand/Logo";
 import { LocalTime } from "@/components/ui/LocalTime";
+import { getSite } from "@/lib/site/settings";
 
-export function Footer() {
+export async function Footer() {
+  const live = await getSite();
   const year = new Date().getFullYear();
   return (
     <footer className="relative border-t border-line">
       <div className="wrap grid-12 gap-y-12 pt-20 pb-10 md:pt-28">
         <div className="col-span-4 md:col-span-4">
           <p className="t-label mb-5">Contact</p>
-          <a href={`mailto:${site.email}`} className="link-u text-[clamp(1.25rem,2.4vw,2rem)] font-medium break-all text-bone" data-cursor="Email">
-            {site.email}
+          <a href={`mailto:${live.email}`} className="link-u text-[clamp(1.25rem,2.4vw,2rem)] font-medium break-all text-bone" data-cursor="Email">
+            {live.email}
           </a>
           <ul className="mt-8 flex flex-col gap-3">
-            {site.locations.map((l) => (
+            {live.locations.map((l) => (
               <li key={l.city} className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                 <span className="t-label w-28 !text-bone">
                   {l.city}, {l.country}
@@ -64,15 +66,17 @@ export function Footer() {
           <p className="t-label mb-5">Elsewhere</p>
           <ul className="flex flex-col gap-2">
             <li>
-              <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="link-u text-bone-dim hover:text-bone">
+              <a href={live.linkedin} target="_blank" rel="noopener noreferrer" className="link-u text-bone-dim hover:text-bone">
                 LinkedIn ↗
               </a>
             </li>
-            <li>
-              <a href={site.locations[0].whatsapp!} target="_blank" rel="noopener noreferrer" className="link-u text-bone-dim hover:text-bone">
-                WhatsApp ↗
-              </a>
-            </li>
+            {live.locations[0].whatsapp && (
+              <li>
+                <a href={live.locations[0].whatsapp} target="_blank" rel="noopener noreferrer" className="link-u text-bone-dim hover:text-bone">
+                  WhatsApp ↗
+                </a>
+              </li>
+            )}
             <li>
               <a href={site.cv} download className="link-u text-bone-dim hover:text-bone">
                 Download CV ↓

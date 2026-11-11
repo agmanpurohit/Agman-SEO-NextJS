@@ -8,6 +8,7 @@ import { ButtonA, ButtonLink } from "@/components/ui/Buttons";
 import { hero } from "@/content/home";
 import { site } from "@/content/site";
 import { asset } from "@/lib/asset";
+import { useSite } from "@/components/shell/SiteSettingsProvider";
 
 /**
  * The opening shot. A low-key portrait lit by a movable "studio light" (the pointer on
@@ -15,6 +16,7 @@ import { asset } from "@/lib/asset";
  * the effect is a brighter copy of the same image revealed through a soft mask.
  */
 export function Hero() {
+  const liveSite = useSite();
   const root = useRef<HTMLElement>(null);
   const portrait = useRef<HTMLDivElement>(null);
 
@@ -129,7 +131,7 @@ export function Hero() {
           <p className="t-label hidden text-right sm:block">
             Index Nº 001
             <br />
-            <span className="text-bone">{site.availability}</span>
+            <span className="text-bone">{liveSite.availability}</span>
           </p>
         </div>
 

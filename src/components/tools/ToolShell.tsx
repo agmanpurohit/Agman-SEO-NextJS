@@ -9,6 +9,7 @@ import { tools, toolBySlug, TOOLS_HUB, type ToolSlug } from "@/content/tools";
 import { services } from "@/content/services";
 import { ServicesStrip } from "@/components/services/ServicesStrip";
 import { PageSchema } from "@/components/seo/PageSchema";
+import { getSite } from "@/lib/site/settings";
 
 export type ToolCopy = {
   slug: ToolSlug;
@@ -30,7 +31,8 @@ export type ToolCopy = {
  * BreadcrumbList, WebPage). The tool is a client component passed as children; all the
  * text around it is server-rendered so search engines and AI agents can read it.
  */
-export function ToolShell({ copy, children }: { copy: ToolCopy; children: ReactNode }) {
+export async function ToolShell({ copy, children }: { copy: ToolCopy; children: ReactNode }) {
+  const live = await getSite();
   const tool = toolBySlug(copy.slug);
   const related = tools.filter((t) => t.slug !== copy.slug);
 
@@ -96,8 +98,8 @@ export function ToolShell({ copy, children }: { copy: ToolCopy; children: ReactN
         <p className="mt-4 max-w-[52rem] text-xs leading-relaxed text-mute">
           Privacy: what you enter in this tool is saved with your IP address and approximate location, so I can see how the tools are used and stop abuse. It&apos;s never shared or sold, and
           it&apos;s deleted automatically after 12 months. To have it removed sooner, email{" "}
-          <a href={`mailto:${site.email}`} className="text-bone-dim underline underline-offset-2 hover:text-bone">
-            {site.email}
+          <a href={`mailto:${live.email}`} className="text-bone-dim underline underline-offset-2 hover:text-bone">
+            {live.email}
           </a>
           .
         </p>

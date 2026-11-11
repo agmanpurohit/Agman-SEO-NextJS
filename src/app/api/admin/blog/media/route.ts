@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
 import { isAdmin } from "@/lib/audit/admin-auth";
-import { saveMedia, listMedia } from "@/lib/blog/db";
+import { saveMedia } from "@/lib/blog/db";
+import { ensureMediaSchema, imageSize, setMediaDetails, listMediaItems } from "@/lib/media/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,11 +32,16 @@ export async function POST(req: Request) {
   const base = (file.name || "image").replace(/\.[^.]+$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "image";
   const id = `${base}-${randomBytes(4).toString("hex")}.${type.ext}`;
   await saveMedia(id, file.name || id, type.mime, buf);
-  return NextResponse.json({ url: `/api/blog/media/${id}`, id, size: buf.length }, { status: 201 });
+  // Library details: dimensions measured from the file, optional alt text and display name.
+  await ensureMediaSchema();
+  const { width, height } = await imageSize(buf);
+  const alt = String(form?.get("alt") ?? "").trim().slice(0, 250);
+  const title = String(form?.get("title") ?? "").trim().slice(0, 120) || (file.name || "").replace(/\.[^.]+$/, "").slice(0, 120);
+  await setMediaDetails(id, { alt, title, width, height });
+  return NextResponse.json({ url: `/api/blog/media/${id}`, id, size: buf.length, width, height, alt, title }, { status: 201 });
 }
 
 export async function GET() {
   if (!(await isAdmin())) return NextResponse.json({ error: "Not authorised" }, { status: 401 });
-  const media = await listMedia();
-  return NextResponse.json({ media: media.map((m) => ({ ...m, url: `/api/blog/media/${m.id}` })) });
+  return NextResponse.json({ media: await listMediaItems() }, { headers: { "Cache-Control": "no-store" } });
 }

@@ -10,6 +10,7 @@ import { site } from "@/content/site";
 import { ServicesStrip } from "@/components/services/ServicesStrip";
 import { withSeo } from "@/lib/site/seo";
 import { PageSchema } from "@/components/seo/PageSchema";
+import { getSite } from "@/lib/site/settings";
 
 const TITLE = "SEO Experience and Career";
 const DESCRIPTION =
@@ -19,7 +20,8 @@ export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, descripti
 
 const toolGroups = Array.from(new Set(tools.map((t) => t.group)));
 
-export default function ExperiencePage() {
+export default async function ExperiencePage() {
+  const live = await getSite();
   return (
     <>
       <PageSchema path={"/experience"} />
@@ -35,7 +37,7 @@ export default function ExperiencePage() {
         }
         aside={
           <div className="flex flex-col gap-4">
-            <p className="t-label">{site.availability} · Dubai, UAE</p>
+            <p className="t-label">{live.availability} · Dubai, UAE</p>
             <div>
               <ButtonA href={site.cv} download arrow="down" variant="primary" cursor="PDF">
                 Download CV
