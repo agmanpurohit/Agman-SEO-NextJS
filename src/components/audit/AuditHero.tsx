@@ -40,7 +40,7 @@ export function AuditHero() {
       <div className="wrap">
         <div className="flex items-center justify-between" data-ah-fade>
           <span className="t-label">
-            <span className="ember">05</span> / {String(nav.length).padStart(2, "0")}
+            <span className="ember">04</span> / {String(nav.length).padStart(2, "0")}
           </span>
           <span className="t-label hidden sm:inline">Free tool · No sign-up</span>
         </div>

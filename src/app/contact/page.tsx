@@ -20,7 +20,7 @@ export default function ContactPage() {
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])} />
       <JsonLd data={contactPage} />
       <PageHero
-        index="04"
+        index="06"
         title="Contact"
         display={
           <>

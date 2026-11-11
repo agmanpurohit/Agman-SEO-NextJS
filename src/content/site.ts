@@ -50,9 +50,9 @@ export const nav = [
   { href: "/", label: "Home", index: "01" },
   { href: "/experience", label: "Experience", index: "02" },
   { href: "/work", label: "Work", index: "03" },
-  { href: "/contact", label: "Contact", index: "04" },
-  { href: "/free-seo-tools", label: "Free SEO Tools", index: "05" },
-  { href: "/blog", label: "Blog", index: "06" },
+  { href: "/free-seo-tools", label: "Free SEO Tools", index: "04" },
+  { href: "/blog", label: "Blog", index: "05" },
+  { href: "/contact", label: "Contact", index: "06" },
 ] as const;
 
 /** The free audit tool: linked from the header, a homepage section and a band on every page. */

@@ -27,7 +27,7 @@ export default function FreeSeoToolsPage() {
       <JsonLd data={listLd} />
 
       <PageHero
-        index="05"
+        index="04"
         title="Tools"
         display={
           <>

@@ -65,7 +65,7 @@ export default async function BlogPage() {
       <JsonLd data={blogLd} />
 
       <PageHero
-        index="06"
+        index="05"
         title="Blog"
         display={
           <>
