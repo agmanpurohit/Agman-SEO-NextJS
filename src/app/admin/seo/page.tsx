@@ -71,7 +71,7 @@ export default async function SeoPagesPage() {
                       o?.customSchema && chip("Custom schema", "ember"),
                       o?.robotsIndex === false && chip("noindex", "warn"),
                       o?.robotsFollow === false && chip("nofollow", "warn"),
-                      p.blog?.noindex && chip("noindex", "warn"),
+                      (p.blog?.noindex || p.builder?.noindex) && chip("noindex", "warn"),
                       sm && !sm.include ? chip("Not in sitemap", "warn") : chip("In sitemap", "good"),
                     ].filter(Boolean);
                     return (
@@ -92,9 +92,19 @@ export default async function SeoPagesPage() {
                               Edit in blog editor
                             </Link>
                           ) : (
-                            <Link href={`/admin/seo/edit?path=${encodeURIComponent(p.path)}`} className="link-u text-bone">
-                              Edit SEO
-                            </Link>
+                            <>
+                              {p.builder && (
+                                <>
+                                  <Link href={`/admin/pages/${p.builder.id}`} className="link-u text-bone">
+                                    Edit page
+                                  </Link>
+                                  {" · "}
+                                </>
+                              )}
+                              <Link href={`/admin/seo/edit?path=${encodeURIComponent(p.path)}`} className="link-u text-bone">
+                                Edit SEO
+                              </Link>
+                            </>
                           )}
                         </td>
                       </tr>

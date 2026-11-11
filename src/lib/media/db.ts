@@ -1,4 +1,5 @@
 import "server-only";
+import { ensurePagesSchema } from "@/lib/pages/db";
 import { sql } from "@/lib/audit/db";
 import { ensureBlogSchema } from "@/lib/blog/db";
 import { ensureSiteSchema } from "@/lib/site/db";
@@ -56,9 +57,13 @@ export async function imageSize(buf: Buffer): Promise<{ width: number | null; he
 
 /** Where every media file is referenced, keyed by media id. */
 async function usageMap(): Promise<Map<string, MediaUsage[]>> {
-  await ensureSiteSchema();
+  await Promise.all([ensureSiteSchema(), ensurePagesSchema()]);
   const q = sql();
-  const [postRows, pageRows] = await Promise.all([q`SELECT id, title, content_md, cover_image, og_image, custom_schema FROM blog_posts`, q`SELECT path, og_image, custom_schema FROM seo_overrides`]);
+  const [postRows, pageRows, builtRows] = await Promise.all([
+    q`SELECT id, title, content_md, cover_image, og_image, custom_schema FROM blog_posts`,
+    q`SELECT path, og_image, custom_schema FROM seo_overrides`,
+    q`SELECT id, title, og_image, sections::text AS sections, custom_schema FROM builder_pages`,
+  ]);
   const posts = postRows as { id: number; title: string; content_md: string; cover_image: string | null; og_image: string | null; custom_schema: string }[];
   const pages = pageRows as { path: string; og_image: string; custom_schema: string }[];
   const map = new Map<string, MediaUsage[]>();
@@ -79,6 +84,12 @@ async function usageMap(): Promise<Map<string, MediaUsage[]>> {
     const href = `/admin/seo/edit?path=${encodeURIComponent(o.path)}`;
     ids(o.og_image).forEach((id) => add(id, { kind: "page", label: o.path, href, where: "Social image" }));
     ids(o.custom_schema).forEach((id) => add(id, { kind: "page", label: o.path, href, where: "Custom schema" }));
+  }
+  for (const b of builtRows as { id: number; title: string; og_image: string; sections: string; custom_schema: string }[]) {
+    const href = `/admin/pages/${b.id}`;
+    ids(b.og_image).forEach((id) => add(id, { kind: "page", label: b.title, href, where: "Social image" }));
+    ids(b.sections).forEach((id) => add(id, { kind: "page", label: b.title, href, where: "On the page" }));
+    ids(b.custom_schema).forEach((id) => add(id, { kind: "page", label: b.title, href, where: "Custom schema" }));
   }
   return map;
 }

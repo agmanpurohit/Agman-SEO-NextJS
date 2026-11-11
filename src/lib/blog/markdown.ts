@@ -126,3 +126,6 @@ export function renderContent(source: string, format: ContentFormat): { html: st
 
 /** Kept for older callers: Markdown only. */
 export const renderMarkdown = (md: string) => renderContent(md, "markdown");
+
+/** Clean editor HTML for storage (same allow-list as rendering, without anchors or ids). */
+export const cleanHtml = (html: string) => sanitizeHtml(html || "", SANITIZE);

@@ -37,6 +37,7 @@ export async function sitemapRows(): Promise<SitemapRow[]> {
     const o = overrides.get(p.path);
     let reason: string | undefined;
     if (p.blog?.noindex) reason = "Post is set to noindex";
+    else if (p.builder?.noindex) reason = "Page is set to noindex in the page builder";
     else if (p.blog && !isOwnUrl(p.blog.canonicalUrl, p.path)) reason = "Post canonical points elsewhere";
     else if (o?.robotsIndex === false) reason = "Set to noindex in the SEO manager";
     else if (o?.canonical && !isOwnUrl(o.canonical, p.path)) reason = "Canonical points to another URL";

@@ -18,9 +18,13 @@ type Props = {
   onChange: (html: string) => void;
   onUploadImage: (file: File) => Promise<string | null>;
   uploading: boolean;
+  /** Shorter editor (page builder sections) instead of a full-page writing area. */
+  compact?: boolean;
+  label?: string;
+  placeholder?: string;
 };
 
-export function VisualEditor({ value, onChange, onUploadImage, uploading }: Props) {
+export function VisualEditor({ value, onChange, onUploadImage, uploading, compact, label = "Post content", placeholder = "Start writing, or paste your article from Google Docs, Word or ChatGPT…" }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const lastEmitted = useRef(value);
   const [libraryOpen, setLibraryOpen] = useState(false);
@@ -35,11 +39,11 @@ export function VisualEditor({ value, onChange, onUploadImage, uploading }: Prop
       }),
       Image.configure({ inline: false, allowBase64: false }),
       TableKit.configure({ table: { resizable: false } }),
-      Placeholder.configure({ placeholder: "Start writing, or paste your article from Google Docs, Word or ChatGPT…" }),
+      Placeholder.configure({ placeholder }),
     ],
     content: value || "",
     editorProps: {
-      attributes: { class: "blog-prose visual-editor min-h-[60vh] p-5 outline-none md:p-7", spellcheck: "true", "aria-label": "Post content" },
+      attributes: { class: `blog-prose visual-editor ${compact ? "min-h-[12rem]" : "min-h-[60vh]"} p-5 outline-none md:p-7`, spellcheck: "true", "aria-label": label },
       transformPastedHTML: cleanPastedHtml,
       // Images pasted or dropped as files are uploaded instead of embedded as data.
       handlePaste: (_view, event) => {
@@ -78,11 +82,11 @@ export function VisualEditor({ value, onChange, onUploadImage, uploading }: Prop
     if (url && editor) editor.chain().focus().setImage({ src: url, alt: "" }).run();
   }
 
-  if (!editor) return <div className="min-h-[60vh] p-5 text-sm text-mute">Loading editor…</div>;
+  if (!editor) return <div className={`${compact ? "min-h-[12rem]" : "min-h-[60vh]"} p-5 text-sm text-mute`}>Loading editor…</div>;
 
   return (
     <div>
-      <Toolbar editor={editor} onImage={() => fileRef.current?.click()} onLibrary={() => setLibraryOpen(true)} uploading={uploading} />
+      <Toolbar editor={editor} onImage={() => fileRef.current?.click()} onLibrary={() => setLibraryOpen(true)} uploading={uploading} sticky={!compact} />
       <MediaPicker
         open={libraryOpen}
         onClose={() => setLibraryOpen(false)}
@@ -134,7 +138,7 @@ function cleanPastedHtml(html: string) {
   return doc.body.innerHTML;
 }
 
-function Toolbar({ editor, onImage, onLibrary, uploading }: { editor: Editor; onImage: () => void; onLibrary: () => void; uploading: boolean }) {
+function Toolbar({ editor, onImage, onLibrary, uploading, sticky = true }: { editor: Editor; onImage: () => void; onLibrary: () => void; uploading: boolean; sticky?: boolean }) {
   const c = () => editor.chain().focus();
   const inTable = editor.isActive("table");
   const btn = (label: string, title: string, run: () => void, active = false, disabled = false) => (
@@ -169,7 +173,7 @@ function Toolbar({ editor, onImage, onLibrary, uploading }: { editor: Editor; on
   };
 
   return (
-    <div className="sticky top-16 z-10 flex flex-wrap items-center gap-0.5 border-b border-line bg-ink-2/95 px-2 py-1.5 backdrop-blur" role="toolbar" aria-label="Formatting">
+    <div className={`${sticky ? "sticky top-16 z-10" : ""} flex flex-wrap items-center gap-0.5 border-b border-line bg-ink-2/95 px-2 py-1.5 backdrop-blur`} role="toolbar" aria-label="Formatting">
       {btn("¶", "Paragraph", () => c().setParagraph().run(), editor.isActive("paragraph"))}
       {btn("H2", "Heading 2 (section)", () => c().toggleHeading({ level: 2 }).run(), editor.isActive("heading", { level: 2 }))}
       {btn("H3", "Heading 3 (sub-section)", () => c().toggleHeading({ level: 3 }).run(), editor.isActive("heading", { level: 3 }))}
