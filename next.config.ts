@@ -17,13 +17,15 @@ const isDev = process.env.NODE_ENV !== "production";
  * (a nonce would force every page to render on each request and slow the site down).
  */
 const GOOGLE = "https://www.googletagmanager.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com";
+// Microsoft Clarity (src/components/seo/Clarity.tsx).
+const CLARITY = "https://www.clarity.ms https://*.clarity.ms https://c.bing.com";
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${GOOGLE} https://vercel.live${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' ${GOOGLE} ${CLARITY} https://vercel.live${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  `connect-src 'self' ${GOOGLE} https://www.google.com https://vercel.live wss://ws-us3.pusher.com${isDev ? " ws: http://localhost:*" : ""}`,
+  `connect-src 'self' ${GOOGLE} ${CLARITY} https://www.google.com https://vercel.live wss://ws-us3.pusher.com${isDev ? " ws: http://localhost:*" : ""}`,
   "frame-src https://www.googletagmanager.com https://vercel.live",
   "media-src 'self'",
   "worker-src 'self' blob:",

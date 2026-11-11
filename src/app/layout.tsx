@@ -5,6 +5,7 @@ import { site } from "@/content/site";
 import { personJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { GoogleTag } from "@/components/seo/GoogleTag";
+import { Clarity } from "@/components/seo/Clarity";
 import { TransitionProvider } from "@/components/shell/TransitionProvider";
 import { SmoothScroll } from "@/components/shell/SmoothScroll";
 import { Preloader } from "@/components/shell/Preloader";
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <GoogleTag />
+        <Clarity />
         <JsonLd data={personJsonLd()} />
       </head>
       <body>
