@@ -11,7 +11,7 @@ import type { PostSummary } from "@/lib/blog/types";
 import { site } from "@/content/site";
 
 // Rebuilt at most hourly, and immediately whenever a post is published or edited.
-export const revalidate = 300;
+export const revalidate = 60;
 
 const TITLE = "SEO Blog: Practical Search Advice";
 const DESCRIPTION =

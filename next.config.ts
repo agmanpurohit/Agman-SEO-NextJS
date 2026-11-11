@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 // A new value on every deploy: the git commit on Vercel, otherwise the build time.
 // Drives image cache-busting (src/lib/asset.ts) and the "new version is live" check.
 const BUILD_ID = (process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString(36)).slice(0, 8);
+// When this version was built: the honest "last modified" date for pages that only change on deploy.
+const BUILT_AT = new Date().toISOString();
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -55,7 +57,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Pin the project root (a stray lockfile in the home folder would otherwise confuse it).
   turbopack: { root: __dirname },
-  env: { NEXT_PUBLIC_BUILD_ID: BUILD_ID },
+  env: { NEXT_PUBLIC_BUILD_ID: BUILD_ID, SITE_BUILT_AT: BUILT_AT },
   experimental: {
     // How long an open tab reuses a page it already loaded before fetching it again
     // (Next.js default is 5 minutes for static pages; 30s is the minimum allowed).

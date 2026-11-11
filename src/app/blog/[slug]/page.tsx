@@ -14,7 +14,7 @@ import { site } from "@/content/site";
 import { asset } from "@/lib/asset";
 import { parseCustomSchema } from "@/lib/blog/custom-schema";
 
-export const revalidate = 300;
+export const revalidate = 60;
 export const dynamicParams = true;
 
 const abs = (u: string | null) => (!u ? null : u.startsWith("/") ? `${site.url}${u}` : u);

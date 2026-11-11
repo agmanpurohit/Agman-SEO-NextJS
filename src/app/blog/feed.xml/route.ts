@@ -1,7 +1,7 @@
 import { listLivePosts } from "@/lib/blog/db";
 import { site } from "@/content/site";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 const esc = (s: string) => s.replace(/[<>&'"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" })[c]!);
 
@@ -32,5 +32,5 @@ export async function GET() {
 ${items}
   </channel>
 </rss>`;
-  return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8", "Cache-Control": "public, max-age=0, s-maxage=300" } });
+  return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8", "Cache-Control": "public, max-age=0, s-maxage=60" } });
 }
