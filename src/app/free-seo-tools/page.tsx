@@ -4,11 +4,14 @@ import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/motion";
 import { TLink } from "@/components/ui/TLink";
 import { tools, TOOLS_HUB } from "@/content/tools";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { withSeo } from "@/lib/site/seo";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 const TITLE = "Free SEO Tools: Audit, Schema & Meta Tags";
 const DESCRIPTION = "Free SEO tools I use in client work: a full site audit, keyword density checker, meta tag and schema generators, SERP preview, robots.txt and sitemaps.";
 
-export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: TOOLS_HUB.href, socialTitle: "Free SEO tools, no sign-up" });
+export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, description: DESCRIPTION, path: TOOLS_HUB.href, socialTitle: "Free SEO tools, no sign-up" }));
 
 const listLd = {
   "@context": "https://schema.org",
@@ -22,6 +25,7 @@ export default function FreeSeoToolsPage() {
   const [audit, ...rest] = tools;
   return (
     <>
+      <PageSchema path={TOOLS_HUB.href} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: TOOLS_HUB.label, path: TOOLS_HUB.href }])} />
       <JsonLd data={webPageJsonLd({ type: "CollectionPage", name: TITLE, description: DESCRIPTION, path: TOOLS_HUB.href })} />
       <JsonLd data={listLd} />
@@ -93,6 +97,7 @@ export default function FreeSeoToolsPage() {
           </div>
         </div>
       </section>
+      <ServicesStrip title="Prefer someone to do it for you?" highlight={["seo-specialist", "technical-seo"]} />
     </>
   );
 }

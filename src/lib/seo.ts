@@ -18,15 +18,19 @@ export function pageMeta({
   path,
   socialTitle,
   absoluteTitle,
+  image,
 }: {
   title: string;
   description: string;
   path: string;
   socialTitle?: string;
   absoluteTitle?: boolean;
+  /** Page-specific share image (defaults to the site-wide card). */
+  image?: { url: string; alt: string };
 }): Metadata {
   const url = absUrl(path);
   const share = socialTitle ?? title;
+  const img = image ? { url: image.url, width: 1200, height: 630, alt: image.alt } : SHARE_IMAGE;
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
@@ -38,10 +42,10 @@ export function pageMeta({
       siteName: site.name,
       type: path === "/" ? "profile" : "website",
       locale: "en_AE",
-      images: [SHARE_IMAGE],
+      images: [img],
       ...(path === "/" ? { firstName: site.firstName, lastName: site.lastName } : {}),
     },
-    twitter: { card: "summary_large_image", title: share, description, images: [SHARE_IMAGE.url] },
+    twitter: { card: "summary_large_image", title: share, description, images: [img.url] },
   };
 }
 
@@ -51,11 +55,14 @@ export function webPageJsonLd({
   name,
   description,
   path,
+  image,
 }: {
   type?: "WebPage" | "ProfilePage" | "ContactPage" | "CollectionPage" | "AboutPage";
   name: string;
   description: string;
   path: string;
+  /** Absolute or site-relative URL of the page's main image. */
+  image?: string;
 }) {
   const url = absUrl(path);
   return {
@@ -69,7 +76,7 @@ export function webPageJsonLd({
     isPartOf: { "@id": `${site.url}/#website` },
     about: { "@id": `${site.url}/#person` },
     ...(type === "ProfilePage" ? { mainEntity: { "@id": `${site.url}/#person` } } : {}),
-    primaryImageOfPage: { "@type": "ImageObject", url: `${site.url}/opengraph-image` },
+    primaryImageOfPage: { "@type": "ImageObject", url: image ? (image.startsWith("/") ? `${site.url}${image}` : image) : `${site.url}/opengraph-image` },
   };
 }
 

@@ -2,11 +2,12 @@ import { pageMeta } from "@/lib/seo";
 import { ToolShell, type ToolCopy } from "@/components/tools/ToolShell";
 import { SitemapTool } from "@/components/tools/SitemapTool";
 import { toolBySlug } from "@/content/tools";
+import { withSeo } from "@/lib/site/seo";
 
 const tool = toolBySlug("sitemap-generator");
 const DESCRIPTION = "Crawl your website or paste a list of URLs to build a clean XML sitemap. Skips noindex, redirected and broken pages. Download sitemap.xml free.";
 
-export const metadata = pageMeta({ title: "Free XML Sitemap Generator", description: DESCRIPTION, path: tool.href, socialTitle: "Free XML sitemap generator with site crawl" });
+export const generateMetadata = () => withSeo(pageMeta({ title: "Free XML Sitemap Generator", description: DESCRIPTION, path: tool.href, socialTitle: "Free XML sitemap generator with site crawl" }));
 
 const copy: ToolCopy = {
   slug: "sitemap-generator",

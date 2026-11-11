@@ -2,11 +2,12 @@ import { pageMeta } from "@/lib/seo";
 import { ToolShell, type ToolCopy } from "@/components/tools/ToolShell";
 import { SchemaTool } from "@/components/tools/SchemaTool";
 import { toolBySlug } from "@/content/tools";
+import { withSeo } from "@/lib/site/seo";
 
 const tool = toolBySlug("schema-markup-generator");
 const DESCRIPTION = "Generate JSON-LD structured data for articles, local businesses, products, FAQs, events, breadcrumbs and more, with Google's required fields checked.";
 
-export const metadata = pageMeta({ title: "Schema Markup Generator (JSON-LD)", description: DESCRIPTION, path: tool.href, socialTitle: "Free JSON-LD schema markup generator" });
+export const generateMetadata = () => withSeo(pageMeta({ title: "Schema Markup Generator (JSON-LD)", description: DESCRIPTION, path: tool.href, socialTitle: "Free JSON-LD schema markup generator" }));
 
 const copy: ToolCopy = {
   slug: "schema-markup-generator",

@@ -6,15 +6,43 @@ import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 import { setStageReady } from "@/lib/stage";
 import { scrollToTop } from "@/lib/scroll";
 import { nav } from "@/content/site";
+import { tools, TOOLS_HUB } from "@/content/tools";
+import { markets, services, type MarketSlug } from "@/content/services";
 
 type Ctx = { go: (href: string) => void };
 const TransitionContext = createContext<Ctx>({ go: () => {} });
 export const useTransition = () => useContext(TransitionContext);
 
-const labelFor = (href: string) => {
-  const path = href.split(/[?#]/)[0] || "/";
+const titleCase = (slug: string) => slug.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+/** Name and small index shown on the page-transition curtain, for every kind of page. */
+const labelFor = (href: string): { label: string; index: string } => {
+  const path = (href.split(/[?#]/)[0] || "/").replace(/\/$/, "") || "/";
   const item = nav.find((n) => n.href === path);
-  return item ? { label: item.label, index: item.index } : { label: "", index: "" };
+  if (item) return { label: item.label, index: item.index };
+
+  // Free tools (and the audit, which lives at /seo-audit).
+  const tool = tools.find((t) => t.href === path);
+  if (tool) return { label: tool.name, index: tool.kind };
+  if (path === TOOLS_HUB.href) return { label: TOOLS_HUB.label, index: "" };
+
+  // Country service pages: /india and /india/<service>.
+  const [, first, second] = path.split("/");
+  const market = markets[first as MarketSlug];
+  if (market) {
+    const code = market.code;
+    if (!second) return { label: "Services", index: code };
+    const svc = services.find((s) => s.slug === second);
+    return { label: svc?.name ?? titleCase(second), index: code };
+  }
+
+  // Blog posts, audit results and admin pages show their section.
+  const section = nav.find((n) => n.href !== "/" && path.startsWith(`${n.href}/`));
+  if (section) return { label: section.label, index: section.index };
+  if (path.startsWith("/seo-audit/")) return { label: "Audit results", index: "" };
+  if (path.startsWith("/admin")) return { label: "Admin", index: "" };
+
+  return { label: titleCase(path.split("/").pop() || ""), index: "" };
 };
 
 /**
@@ -121,9 +149,9 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         <div data-pt-panel className="absolute inset-0 bg-ink-2" style={{ clipPath: "inset(100% 0% 0% 0%)" }} />
         <div data-pt-line className="absolute inset-x-0 h-px bg-ember" style={{ top: "100%" }} />
         <div data-pt-text className="absolute inset-0 grid place-items-center">
-          <div className="flex items-baseline gap-4">
-            <span ref={index} className="t-label ember" />
-            <span ref={label} className="t-h2 uppercase" style={{ fontStretch: "120%" }} />
+          <div className="flex max-w-[92vw] items-baseline justify-center gap-4 px-4 text-center">
+            <span ref={index} className="t-label ember shrink-0" />
+            <span ref={label} className="t-h2 uppercase [overflow-wrap:anywhere]" style={{ fontStretch: "120%" }} />
           </div>
         </div>
       </div>

@@ -6,6 +6,9 @@ import { ButtonLink } from "@/components/ui/Buttons";
 import { breadcrumbJsonLd, webPageJsonLd, absUrl } from "@/lib/seo";
 import { site } from "@/content/site";
 import { tools, toolBySlug, TOOLS_HUB, type ToolSlug } from "@/content/tools";
+import { services } from "@/content/services";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 export type ToolCopy = {
   slug: ToolSlug;
@@ -59,6 +62,7 @@ export function ToolShell({ copy, children }: { copy: ToolCopy; children: ReactN
       <JsonLd data={webPageJsonLd({ name: copy.h1, description: copy.description, path: tool.href })} />
       <JsonLd data={appLd} />
       <JsonLd data={faqLd} />
+      <PageSchema path={tool.href} />
 
       <section className="pt-[calc(var(--header-h)+2.5rem)] md:pt-[calc(var(--header-h)+4rem)]">
         <div className="wrap">
@@ -160,6 +164,8 @@ export function ToolShell({ copy, children }: { copy: ToolCopy; children: ReactN
           </div>
         </div>
       </section>
+
+      <ServicesStrip title="Rather have it done for you?" intro="I offer this as part of my services for Indian businesses." highlight={services.filter((sv) => sv.tools.includes(copy.slug)).map((sv) => sv.slug)} />
 
       <section aria-labelledby="more-title" className="section border-t border-line">
         <div className="wrap">

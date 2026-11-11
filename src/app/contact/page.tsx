@@ -5,18 +5,22 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { Reveal } from "@/components/ui/motion";
 import { LocalTime } from "@/components/ui/LocalTime";
 import { site } from "@/content/site";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { withSeo } from "@/lib/site/seo";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 const TITLE = "Hire an SEO Specialist in Dubai";
 const DESCRIPTION =
   "Hiring for SEO in the UAE, or need help with your website? Send a message, call or WhatsApp me. I'm based in Dubai and available to start now.";
 
-export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/contact", socialTitle: "Contact Agman Rajpurohit" });
+export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, description: DESCRIPTION, path: "/contact", socialTitle: "Contact Agman Rajpurohit" }));
 
 const contactPage = webPageJsonLd({ type: "ContactPage", name: TITLE, description: DESCRIPTION, path: "/contact" });
 
 export default function ContactPage() {
   return (
     <>
+      <PageSchema path={"/contact"} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])} />
       <JsonLd data={contactPage} />
       <PageHero
@@ -99,6 +103,7 @@ export default function ContactPage() {
           </Reveal>
         </div>
       </section>
+      <ServicesStrip title="Not sure what you need?" intro="Have a look at the services first. Each page explains what is included and how I work." />
     </>
   );
 }

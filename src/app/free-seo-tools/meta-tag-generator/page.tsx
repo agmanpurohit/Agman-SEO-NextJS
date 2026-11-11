@@ -2,11 +2,12 @@ import { pageMeta } from "@/lib/seo";
 import { ToolShell, type ToolCopy } from "@/components/tools/ToolShell";
 import { MetaTagTool } from "@/components/tools/MetaTagTool";
 import { toolBySlug } from "@/content/tools";
+import { withSeo } from "@/lib/site/seo";
 
 const tool = toolBySlug("meta-tag-generator");
 const DESCRIPTION = "Write your title tag, meta description, canonical, Open Graph and Twitter tags, preview them in Google, and copy clean HTML for your page's head.";
 
-export const metadata = pageMeta({ title: "Free Meta Tag Generator for SEO & Social", description: DESCRIPTION, path: tool.href, socialTitle: "Meta tag generator with live Google preview" });
+export const generateMetadata = () => withSeo(pageMeta({ title: "Free Meta Tag Generator for SEO & Social", description: DESCRIPTION, path: tool.href, socialTitle: "Meta tag generator with live Google preview" }));
 
 const copy: ToolCopy = {
   slug: "meta-tag-generator",

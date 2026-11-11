@@ -10,6 +10,19 @@
 - [Blog](https://agmanrajpurohit.com/blog): practical articles on SEO, local search and AI search.
 - [Free SEO tools](https://agmanrajpurohit.com/free-seo-tools): all of Agman's free tools in one place. No sign-up.
 
+## Services for Indian businesses
+
+- [All services in India](https://agmanrajpurohit.com/india): overview of every service Agman offers to businesses in India, delivered remotely.
+- [SEO specialist in India](https://agmanrajpurohit.com/india/seo-specialist): hands-on SEO from audit to rankings, by one specialist.
+- [Digital marketing services in India](https://agmanrajpurohit.com/india/digital-marketing): SEO, local search, Google Ads, Meta Ads and AI search planned as one strategy.
+- [Technical SEO services in India](https://agmanrajpurohit.com/india/technical-seo): crawling, indexing, Core Web Vitals, site structure, redirects and schema, fixed on the site.
+- [Local SEO services in India](https://agmanrajpurohit.com/india/local-seo): Google Business Profile, Google Maps ranking, reviews, citations and location pages.
+- [GEO specialist in India](https://agmanrajpurohit.com/india/geo-specialist): generative engine optimization for ChatGPT, Gemini, Perplexity and Google AI Overviews.
+- [Answer engine optimization (AEO) in India](https://agmanrajpurohit.com/india/answer-engine-optimization): content for featured snippets, People Also Ask, voice search and AI answers.
+- [Google Ads expert in India](https://agmanrajpurohit.com/india/google-ads): Search, Display and Remarketing campaigns built for leads.
+- [Meta Ads expert in India](https://agmanrajpurohit.com/india/meta-ads): Facebook and Instagram campaigns for leads and enquiries.
+- [SEO-friendly website development in India](https://agmanrajpurohit.com/india/web-development): fast WordPress and WooCommerce sites with SEO built in before launch.
+
 ## Free SEO tools
 
 - [Website SEO audit](https://agmanrajpurohit.com/seo-audit): crawls up to 100 pages of a website and reports technical, on-page, content, speed, mobile, image, linking and structured data issues.

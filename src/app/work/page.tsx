@@ -6,12 +6,15 @@ import { ReportsWall } from "@/components/work/ReportsWall";
 import { Closing } from "@/components/home/Closing";
 import { cases } from "@/content/work";
 import { site } from "@/content/site";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { withSeo } from "@/lib/site/seo";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 const TITLE = "SEO Case Studies and Results";
 const DESCRIPTION =
   "Real SEO results for dental clinics, a four-market finance site and local businesses, with the Search Console and GA4 screenshots to prove them.";
 
-export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/work", socialTitle: "SEO case studies by Agman Rajpurohit" });
+export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, description: DESCRIPTION, path: "/work", socialTitle: "SEO case studies by Agman Rajpurohit" }));
 
 const itemList = {
   "@context": "https://schema.org",
@@ -35,6 +38,7 @@ const itemList = {
 export default function WorkPage() {
   return (
     <>
+      <PageSchema path={"/work"} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Work", path: "/work" }])} />
       <JsonLd data={itemList} />
       <JsonLd data={webPageJsonLd({ type: "CollectionPage", name: TITLE, description: DESCRIPTION, path: "/work" })} />
@@ -63,6 +67,7 @@ export default function WorkPage() {
 
       <ReportsWall />
 
+      <ServicesStrip title="Want results like these for your business?" intro="The same work, offered to businesses across India." highlight={["seo-specialist", "local-seo", "technical-seo"]} />
       <Closing
         label="Your project"
         headline={["Have a site that should", "be ranking by now?"]}

@@ -458,3 +458,28 @@ html.js:not(.reduced) [data-reveal] {
 .visual-editor th > p, .visual-editor td > p { margin: 0; }
 .visual-editor .selectedCell::after { content: ""; position: absolute; inset: 0; background: rgb(255 90 31 / 0.15); pointer-events: none; }
 .visual-editor a { cursor: text; }
+
+/* ── Service illustrations: light, CSS-only motion ── */
+.service-art .art-pulse, .service-art .art-pulse-ring, .service-art .art-twinkle { transform-box: fill-box; transform-origin: center; }
+.service-art .art-pulse { animation: art-pulse 2.4s ease-in-out infinite; }
+.service-art .art-pulse-ring { animation: art-ring 2.8s ease-out infinite; }
+.service-art .art-twinkle { animation: art-twinkle 3s ease-in-out infinite; }
+.service-art .art-dash { animation: art-dash 1.6s linear infinite; }
+.service-art .art-wave rect { transform-box: fill-box; transform-origin: center; animation: art-wave 1.2s ease-in-out infinite; }
+.service-art .art-wave rect:nth-child(2) { animation-delay: 0.15s; }
+.service-art .art-wave rect:nth-child(3) { animation-delay: 0.3s; }
+.service-art .art-wave rect:nth-child(4) { animation-delay: 0.45s; }
+.service-art .art-wave rect:nth-child(5) { animation-delay: 0.6s; }
+@keyframes art-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+@keyframes art-ring { 0% { transform: scale(0.9); opacity: 0.6; } 100% { transform: scale(1.35); opacity: 0; } }
+@keyframes art-twinkle { 0%, 100% { transform: rotate(0) scale(1); } 50% { transform: rotate(45deg) scale(0.85); } }
+@keyframes art-dash { to { stroke-dashoffset: -20; } }
+@keyframes art-wave { 0%, 100% { transform: scaleY(0.6); } 50% { transform: scaleY(1.15); } }
+@media (prefers-reduced-motion: reduce) {
+  .service-art * { animation: none !important; }
+}
+
+/* Service pages: tighter rhythm than the portfolio's cinematic .section spacing. */
+.svc-section {
+  padding-block: clamp(2rem, 3.5vw, 3rem);
+}

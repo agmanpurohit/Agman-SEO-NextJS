@@ -1,4 +1,5 @@
 import { nav, site } from "@/content/site";
+import { markets, services, servicePath, marketPath } from "@/content/services";
 import { TLink } from "@/components/ui/TLink";
 import { Logo } from "@/components/brand/Logo";
 import { LocalTime } from "@/components/ui/LocalTime";
@@ -8,7 +9,7 @@ export function Footer() {
   return (
     <footer className="relative border-t border-line">
       <div className="wrap grid-12 gap-y-12 pt-20 pb-10 md:pt-28">
-        <div className="col-span-4 md:col-span-5">
+        <div className="col-span-4 md:col-span-4">
           <p className="t-label mb-5">Contact</p>
           <a href={`mailto:${site.email}`} className="link-u text-[clamp(1.25rem,2.4vw,2rem)] font-medium break-all text-bone" data-cursor="Email">
             {site.email}
@@ -28,7 +29,25 @@ export function Footer() {
           </ul>
         </div>
 
-        <nav aria-label="Footer" className="col-span-2 md:col-span-3 md:col-start-7">
+        {/* Every service page is linked from every page, so crawlers can reach all of them. */}
+        <nav aria-label="Services in India" className="col-span-4 md:col-span-3 md:col-start-6">
+          <p className="t-label mb-5">
+            <TLink href={marketPath("india")} className="hover:!text-bone">
+              Services · {markets.india.name}
+            </TLink>
+          </p>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 md:grid-cols-1">
+            {services.map((s) => (
+              <li key={s.slug}>
+                <TLink href={servicePath("india", s.slug)} className="link-u text-bone-dim hover:text-bone">
+                  {s.name}
+                </TLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label="Footer" className="col-span-2 md:col-span-2 md:col-start-9">
           <p className="t-label mb-5">Pages</p>
           <ul className="flex flex-col gap-2">
             {nav.map((n) => (
@@ -41,7 +60,7 @@ export function Footer() {
           </ul>
         </nav>
 
-        <div className="col-span-2 md:col-span-3">
+        <div className="col-span-2 md:col-span-2">
           <p className="t-label mb-5">Elsewhere</p>
           <ul className="flex flex-col gap-2">
             <li>

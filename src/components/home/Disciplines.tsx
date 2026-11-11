@@ -5,7 +5,18 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { Reveal, SplitReveal } from "@/components/ui/motion";
 import { SectionLabel } from "@/components/ui/Buttons";
 import { DisciplineIcon } from "./DisciplineIcon";
-import { disciplines } from "@/content/home";
+import { disciplines, type Discipline } from "@/content/home";
+import { TLink } from "@/components/ui/TLink";
+import { serviceBySlug, servicePath, type ServiceSlug } from "@/content/services";
+
+/** India service pages that go deeper on each discipline. */
+const SERVICE_LINKS: Record<Discipline["id"], ServiceSlug[]> = {
+  search: ["seo-specialist", "technical-seo"],
+  ai: ["geo-specialist", "answer-engine-optimization"],
+  local: ["local-seo"],
+  paid: ["google-ads", "meta-ads"],
+  build: ["web-development", "digital-marketing"],
+};
 
 /**
  * Five disciplines as an editorial index. Each row opens to show what it covers and one
@@ -127,6 +138,14 @@ function Row({
             <p data-in className="t-label mb-3">{d.kicker}</p>
             <p data-in className="t-body text-[1.02rem]">{d.body}</p>
             <p data-in className="mt-6 border-l border-ember pl-4 text-sm text-bone">{d.proof}</p>
+            <p data-in className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+              <span className="t-label">Services in India</span>
+              {SERVICE_LINKS[d.id].map((slug) => (
+                <TLink key={slug} href={servicePath("india", slug)} className="link-u text-bone hover:text-ember" tabIndex={open ? 0 : -1}>
+                  {serviceBySlug(slug)!.name} →
+                </TLink>
+              ))}
+            </p>
           </div>
           <ul className="flex flex-wrap content-start gap-2">
             {d.items.map((it) => (

@@ -2,11 +2,12 @@ import { pageMeta } from "@/lib/seo";
 import { ToolShell, type ToolCopy } from "@/components/tools/ToolShell";
 import { SerpPreviewTool } from "@/components/tools/SerpPreviewTool";
 import { toolBySlug } from "@/content/tools";
+import { withSeo } from "@/lib/site/seo";
 
 const tool = toolBySlug("serp-snippet-preview");
 const DESCRIPTION = "See how your title and meta description look in Google on desktop and mobile. Pixel-accurate truncation, keyword bolding and length checks.";
 
-export const metadata = pageMeta({ title: "SERP Snippet Preview Tool: Google Preview", description: DESCRIPTION, path: tool.href, socialTitle: "Preview your Google search snippet" });
+export const generateMetadata = () => withSeo(pageMeta({ title: "SERP Snippet Preview Tool: Google Preview", description: DESCRIPTION, path: tool.href, socialTitle: "Preview your Google search snippet" }));
 
 const copy: ToolCopy = {
   slug: "serp-snippet-preview",

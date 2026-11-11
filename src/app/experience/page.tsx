@@ -7,18 +7,22 @@ import { ButtonA } from "@/components/ui/Buttons";
 import { Closing } from "@/components/home/Closing";
 import { capabilities, tools, education, certifications } from "@/content/experience";
 import { site } from "@/content/site";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { withSeo } from "@/lib/site/seo";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 const TITLE = "SEO Experience and Career";
 const DESCRIPTION =
   "My SEO work at NCS GX, MediaNV and Diya Infotech, from 25+ agency client sites and 100+ dental builds to international SEO for a finance brand.";
 
-export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/experience", socialTitle: "Agman Rajpurohit's SEO experience" });
+export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, description: DESCRIPTION, path: "/experience", socialTitle: "Agman Rajpurohit's SEO experience" }));
 
 const toolGroups = Array.from(new Set(tools.map((t) => t.group)));
 
 export default function ExperiencePage() {
   return (
     <>
+      <PageSchema path={"/experience"} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Experience", path: "/experience" }])} />
       <JsonLd data={webPageJsonLd({ type: "AboutPage", name: TITLE, description: DESCRIPTION, path: "/experience" })} />
       <PageHero
@@ -163,6 +167,7 @@ export default function ExperiencePage() {
         </div>
       </section>
 
+      <ServicesStrip title="Put this experience to work" intro="Everything above, available as a service for Indian businesses." highlight={["seo-specialist", "technical-seo", "geo-specialist"]} />
       <Closing
         label="Hiring?"
         headline={["Looking for an SEO who", "can start on Monday?"]}

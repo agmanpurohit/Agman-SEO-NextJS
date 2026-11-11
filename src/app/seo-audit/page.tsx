@@ -5,12 +5,15 @@ import { Reveal, SplitReveal } from "@/components/ui/motion";
 import { CHECKS } from "@/lib/audit/checks-meta";
 import { CATEGORIES, CATEGORY_META } from "@/lib/audit/types";
 import { site } from "@/content/site";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { withSeo } from "@/lib/site/seo";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 const TITLE = "Free Website SEO Audit Tool";
 const DESCRIPTION =
   "Run a free SEO check on your website. It crawls up to 100 pages, flags technical, on-page, speed and mobile issues, and tells you how to fix them.";
 
-export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/seo-audit", socialTitle: "Free SEO audit: see what's holding your site back" });
+export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, description: DESCRIPTION, path: "/seo-audit", socialTitle: "Free SEO audit: see what's holding your site back" }));
 
 const CAT_COPY: Record<string, string> = {
   technical: "HTTPS, redirects, status codes, robots.txt, sitemaps, canonicals, indexability, orphan pages, hreflang and JavaScript rendering.",
@@ -47,6 +50,7 @@ const appLd = {
 export default function SeoAuditPage() {
   return (
     <>
+      <PageSchema path={"/seo-audit"} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Free SEO Tools", path: "/free-seo-tools" }, { name: "Website SEO Audit", path: "/seo-audit" }])} />
       <JsonLd data={appLd} />
       <JsonLd data={webPageJsonLd({ name: TITLE, description: DESCRIPTION, path: "/seo-audit" })} />
@@ -162,6 +166,7 @@ export default function SeoAuditPage() {
           </div>
         </div>
       </section>
+      <ServicesStrip title="Want the issues fixed for you?" intro="The audit shows the problems. These services fix them." highlight={["technical-seo", "seo-specialist", "local-seo"]} />
     </>
   );
 }

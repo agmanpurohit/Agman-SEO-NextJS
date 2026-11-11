@@ -2,11 +2,12 @@ import { pageMeta } from "@/lib/seo";
 import { ToolShell, type ToolCopy } from "@/components/tools/ToolShell";
 import { RobotsTool } from "@/components/tools/RobotsTool";
 import { toolBySlug } from "@/content/tools";
+import { withSeo } from "@/lib/site/seo";
 
 const tool = toolBySlug("robots-txt-generator");
 const DESCRIPTION = "Create a robots.txt file in minutes. Block admin and search pages, choose which AI crawlers can read your site, add your sitemap and download.";
 
-export const metadata = pageMeta({ title: "Robots.txt Generator with AI Bot Controls", description: DESCRIPTION, path: tool.href, socialTitle: "Robots.txt generator, including AI crawlers" });
+export const generateMetadata = () => withSeo(pageMeta({ title: "Robots.txt Generator with AI Bot Controls", description: DESCRIPTION, path: tool.href, socialTitle: "Robots.txt generator, including AI crawlers" }));
 
 const copy: ToolCopy = {
   slug: "robots-txt-generator",

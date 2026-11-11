@@ -2,11 +2,12 @@ import { pageMeta } from "@/lib/seo";
 import { ToolShell, type ToolCopy } from "@/components/tools/ToolShell";
 import { KeywordDensityTool } from "@/components/tools/KeywordDensityTool";
 import { toolBySlug } from "@/content/tools";
+import { withSeo } from "@/lib/site/seo";
 
 const tool = toolBySlug("keyword-density-checker");
 const DESCRIPTION = "Paste text or enter a URL to see how often each word and phrase appears. Spot keyword stuffing, check your focus keyword and export the results.";
 
-export const metadata = pageMeta({ title: "Keyword Density Checker: Free Online Tool", description: DESCRIPTION, path: tool.href, socialTitle: "Free keyword density checker" });
+export const generateMetadata = () => withSeo(pageMeta({ title: "Keyword Density Checker: Free Online Tool", description: DESCRIPTION, path: tool.href, socialTitle: "Free keyword density checker" }));
 
 const copy: ToolCopy = {
   slug: "keyword-density-checker",

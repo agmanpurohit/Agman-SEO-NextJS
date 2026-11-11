@@ -9,22 +9,25 @@ import { SelectedWork } from "@/components/home/SelectedWork";
 import { JourneyPreview } from "@/components/home/JourneyPreview";
 import { Closing } from "@/components/home/Closing";
 import { AuditTeaser } from "@/components/home/AuditTeaser";
+import { withSeo } from "@/lib/site/seo";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 const TITLE = "Agman Rajpurohit | SEO Specialist in Dubai";
 const DESCRIPTION =
   "I'm Agman, an SEO specialist in Dubai. I grow organic traffic for clinics, finance brands and local businesses, and I can start a new role right away.";
 
-export const metadata = pageMeta({
+export const generateMetadata = () => withSeo(pageMeta({
   title: TITLE,
   absoluteTitle: true,
   description: DESCRIPTION,
   path: "/",
   socialTitle: "Agman Rajpurohit, SEO specialist in Dubai",
-});
+}));
 
 export default function HomePage() {
   return (
     <>
+      <PageSchema path={"/"} />
       <JsonLd data={webPageJsonLd({ type: "ProfilePage", name: TITLE, description: DESCRIPTION, path: "/" })} />
       <Hero />
       <IndexBand />

@@ -9,6 +9,9 @@ import { COVER_ASPECT, Cover, fmtDate } from "@/components/blog/PostCard";
 import { listLivePosts } from "@/lib/blog/db";
 import type { PostSummary } from "@/lib/blog/types";
 import { site } from "@/content/site";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { withSeo } from "@/lib/site/seo";
+import { PageSchema } from "@/components/seo/PageSchema";
 
 // Rebuilt at most hourly, and immediately whenever a post is published or edited.
 export const revalidate = 60;
@@ -17,7 +20,7 @@ const TITLE = "SEO Blog: Practical Search Advice";
 const DESCRIPTION =
   "Straightforward articles on technical SEO, local search and getting found in AI answers, written from real client work rather than theory.";
 
-export const metadata = pageMeta({ title: TITLE, description: DESCRIPTION, path: "/blog", socialTitle: "The blog | Agman Rajpurohit" });
+export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, description: DESCRIPTION, path: "/blog", socialTitle: "The blog | Agman Rajpurohit" }));
 
 async function getPosts(): Promise<PostSummary[]> {
   try {
@@ -60,6 +63,7 @@ export default async function BlogPage() {
 
   return (
     <>
+      <PageSchema path={"/blog"} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }])} />
       <JsonLd data={webPageJsonLd({ type: "CollectionPage", name: TITLE, description: DESCRIPTION, path: "/blog" })} />
       <JsonLd data={blogLd} />
@@ -117,6 +121,7 @@ export default async function BlogPage() {
           </>
         )}
       </section>
+      <ServicesStrip title="Need help with your own site?" highlight={["seo-specialist", "geo-specialist", "answer-engine-optimization"]} />
     </>
   );
 }

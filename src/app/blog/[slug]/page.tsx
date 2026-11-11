@@ -13,6 +13,7 @@ import { ShareLinks } from "@/components/blog/ShareLinks";
 import { site } from "@/content/site";
 import { asset } from "@/lib/asset";
 import { parseCustomSchema } from "@/lib/blog/custom-schema";
+import { ServicesStrip } from "@/components/services/ServicesStrip";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -288,6 +289,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </section>
       )}
+      <ServicesStrip title="Want this done for your business?" highlight={["seo-specialist", "geo-specialist", "local-seo"]} />
     </>
   );
 }
