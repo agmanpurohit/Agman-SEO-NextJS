@@ -19,7 +19,7 @@ export function JourneyPreview() {
   });
 
   return (
-    <section ref={root} aria-labelledby="journey-title" className="section">
+    <section ref={root} aria-labelledby="journey-title" className="section overflow-hidden">
       <div className="wrap grid-12 gap-y-12">
         <div className="col-span-4 md:col-span-5">
           <SectionLabel index="05" className="mb-6">Journey</SectionLabel>
