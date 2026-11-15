@@ -296,7 +296,7 @@ function ReportDoc({ a, recipient }: { a: AuditStatus; recipient: string }) {
         <View style={[s.card, { marginTop: 14, backgroundColor: "#FFF4EE", borderColor: "#FFD3C0" }]} wrap={false}>
           <Text style={s.h3}>Want help implementing this?</Text>
           <Text>
-            I’m Agman Rajpurohit, an SEO & digital marketing specialist based in Dubai. Reply to this email or reach me at {owner.email} / {owner.locations[0].phone}.
+            I’m Agman Rajpurohit, an SEO & digital marketing specialist based in Ahmedabad, India, working with clients worldwide. Reply to this email or reach me at {owner.email} / {owner.locations[0].phone}.
           </Text>
           <Link src={`${owner.url}/contact`} style={{ color: C.ember, marginTop: 4 }}>
             {owner.url.replace(/^https?:\/\//, "")}/contact

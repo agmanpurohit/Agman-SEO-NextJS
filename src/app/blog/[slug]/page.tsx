@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: post.ogTitle || title,
       description: post.ogDescription || description,
       siteName: site.name,
-      locale: "en_AE",
+      locale: "en_IN",
       publishedTime: post.publishedAt ?? undefined,
       modifiedTime: post.updatedAt,
       authors: [site.url],
@@ -233,7 +233,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   <p className="t-label">Written by</p>
                   <p className="mt-1 text-xl font-semibold text-bone">{site.name}</p>
                   <p className="t-body mt-2 text-sm">
-                    SEO specialist in Dubai. I work on technical, local and ecommerce SEO for clinics, finance brands and local businesses, and build the WordPress fixes myself.
+                    SEO specialist in Ahmedabad, India, working with clients worldwide. I work on technical, local and ecommerce SEO for clinics, finance brands and local businesses, and build the WordPress fixes myself.
                   </p>
                   <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
                     <TLink href="/experience" className="link-u text-bone">

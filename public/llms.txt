@@ -1,6 +1,6 @@
 # Agman Rajpurohit
 
-> SEO specialist based in Dubai, UAE. Two and a half years of hands-on SEO across agency and in-house roles, working on technical SEO, local SEO, ecommerce SEO, content for AI search (GEO and AEO), Google and Meta ads, and WordPress development. Available immediately for full-time SEO and digital marketing roles in the UAE, and open to selected freelance projects.
+> SEO specialist based in Ahmedabad, India, working with clients worldwide. Two and a half years of hands-on SEO across agency and in-house roles, working on technical SEO, local SEO, ecommerce SEO, content for AI search (GEO and AEO), Google and Meta ads, and WordPress development. Available now for SEO, web and paid media projects with clients anywhere, and open to full-time remote roles.
 
 ## Pages
 
@@ -32,11 +32,11 @@
 - [Schema markup generator](https://agmanrajpurohit.com/free-seo-tools/schema-markup-generator): JSON-LD for Article, LocalBusiness, Organization, Person, Product, FAQ, Breadcrumb, Event and WebSite.
 - [Robots.txt generator](https://agmanrajpurohit.com/free-seo-tools/robots-txt-generator): robots.txt with presets and separate controls for AI training and AI search crawlers.
 - [XML sitemap generator](https://agmanrajpurohit.com/free-seo-tools/sitemap-generator): crawls a site (up to 250 pages, respecting robots.txt) or takes a URL list, and skips noindex, redirected and broken pages.
-- [Contact](https://agmanrajpurohit.com/contact): email, phone and WhatsApp for Dubai and Ahmedabad, plus a contact form.
+- [Contact](https://agmanrajpurohit.com/contact): email, phone (India primary, UAE secondary) and WhatsApp, plus a contact form.
 
 ## Key facts
 
-- Based in Dubai, UAE. Indian national. Notice period: immediate.
+- Based in Ahmedabad, India. Works remotely with clients worldwide. Available immediately.
 - Organic traffic up 120% in about three months for a dental and healthcare website.
 - SEO for 25+ client websites at once at a digital agency, and 100+ dental websites made SEO-ready before launch.
 - 25+ Google Business Profiles optimised for businesses in the USA and Canada.

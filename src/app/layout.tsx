@@ -37,11 +37,11 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | SEO Specialist in Dubai`,
+    default: `${site.name} | SEO Specialist in India`,
     template: `%s | ${site.name}`,
   },
   description:
-    "I'm Agman, an SEO specialist based in Dubai. I help businesses get found on Google and in AI answers, and I build the WordPress fixes myself.",
+    "I'm Agman, an SEO specialist based in Ahmedabad, India, working with clients worldwide. I help businesses get found on Google and in AI answers, and I build the WordPress fixes myself.",
   applicationName: site.name,
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,

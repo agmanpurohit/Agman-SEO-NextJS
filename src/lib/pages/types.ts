@@ -70,7 +70,7 @@ export const pagePath = (slug: string) => `/${slug}`;
 export function slugProblem(slug: string): string | null {
   if (!slug) return "Add a URL.";
   if (slug.length > 120) return "Keep the URL under 120 characters.";
-  if (!SLUG_RE.test(slug)) return "Use lowercase letters, numbers and hyphens, with up to 3 parts separated by / (e.g. uae/seo-specialist).";
+  if (!SLUG_RE.test(slug)) return "Use lowercase letters, numbers and hyphens, with up to 3 parts separated by / (e.g. usa/seo-specialist).";
   if (RESERVED.includes(slug.split("/")[0])) return `“/${slug.split("/")[0]}” is already used by the site. Pick another URL.`;
   return null;
 }

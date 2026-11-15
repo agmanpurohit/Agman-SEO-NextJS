@@ -19,7 +19,7 @@ export const india: MarketCopy = {
     lead: "I help Indian businesses get found on Google, Google Maps and in AI answers, then turn that attention into enquiries. One specialist, one point of contact, and the technical work done myself.",
     answer: {
       q: "What SEO and digital marketing services do you offer in India?",
-      a: "I offer SEO, technical SEO, local SEO, generative engine optimization (GEO), answer engine optimization (AEO), Google Ads, Meta Ads and SEO-friendly WordPress development for Indian businesses. I worked in SEO in Ahmedabad from 2023 to 2026 and now work with clients across India remotely from Dubai.",
+      a: "I offer SEO, technical SEO, local SEO, generative engine optimization (GEO), answer engine optimization (AEO), Google Ads, Meta Ads and SEO-friendly WordPress development for Indian businesses. I worked in SEO in Ahmedabad from 2023 to 2026 and work with clients across India and abroad from Ahmedabad.",
     },
     keywords: {
       primary: "SEO and digital marketing services in India",
@@ -62,7 +62,7 @@ export const india: MarketCopy = {
         paragraphs: [
           "A lot of SEO sold in India is a package: a fixed number of backlinks, a few blog posts and a report full of rankings for keywords nobody searches. It looks busy, but it rarely touches the reasons a site isn't ranking. Those reasons are usually structural: pages Google can't reach, thin category pages, duplicate URLs, slow mobile pages, or titles that don't match what people type.",
           "Indian search behaviour adds its own layer. Most searches happen on a phone, often mixing English with Hindi or a regional language, and many are local (“near me”, a neighbourhood, a city). A page written for a generic global audience misses most of that. I plan keywords around how your customers actually search, then build pages that answer those searches properly.",
-          "I spent three years doing SEO from Ahmedabad, for agency clients and in-house, before moving to Dubai. If you want to see the kind of work I do before we talk, run a [free SEO audit](/seo-audit) of your site, or read the [case studies](/work).",
+          "I have spent three years doing SEO from Ahmedabad, for agency clients and in-house, and I still work from here. If you want to see the kind of work I do before we talk, run a [free SEO audit](/seo-audit) of your site, or read the [case studies](/work).",
         ],
       },
       includes: {

@@ -60,7 +60,7 @@ export function visitorReportEmail(p: { name: string; domain: string; score: num
       <p>Your SEO audit for <strong>${esc(p.domain)}</strong> is attached as a PDF. The site scored <strong>${p.score ?? "–"}/100</strong>.</p>
       <p>You can also view the interactive results here: <a href="${esc(p.auditLink)}">${esc(p.auditLink)}</a></p>
       <p>If you’d like help fixing any of the issues, just reply to this email.</p>
-      <p>— Agman Rajpurohit<br/>SEO & Digital Marketing Specialist, Dubai</p></div>`,
+      <p>— Agman Rajpurohit<br/>SEO & Digital Marketing Specialist, Ahmedabad, India</p></div>`,
     text: `Hi ${first},\n\nYour SEO audit for ${p.domain} is attached. Score: ${p.score ?? "–"}/100.\nView online: ${p.auditLink}\n\nReply to this email if you'd like help.\n— Agman Rajpurohit`,
   };
 }

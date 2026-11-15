@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Tool usage" };
 export const dynamic = "force-dynamic";
 
 const toolName = (slug: string) => tools.find((t) => t.slug === slug)?.name ?? slug;
-const when = (iso: string) => new Date(iso).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" });
+const when = (iso: string) => new Date(iso).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" });
 
 const ACTION_LABEL: Record<string, string> = {
   use: "Used",
@@ -199,7 +199,7 @@ export default async function ToolUsagePage({ searchParams }: { searchParams: Pr
         </table>
       </div>
       <p className="t-body mt-4 text-xs">
-        Each row is one visitor session on one tool, updated as they keep working. Times are Dubai time. Showing up to 300 most recent; export includes all matches. Records are deleted automatically after{" "}
+        Each row is one visitor session on one tool, updated as they keep working. Times are India time (IST). Showing up to 300 most recent; export includes all matches. Records are deleted automatically after{" "}
         {RETENTION_DAYS} days. Location comes from Vercel and is only available on the live site.
       </p>
     </section>

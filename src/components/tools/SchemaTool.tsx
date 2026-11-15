@@ -16,7 +16,7 @@ type FieldDef = {
 };
 type TypeDef = { id: string; label: string; blurb: string; fields: FieldDef[]; list?: "faq" | "crumbs" };
 
-const COUNTRIES = "AE,IN,US,GB,SA,QA,OM,KW,BH,CA,AU,DE,FR,SG".split(",");
+const COUNTRIES = "IN,AE,US,GB,SA,QA,OM,KW,BH,CA,AU,DE,FR,SG".split(",");
 
 const TYPES: TypeDef[] = [
   {
@@ -26,7 +26,7 @@ const TYPES: TypeDef[] = [
     fields: [
       { key: "articleType", label: "Article type", kind: "select", options: ["BlogPosting", "Article", "NewsArticle"].map((v) => ({ value: v, label: v })), half: true },
       { key: "url", label: "Article URL", kind: "url", placeholder: "https://www.example.com/blog/post", half: true },
-      { key: "headline", label: "Headline", required: true, placeholder: "How to choose a dentist in Dubai" },
+      { key: "headline", label: "Headline", required: true, placeholder: "How to choose a dentist in Ahmedabad" },
       { key: "description", label: "Short description", kind: "textarea" },
       { key: "image", label: "Image URL", kind: "url", required: true, hint: "At least 1200px wide works best." },
       { key: "datePublished", label: "Published", kind: "datetime", required: true, half: true },
@@ -58,7 +58,7 @@ const TYPES: TypeDef[] = [
       },
       { key: "name", label: "Business name", required: true, half: true },
       { key: "url", label: "Website", kind: "url", half: true },
-      { key: "telephone", label: "Phone", placeholder: "+971 4 123 4567", half: true },
+      { key: "telephone", label: "Phone", placeholder: "+91 79 1234 5678", half: true },
       { key: "image", label: "Photo or logo URL", kind: "url", required: true },
       { key: "street", label: "Street address", required: true },
       { key: "city", label: "City", required: true, half: true },
@@ -262,7 +262,7 @@ function build(t: string, v: V, faq: { q: string; a: string }[], crumbs: { name:
         url: v.url,
         telephone: v.telephone,
         priceRange: v.priceRange,
-        address: { "@type": "PostalAddress", streetAddress: v.street, addressLocality: v.city, addressRegion: v.region, postalCode: v.postal, addressCountry: v.country || "AE" },
+        address: { "@type": "PostalAddress", streetAddress: v.street, addressLocality: v.city, addressRegion: v.region, postalCode: v.postal, addressCountry: v.country || "IN" },
         geo: num(v.lat) !== undefined && num(v.lng) !== undefined ? { "@type": "GeoCoordinates", latitude: num(v.lat), longitude: num(v.lng) } : undefined,
         openingHoursSpecification: hoursSpec(split(v.hours)),
         sameAs: split(v.sameAs),

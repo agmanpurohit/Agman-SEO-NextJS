@@ -121,7 +121,7 @@ export function Hero() {
         <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-ink to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-1/5 bg-gradient-to-b from-ink to-transparent" />
         <span className="t-label absolute top-3 right-3 hidden !text-[0.6rem] md:block" data-hero-fade>
-          Fig. 01 — Dubai, {new Date().getFullYear()}
+          Fig. 01 — Ahmedabad, {new Date().getFullYear()}
         </span>
       </div>
 

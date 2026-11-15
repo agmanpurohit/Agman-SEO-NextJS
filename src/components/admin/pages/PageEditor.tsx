@@ -284,7 +284,7 @@ export function PageEditor({ id, initial, publishedAt, siteUrl, pages }: Props) 
           <section className="space-y-4 border border-line p-5">
             <h2 className="t-label !text-bone">Page</h2>
             <Field label="Page name" hint={errors.title}>
-              <input className={input} value={p.title} onChange={(e) => setTitle(e.target.value)} maxLength={120} placeholder="SEO Specialist in Dubai" />
+              <input className={input} value={p.title} onChange={(e) => setTitle(e.target.value)} maxLength={120} placeholder="SEO Specialist in Ahmedabad" />
             </Field>
             <Field label="URL" hint={<span className={slugError || errors.slug ? "text-ember-soft" : ""}>{errors.slug || slugError || `${siteUrl.replace(/^https?:\/\//, "")}${path}`}</span>}>
               <div className="flex items-center rounded border border-line-2 bg-ink-2 focus-within:border-bone">
@@ -303,7 +303,7 @@ export function PageEditor({ id, initial, publishedAt, siteUrl, pages }: Props) 
               </div>
             </Field>
             {live && savedPage.slug !== p.slug && p.slug && !slugError && <p className="text-xs text-[#f0b64a]">The old URL /{savedPage.slug} will redirect here (301) when you update.</p>}
-            {publishedAt && <p className="text-xs text-mute">First published {new Date(publishedAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" })}</p>}
+            {publishedAt && <p className="text-xs text-mute">First published {new Date(publishedAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" })}</p>}
           </section>
 
           <section className="space-y-4 border border-line p-5">

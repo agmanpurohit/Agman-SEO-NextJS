@@ -22,26 +22,25 @@ export const site = {
   photo: "/images/agman-rajpurohit.png",
   availability: "Available immediately",
   availabilityLong:
-    "Available immediately for full-time SEO and digital marketing roles in Dubai and across the UAE. Open to selected freelance projects.",
+    "Based in Ahmedabad, India, and working with clients around the world. Available now for SEO, web and paid media projects, and open to full-time remote roles.",
   nationality: "Indian",
+  /** Where Agman is based (used in copy, structured data and the header). */
+  base: { city: "Ahmedabad", country: "India", countryCode: "IN", timezone: "Asia/Kolkata" },
+  /** WhatsApp chat link (shown wherever WhatsApp is offered). */
+  whatsapp: "https://wa.me/971507298791" as string | null,
+  /** Phone numbers, primary first. */
   locations: [
     {
-      city: "Dubai",
-      country: "UAE",
+      label: "India",
       primary: true,
-      timezone: "Asia/Dubai",
-      phone: "+971 50 729 8791",
-      phoneHref: "tel:+971507298791",
-      whatsapp: "https://wa.me/971507298791",
-    },
-    {
-      city: "Ahmedabad",
-      country: "India",
-      primary: false,
-      timezone: "Asia/Kolkata",
       phone: "+91 63750 26232",
       phoneHref: "tel:+916375026232",
-      whatsapp: null,
+    },
+    {
+      label: "UAE",
+      primary: false,
+      phone: "+971 50 729 8791",
+      phoneHref: "tel:+971507298791",
     },
   ],
 } as const;
@@ -58,4 +57,4 @@ export const nav = [
 /** The free audit tool: linked from the header, a homepage section and a band on every page. */
 export const auditTool = { href: "/seo-audit", label: "Free SEO Audit" } as const;
 
-export const primaryLocation = site.locations[0];
+

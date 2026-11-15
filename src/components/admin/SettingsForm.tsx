@@ -85,14 +85,14 @@ export function SettingsForm({ initial, defaults, isCustom }: { initial: SiteSet
         <Field label="Email" error={errors.email}>
           <input className={input} type="email" value={s.email} onChange={(e) => set("email", e.target.value)} />
         </Field>
-        <Field label="Dubai phone" error={errors.dubaiPhone}>
-          <input className={input} value={s.dubaiPhone} onChange={(e) => set("dubaiPhone", e.target.value)} placeholder="+971 50 000 0000" />
-        </Field>
-        <Field label="WhatsApp link" error={errors.dubaiWhatsapp} hint="e.g. https://wa.me/971500000000. Leave empty to hide WhatsApp links.">
-          <input className={input} value={s.dubaiWhatsapp} onChange={(e) => set("dubaiWhatsapp", e.target.value)} inputMode="url" />
-        </Field>
-        <Field label="India phone" error={errors.indiaPhone}>
+        <Field label="India phone (primary)" error={errors.indiaPhone} hint="Shown first everywhere and used in structured data.">
           <input className={input} value={s.indiaPhone} onChange={(e) => set("indiaPhone", e.target.value)} placeholder="+91 00000 00000" />
+        </Field>
+        <Field label="UAE phone (secondary)" error={errors.uaePhone} hint="Leave empty to hide it.">
+          <input className={input} value={s.uaePhone} onChange={(e) => set("uaePhone", e.target.value)} placeholder="+971 50 000 0000" />
+        </Field>
+        <Field label="WhatsApp link" error={errors.whatsapp} hint="e.g. https://wa.me/919800000000. Leave empty to hide WhatsApp links.">
+          <input className={input} value={s.whatsapp} onChange={(e) => set("whatsapp", e.target.value)} inputMode="url" />
         </Field>
       </Section>
 

@@ -145,7 +145,7 @@ export function Header() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ember" />
               </span>
-              {liveSite.availability} · {liveSite.locations[0].city}
+              {liveSite.availability} · {liveSite.base.city}
             </span>
             <Magnetic>
               <TLink href={auditTool.href} className="btn btn-primary !h-11 !px-5" data-cursor="Audit">
@@ -227,8 +227,8 @@ export function Header() {
             {liveSite.email}
           </a>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {liveSite.locations[0].whatsapp && (
-              <a href={liveSite.locations[0].whatsapp} tabIndex={open ? 0 : -1} className="t-label !text-bone" target="_blank" rel="noopener noreferrer">
+            {liveSite.whatsapp && (
+              <a href={liveSite.whatsapp} tabIndex={open ? 0 : -1} className="t-label !text-bone" target="_blank" rel="noopener noreferrer">
                 WhatsApp
               </a>
             )}

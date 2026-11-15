@@ -10,9 +10,9 @@ import { withSeo } from "@/lib/site/seo";
 import { PageSchema } from "@/components/seo/PageSchema";
 import { getSite } from "@/lib/site/settings";
 
-const TITLE = "Hire an SEO Specialist in Dubai";
+const TITLE = "Hire an SEO Specialist: Remote, Worldwide";
 const DESCRIPTION =
-  "Hiring for SEO in the UAE, or need help with your website? Send a message, call or WhatsApp me. I'm based in Dubai and available to start now.";
+  "Need help with SEO or your website? Send a message, call or WhatsApp me. I'm based in Ahmedabad, India, work with clients worldwide and can start now.";
 
 export const generateMetadata = () => withSeo(pageMeta({ title: TITLE, description: DESCRIPTION, path: "/contact", socialTitle: "Contact Agman Rajpurohit" }));
 
@@ -61,26 +61,36 @@ export default async function ContactPage() {
               </a>
             </div>
 
+            <div className="border-t border-line py-6">
+              <div className="flex items-baseline justify-between">
+                <p className="t-label">
+                  Based in {live.base.city}, {live.base.country}
+                </p>
+                <LocalTime timeZone={live.base.timezone} className="t-mono text-xs text-mute" />
+              </div>
+              <p className="t-body mt-2 text-sm">Working with clients around the world, remotely.</p>
+            </div>
+
             {live.locations.map((l) => (
-              <div key={l.city} className="border-t border-line py-6">
-                <div className="flex items-baseline justify-between">
-                  <p className="t-label">
-                    {l.city}, {l.country}
-                    {l.primary && <span className="ember"> · Based here</span>}
-                  </p>
-                  <LocalTime timeZone={l.timezone} className="t-mono text-xs text-mute" />
-                </div>
+              <div key={l.label} className="border-t border-line py-6">
+                <p className="t-label">
+                  Phone · {l.label}
+                  {l.primary && <span className="ember"> · Primary</span>}
+                </p>
                 <a href={l.phoneHref} className="link-u mt-2 inline-block text-xl text-bone">
                   {l.phone}
                 </a>
-                {l.whatsapp && (
-                  <a href={l.whatsapp} target="_blank" rel="noopener noreferrer" className="t-label mt-3 flex items-center gap-2 !text-bone hover:!text-ember">
-                    <span className="h-1.5 w-1.5 rounded-full bg-ember" aria-hidden="true" />
-                    Message on WhatsApp ↗
-                  </a>
-                )}
               </div>
             ))}
+
+            {live.whatsapp && (
+              <div className="border-t border-line py-6">
+                <a href={live.whatsapp} target="_blank" rel="noopener noreferrer" className="t-label flex items-center gap-2 !text-bone hover:!text-ember">
+                  <span className="h-1.5 w-1.5 rounded-full bg-ember" aria-hidden="true" />
+                  Message on WhatsApp ↗
+                </a>
+              </div>
+            )}
 
             <div className="border-t border-line py-6">
               <p className="t-label">Elsewhere</p>

@@ -37,7 +37,9 @@ export default async function ExperiencePage() {
         }
         aside={
           <div className="flex flex-col gap-4">
-            <p className="t-label">{live.availability} · Dubai, UAE</p>
+            <p className="t-label">
+              {live.availability} · {live.base.city}, {live.base.country}
+            </p>
             <div>
               <ButtonA href={site.cv} download arrow="down" variant="primary" cursor="PDF">
                 Download CV
@@ -173,7 +175,7 @@ export default async function ExperiencePage() {
       <Closing
         label="Hiring?"
         headline={["Looking for an SEO who", "can start on Monday?"]}
-        body="I'm available immediately for full-time SEO and digital marketing roles in Dubai and across the UAE. Send the role over, or download my CV and share it with your team."
+        body="I'm available immediately for SEO and digital marketing work with teams anywhere, remotely from Ahmedabad, India, including full-time remote roles. Send the role over, or download my CV and share it with your team."
       />
     </>
   );

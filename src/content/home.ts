@@ -3,9 +3,9 @@
  * for publication. Edit text freely; keep numbers tied to a real source.
  */
 export const hero = {
-  eyebrow: "SEO · GEO · AEO — Dubai, UAE",
+  eyebrow: "SEO · GEO · AEO — Ahmedabad, India",
   intro:
-    "I'm an SEO and digital marketing specialist based in Dubai. I grow organic traffic, shape content that AI answer engines can understand and cite, and build the WordPress fixes myself instead of waiting in a dev queue.",
+    "I'm an SEO and digital marketing specialist based in Ahmedabad, India, working with clients worldwide. I grow organic traffic, shape content that AI answer engines can understand and cite, and build the WordPress fixes myself instead of waiting in a dev queue.",
   primaryCta: { label: "See the work", href: "/work" },
   secondaryCta: { label: "Download CV" },
 };
@@ -101,6 +101,6 @@ export const signals = [
 export const closing = {
   label: "Next step",
   headline: ["Need someone who can", "rank it and build it?"],
-  body: "I'm looking for a full-time SEO or digital marketing role in Dubai or anywhere in the UAE, and I can start immediately. I also take on a small number of freelance SEO, web and paid media projects.",
+  body: "I work with businesses around the world on SEO, web and paid media, remotely from Ahmedabad, India. I can start right away, and I'm also open to full-time remote roles.",
   primary: { label: "Let's talk", href: "/contact" },
 };

@@ -214,11 +214,11 @@ export function ContactForm() {
             <a className="underline" href={`mailto:${liveSite.email}?subject=${encodeURIComponent(values.subject)}`}>
               {liveSite.email}
             </a>
-            {liveSite.locations[0].whatsapp && (
+            {liveSite.whatsapp && (
               <>
                 {" "}
                 or message me on{" "}
-                <a className="underline" href={liveSite.locations[0].whatsapp} target="_blank" rel="noopener noreferrer">
+                <a className="underline" href={liveSite.whatsapp} target="_blank" rel="noopener noreferrer">
                   WhatsApp
                 </a>
               </>

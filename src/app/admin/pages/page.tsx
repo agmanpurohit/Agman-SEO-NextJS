@@ -10,7 +10,7 @@ import { PageRowActions } from "@/components/admin/pages/PageRowActions";
 export const metadata: Metadata = { title: "Pages" };
 export const dynamic = "force-dynamic";
 
-const fmt = (d: string | null) => (d ? new Date(d).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" }) : "–");
+const fmt = (d: string | null) => (d ? new Date(d).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" }) : "–");
 
 export default async function PagesAdmin() {
   if (!(await isAdmin())) {

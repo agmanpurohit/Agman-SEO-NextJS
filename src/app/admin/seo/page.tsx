@@ -84,7 +84,7 @@ export default async function SeoPagesPage() {
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex flex-wrap gap-1.5">{chips}</div>
-                          {o?.updatedAt && <p className="mt-1.5 text-[0.7rem] text-mute">Edited {new Date(o.updatedAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" })}</p>}
+                          {o?.updatedAt && <p className="mt-1.5 text-[0.7rem] text-mute">Edited {new Date(o.updatedAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" })}</p>}
                         </td>
                         <td className="px-4 py-3 text-right whitespace-nowrap">
                           {p.blog ? (

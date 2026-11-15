@@ -50,7 +50,7 @@ function countPhrase(text: string, phrase: string) {
 }
 
 const SAMPLE =
-  "Local SEO helps a dental clinic show up when people nearby search for a dentist. The map pack, the three businesses Google shows with a map, gets most of the clicks for local searches. To get there, a clinic needs a complete Google Business Profile, consistent details across directories and real reviews from patients. Location pages matter too. A clinic with branches in Dubai Marina and Jumeirah should have a page for each area, with its own address, opening hours, photos and the treatments offered there. Local SEO is not a one-off task. Reviews, photos and posts need regular attention, and the website has to load fast on mobile, because most local searches happen on a phone.";
+  "Local SEO helps a dental clinic show up when people nearby search for a dentist. The map pack, the three businesses Google shows with a map, gets most of the clicks for local searches. To get there, a clinic needs a complete Google Business Profile, consistent details across directories and real reviews from patients. Location pages matter too. A clinic with branches in Navrangpura and Satellite should have a page for each area, with its own address, opening hours, photos and the treatments offered there. Local SEO is not a one-off task. Reviews, photos and posts need regular attention, and the website has to load fast on mobile, because most local searches happen on a phone.";
 
 export function KeywordDensityTool() {
   const [mode, setMode] = useState<"text" | "url">("text");

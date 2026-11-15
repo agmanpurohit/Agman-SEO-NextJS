@@ -1,5 +1,5 @@
 /**
- * Services, defined once and published per country market (/india/<service>, later /uae/…).
+ * Services, defined once and published per country market (/india/<service>, later other countries).
  * The registry here is country-neutral; each market has its own copy file (./india.ts) with
  * the page text, FAQs and target keywords for that audience.
  */

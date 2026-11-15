@@ -18,17 +18,20 @@ export async function Footer() {
           </a>
           <ul className="mt-8 flex flex-col gap-3">
             {live.locations.map((l) => (
-              <li key={l.city} className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                <span className="t-label w-28 !text-bone">
-                  {l.city}, {l.country}
-                </span>
+              <li key={l.label} className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                <span className="t-label w-28 !text-bone">{l.label}</span>
                 <a href={l.phoneHref} className="link-u t-mono text-sm text-bone-dim hover:text-bone">
                   {l.phone}
                 </a>
-                <LocalTime timeZone={l.timezone} className="t-mono text-xs text-mute" />
               </li>
             ))}
           </ul>
+          <p className="t-label mt-6 flex flex-wrap items-baseline gap-x-3">
+            <span>
+              Based in {live.base.city}, {live.base.country}
+            </span>
+            <LocalTime timeZone={live.base.timezone} className="t-mono text-xs text-mute" />
+          </p>
         </div>
 
         {/* Every service page is linked from every page, so crawlers can reach all of them. */}
@@ -70,9 +73,9 @@ export async function Footer() {
                 LinkedIn ↗
               </a>
             </li>
-            {live.locations[0].whatsapp && (
+            {live.whatsapp && (
               <li>
-                <a href={live.locations[0].whatsapp} target="_blank" rel="noopener noreferrer" className="link-u text-bone-dim hover:text-bone">
+                <a href={live.whatsapp} target="_blank" rel="noopener noreferrer" className="link-u text-bone-dim hover:text-bone">
                   WhatsApp ↗
                 </a>
               </li>
@@ -93,7 +96,7 @@ export async function Footer() {
       <div className="wrap flex flex-col gap-2 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="t-label">© {year} {site.name}</p>
         <p className="t-label">
-          {site.role} · Dubai, UAE
+          {site.role} · {site.base.city}, {site.base.country} · Clients worldwide
         </p>
       </div>
     </footer>

@@ -12,16 +12,16 @@ import { AuditTeaser } from "@/components/home/AuditTeaser";
 import { withSeo } from "@/lib/site/seo";
 import { PageSchema } from "@/components/seo/PageSchema";
 
-const TITLE = "Agman Rajpurohit | SEO Specialist in Dubai";
+const TITLE = "Agman Rajpurohit | SEO Specialist in India";
 const DESCRIPTION =
-  "I'm Agman, an SEO specialist in Dubai. I grow organic traffic for clinics, finance brands and local businesses, and I can start a new role right away.";
+  "I'm Agman, an SEO specialist in Ahmedabad, India, working with clients worldwide. I grow organic traffic for clinics, finance brands and local businesses.";
 
 export const generateMetadata = () => withSeo(pageMeta({
   title: TITLE,
   absoluteTitle: true,
   description: DESCRIPTION,
   path: "/",
-  socialTitle: "Agman Rajpurohit, SEO specialist in Dubai",
+  socialTitle: "Agman Rajpurohit, SEO specialist in India",
 }));
 
 export default function HomePage() {

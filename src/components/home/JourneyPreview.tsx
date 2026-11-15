@@ -27,7 +27,7 @@ export function JourneyPreview() {
             Three companies. One direction: search.
           </SplitReveal>
           <p className="t-body mt-6 max-w-[30rem]">
-            From process operations into SEO, then into agency work at scale and international search for a financial-services brand. Now based in Dubai.
+            From process operations into SEO, then into agency work at scale and international search for a financial-services brand. Based in Ahmedabad, working with clients worldwide.
           </p>
           <div className="mt-10">
             <ButtonLink href="/experience" variant="ghost">

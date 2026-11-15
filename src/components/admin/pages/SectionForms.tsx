@@ -168,7 +168,7 @@ export function SectionForm({ s, set, ctx }: { s: Section; set: (patch: Partial<
       return (
         <>
           <Grid2>
-            <Text label="Small label above (optional)" value={s.eyebrow} onChange={(v) => up({ eyebrow: v })} placeholder="SEO services · UAE" />
+            <Text label="Small label above (optional)" value={s.eyebrow} onChange={(v) => up({ eyebrow: v })} placeholder="SEO services · India" />
             <Text label="Heading (H1)" value={s.heading} onChange={(v) => up({ heading: v })} max={200} placeholder="The main promise of the page" hint="The page's only H1. Include the main keyword." />
           </Grid2>
           <Area label="Intro" value={s.text} onChange={(v) => up({ text: v })} rows={3} />

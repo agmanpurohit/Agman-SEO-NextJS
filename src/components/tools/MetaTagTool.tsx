@@ -128,7 +128,7 @@ export function MetaTagTool() {
         <Panel title="1 · Search basics">
           <div className="space-y-5">
             <Field label="Page title" count={{ value: s.title.length, max: 60, min: 30 }} hint="Lead with the topic or service, then your brand. Each page needs its own.">
-              {(id) => <TextInput id={id} value={s.title} onChange={(e) => set("title")(e.target.value)} placeholder="e.g. Teeth Whitening in Dubai | Bright Smile Clinic" />}
+              {(id) => <TextInput id={id} value={s.title} onChange={(e) => set("title")(e.target.value)} placeholder="e.g. Teeth Whitening in Ahmedabad | Bright Smile Clinic" />}
             </Field>
             <Field label="Meta description" count={{ value: s.description.length, max: 160, min: 120 }} hint="Not a ranking factor, but it decides whether people click.">
               {(id) => <TextArea id={id} rows={3} value={s.description} onChange={(e) => set("description")(e.target.value)} placeholder="Say what the page offers and why someone should choose you." />}

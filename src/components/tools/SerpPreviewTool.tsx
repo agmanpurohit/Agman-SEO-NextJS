@@ -9,9 +9,9 @@ const today = () => new Date().toLocaleDateString("en-US", { month: "short", day
 
 export function SerpPreviewTool() {
   const ready = useMeasureReady();
-  const [title, setTitle] = useState("SEO Specialist in Dubai | Technical & Local SEO");
-  const [desc, setDesc] = useState("I help Dubai businesses get found on Google and in AI answers. Technical fixes, local SEO and content that brings in enquiries, not just traffic.");
-  const [url, setUrl] = useState("https://www.example.com/services/seo-dubai");
+  const [title, setTitle] = useState("SEO Specialist in India | Technical & Local SEO");
+  const [desc, setDesc] = useState("I help businesses in India and worldwide get found on Google and in AI answers. Technical fixes, local SEO and content that brings in enquiries, not just traffic.");
+  const [url, setUrl] = useState("https://www.example.com/services/seo-india");
   const [siteName, setSiteName] = useState("");
   const [keyword, setKeyword] = useState("SEO");
   const [showDate, setShowDate] = useState(false);
@@ -57,7 +57,7 @@ export function SerpPreviewTool() {
       <Panel title="Your snippet">
         <div className="space-y-5">
           <Field label="Page title" count={{ value: title.length, max: 60, min: 30 }}>
-            {(id) => <TextInput id={id} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Emergency Dentist in Dubai Marina | Open 7 Days" />}
+            {(id) => <TextInput id={id} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Emergency Dentist in Navrangpura, Ahmedabad | Open 7 Days" />}
           </Field>
           <Field label="Meta description" count={{ value: desc.length, max: 160, min: 120 }}>
             {(id) => <TextArea id={id} rows={4} value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="Summarise the page and give a reason to click." />}
@@ -68,7 +68,7 @@ export function SerpPreviewTool() {
               {(id) => <TextInput id={id} value={siteName} onChange={(e) => setSiteName(e.target.value)} placeholder="Example Clinic" />}
             </Field>
             <Field label="Search keyword" hint="Matching words are shown in bold.">
-              {(id) => <TextInput id={id} value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="e.g. dentist dubai" />}
+              {(id) => <TextInput id={id} value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="e.g. dentist ahmedabad" />}
             </Field>
           </div>
           <Toggle checked={showDate} onChange={setShowDate} label="Show a date" hint="Articles and news often show a publish date before the description." />

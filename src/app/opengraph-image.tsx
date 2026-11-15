@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { logo_mark } from "@/components/brand/logo-paths";
 
-export const alt = "Agman Rajpurohit, SEO specialist in Dubai";
+export const alt = "Agman Rajpurohit, SEO specialist in Ahmedabad, India";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,7 +30,7 @@ export default async function OpengraphImage() {
               engineered<span style={{ color: "#ff5a1f" }}>.</span>
             </div>
             <div style={{ marginTop: 36, fontSize: 30, fontWeight: 600 }}>Agman Rajpurohit</div>
-            <div style={{ marginTop: 8, fontSize: 22, color: "#aca79e" }}>SEO & Digital Marketing Specialist · Dubai, UAE</div>
+            <div style={{ marginTop: 8, fontSize: 22, color: "#aca79e" }}>SEO & Digital Marketing Specialist · Ahmedabad, India</div>
           </div>
         </div>
       </div>
