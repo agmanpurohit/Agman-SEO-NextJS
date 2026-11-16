@@ -31,23 +31,37 @@ export function WorkExplorer() {
   const visible = useMemo(() => (filter === "All" ? cases : cases.filter((c) => c.tags.includes(filter))), [filter]);
   const counts = useMemo(() => Object.fromEntries(filters.map((f) => [f, f === "All" ? cases.length : cases.filter((c) => c.tags.includes(f as Tag)).length])), []);
 
-  // Deep link: /work?case=slug opens that case. Read from the URL directly (no
-  // useSearchParams) so the grid renders and hydrates without a Suspense bailout.
+  // Deep link: /work#slug opens that case. A #fragment is not a separate URL for search
+  // engines, so case links never show up as duplicates of /work in Search Console.
+  // Older /work?case=slug links still open the case, and the address is tidied to #slug.
   useEffect(() => {
     const read = () => {
-      const slug = new URLSearchParams(window.location.search).get("case");
-      setOpenSlug(slug && cases.some((c) => c.slug === slug) ? slug : null);
+      const legacy = new URLSearchParams(window.location.search).get("case");
+      const slug = legacy || decodeURIComponent(window.location.hash.slice(1));
+      const valid = !!slug && cases.some((c) => c.slug === slug);
+      setOpenSlug(valid ? slug : null);
+      if (legacy) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("case");
+        url.hash = valid ? legacy : "";
+        window.history.replaceState(window.history.state, "", url);
+      }
     };
     read();
     window.addEventListener("popstate", read);
-    return () => window.removeEventListener("popstate", read);
+    window.addEventListener("hashchange", read);
+    return () => {
+      window.removeEventListener("popstate", read);
+      window.removeEventListener("hashchange", read);
+    };
   }, []);
 
   const syncUrl = (slug: string | null) => {
     const url = new URL(window.location.href);
-    if (slug) url.searchParams.set("case", slug);
-    else url.searchParams.delete("case");
-    window.history.replaceState(window.history.state, "", url);
+    url.searchParams.delete("case");
+    url.hash = slug ?? "";
+    // An empty hash still leaves a trailing "#"; drop it.
+    window.history.replaceState(window.history.state, "", slug ? url : url.href.replace(/#$/, ""));
   };
 
   const open = (slug: string) => {

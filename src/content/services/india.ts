@@ -256,7 +256,7 @@ export const india: MarketCopy = {
         paragraphs: [
           "For a clinic, salon, coaching centre, showroom or restaurant, most new customers now start on Google Maps. They search “dentist near me” or “physiotherapist in Satellite Ahmedabad”, look at the three businesses Google shows on the map, check the stars and photos, and call one. If you're not in those three, you're mostly invisible.",
           "In Indian cities the competition is dense and messy: duplicate listings, keyword-stuffed business names, fake reviews and listings with the wrong pin. Doing it properly still works. That means a complete Business Profile, the right categories, real photos, a steady flow of genuine reviews, consistent details on directories like Justdial and IndiaMART, and a website with a proper page for each location you serve.",
-          "I've optimized more than 25 Google Business Profiles and helped a dental clinic reach the top of the local pack for a high-volume keyword. You can read that [local pack case study](/work?case=dental-clinic-local-pack). If you have several branches, location pages and [LocalBusiness schema](/free-seo-tools/schema-markup-generator) matter even more.",
+          "I've optimized more than 25 Google Business Profiles and helped a dental clinic reach the top of the local pack for a high-volume keyword. You can read that [local pack case study](/work#dental-clinic-local-pack). If you have several branches, location pages and [LocalBusiness schema](/free-seo-tools/schema-markup-generator) matter even more.",
         ],
       },
       includes: {
@@ -320,7 +320,7 @@ export const india: MarketCopy = {
         paragraphs: [
           "When someone asks an AI assistant “best CA firm in Ahmedabad for startups” or “which CRM suits a small Indian business”, they don't get ten blue links. They get a short answer that names a few businesses and sometimes cites sources. If your business isn't in that answer, the conversation is over before it reaches your website.",
           "AI tools build those answers from what they can read and trust: your own website, your Google Business Profile, directories, reviews, news mentions, and forums like Reddit and Quora. GEO is about making all of that clear and consistent, so the models describe you correctly and have good reasons to mention you.",
-          "I wrote SEO, GEO and AEO content for a finance website serving four countries. Its impressions on Google's AI search features grew from 6,450 to 48,300 in a quarter (see the [case study](/work?case=multi-market-financial-services)). GEO works best on top of solid [SEO](/india/seo-specialist) and [answer engine optimization](/india/answer-engine-optimization), which is why I plan them together.",
+          "I wrote SEO, GEO and AEO content for a finance website serving four countries. Its impressions on Google's AI search features grew from 6,450 to 48,300 in a quarter (see the [case study](/work#multi-market-financial-services)). GEO works best on top of solid [SEO](/india/seo-specialist) and [answer engine optimization](/india/answer-engine-optimization), which is why I plan them together.",
         ],
       },
       includes: {
@@ -575,7 +575,7 @@ export const india: MarketCopy = {
         heading: "Most websites are built first and fixed for SEO later",
         paragraphs: [
           "The usual way a business website gets made in India: a designer builds something attractive with a heavy theme and a page builder, it launches, and six months later someone notices it doesn't rank. Then the SEO person has to fight the theme, the slow sliders, the missing headings and the duplicate URLs it created.",
-          "I've done it the other way, at scale. At a digital agency I made more than 100 dental websites SEO-ready during development, before they launched. Structure, headings, URLs, schema, sitemaps and speed were all decided before the first page went live. I also built a site from scratch for a studio that had no web presence at all; it now ranks first on Google for several of its main keywords ([case study](/work?case=tattoo-studio-from-zero)).",
+          "I've done it the other way, at scale. At a digital agency I made more than 100 dental websites SEO-ready during development, before they launched. Structure, headings, URLs, schema, sitemaps and speed were all decided before the first page went live. I also built a site from scratch for a studio that had no web presence at all; it now ranks first on Google for several of its main keywords ([case study](/work#tattoo-studio-from-zero)).",
           "My background is in computer applications and full-stack development, so when WordPress needs something a plugin can't do, I write the plugin. Two of mine are in production: one for page-level JSON-LD schema and one for custom XML sitemaps. If you're redesigning an existing site, I map every old URL to a new one so you keep the rankings you've earned. See also [technical SEO](/india/technical-seo).",
         ],
       },

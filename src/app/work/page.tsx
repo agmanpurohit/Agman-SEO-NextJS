@@ -29,7 +29,7 @@ const itemList = {
       about: c.industry,
       ...(c.client ? { mentions: { "@type": "Organization", name: c.client.name } } : {}),
       abstract: c.summary,
-      url: `${site.url}/work?case=${c.slug}`,
+      url: `${site.url}/work#${c.slug}`,
       creator: { "@id": `${site.url}/#person` },
     },
   })),

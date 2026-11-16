@@ -201,7 +201,7 @@ export function ServicePage({ market, service, copy }: { market: Market; service
           </Reveal>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
             {service.caseSlug && (
-              <TLink href={`/work?case=${service.caseSlug}`} className="link-u text-bone">
+              <TLink href={`/work#${service.caseSlug}`} className="link-u text-bone">
                 Read the related case study →
               </TLink>
             )}

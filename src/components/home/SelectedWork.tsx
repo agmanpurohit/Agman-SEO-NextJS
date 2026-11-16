@@ -73,7 +73,7 @@ export function SelectedWork() {
       <div ref={track} className="flex flex-col gap-14 px-[var(--gutter)] lg:w-max lg:flex-row lg:gap-8">
         {featured.map((c, i) => (
           <article key={c.slug} data-card className="group lg:w-[min(62vw,58rem)]">
-            <TLink href={`/work?case=${c.slug}`} className="block" data-cursor="View case" aria-label={`${c.client ? `${c.client.name}: ` : ""}${c.title} — ${c.industry}. View case study`}>
+            <TLink href={`/work#${c.slug}`} className="block" data-cursor="View case" aria-label={`${c.client ? `${c.client.name}: ` : ""}${c.title} — ${c.industry}. View case study`}>
               <div className="relative aspect-[16/10] overflow-hidden lg:aspect-auto lg:h-[52svh]">
                 <div className="absolute inset-0 transition-transform duration-[1.2s] ease-[var(--ease-out-expo)] group-hover:scale-[1.03]">
                   <CaseCover c={c} />
