@@ -14,6 +14,7 @@ import { site } from "@/content/site";
 import { asset } from "@/lib/asset";
 import { parseCustomSchema } from "@/lib/blog/custom-schema";
 import { ServicesStrip } from "@/components/services/ServicesStrip";
+import { FreeToolsSection } from "@/components/tools/FreeToolsSection";
 import { getSite } from "@/lib/site/settings";
 
 export const revalidate = 60;
@@ -291,6 +292,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </section>
       )}
+      <FreeToolsSection />
       <ServicesStrip title="Want this done for your business?" highlight={["seo-specialist", "geo-specialist", "local-seo"]} />
     </>
   );
