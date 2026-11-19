@@ -20,4 +20,23 @@ export const prefersReducedMotion = () =>
 export const isFinePointer = () =>
   typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-export { gsap, ScrollTrigger, SplitText, useGSAP };
+/** True while the page is shown in Hindi (set before paint by the boot script in layout.tsx). */
+export const isTranslated = () => typeof document !== "undefined" && document.documentElement.classList.contains("lang-hi");
+
+/**
+ * SplitText, but translation-safe. Splitting a heading into single letters or words would make
+ * Google Translate translate each piece on its own (gibberish). In Hindi mode nothing is split:
+ * the whole element stands in for its lines/words/chars, so every animation still plays, as one block.
+ */
+type SplitVars = Parameters<typeof SplitText.create>[1];
+const SafeSplitText = {
+  create(target: Parameters<typeof SplitText.create>[0], vars?: SplitVars): SplitText {
+    if (!isTranslated()) return SplitText.create(target, vars);
+    const els = gsap.utils.toArray<HTMLElement>(target);
+    const self = { chars: els, words: els, lines: els, masks: [], elements: els, isSplit: true, revert() {}, split() { return self; }, kill() {} };
+    (vars?.onSplit as ((s: unknown) => unknown) | undefined)?.(self);
+    return self as unknown as SplitText;
+  },
+};
+
+export { gsap, ScrollTrigger, SafeSplitText as SplitText, useGSAP };

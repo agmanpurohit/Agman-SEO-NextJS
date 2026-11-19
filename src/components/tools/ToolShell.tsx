@@ -98,7 +98,7 @@ export async function ToolShell({ copy, children }: { copy: ToolCopy; children: 
         <p className="mt-4 max-w-[52rem] text-xs leading-relaxed text-mute">
           Privacy: what you enter in this tool is saved with your IP address and approximate location, so I can see how the tools are used and stop abuse. It&apos;s never shared or sold, and
           it&apos;s deleted automatically after 12 months. To have it removed sooner, email{" "}
-          <a href={`mailto:${live.email}`} className="text-bone-dim underline underline-offset-2 hover:text-bone">
+          <a translate="no" href={`mailto:${live.email}`} className="text-bone-dim underline underline-offset-2 hover:text-bone">
             {live.email}
           </a>
           .

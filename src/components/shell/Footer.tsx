@@ -13,14 +13,14 @@ export async function Footer() {
       <div className="wrap grid-12 gap-y-12 pt-20 pb-10 md:pt-28">
         <div className="col-span-4 md:col-span-4">
           <p className="t-label mb-5">Contact</p>
-          <a href={`mailto:${live.email}`} className="link-u text-[clamp(1.25rem,2.4vw,2rem)] font-medium break-all text-bone" data-cursor="Email">
+          <a translate="no" href={`mailto:${live.email}`} className="link-u text-[clamp(1.25rem,2.4vw,2rem)] font-medium break-all text-bone" data-cursor="Email">
             {live.email}
           </a>
           <ul className="mt-8 flex flex-col gap-3">
             {live.locations.map((l) => (
               <li key={l.label} className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                 <span className="t-label w-28 !text-bone">{l.label}</span>
-                <a href={l.phoneHref} className="link-u t-mono text-sm text-bone-dim hover:text-bone">
+                <a translate="no" href={l.phoneHref} className="link-u t-mono text-sm text-bone-dim hover:text-bone">
                   {l.phone}
                 </a>
               </li>
@@ -94,7 +94,12 @@ export async function Footer() {
       </div>
 
       <div className="wrap flex flex-col gap-2 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="t-label">© {year} {site.name}</p>
+        <p className="t-label">
+          © {year}{" "}
+          <span translate="no" className="notranslate">
+            {site.name}
+          </span>
+        </p>
         <p className="t-label">
           {site.role} · {site.base.city}, {site.base.country} · Clients worldwide
         </p>

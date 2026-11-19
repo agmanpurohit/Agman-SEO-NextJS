@@ -136,7 +136,8 @@ export function Hero() {
         </div>
 
         <div className="mt-[52vw] flex flex-1 flex-col justify-end pb-8 sm:mt-[60vw] md:mt-0 md:pb-12">
-          <p aria-hidden="true" className="t-display select-none">
+          {/* Brand line: kept in English when the site is shown in Hindi. */}
+          <p aria-hidden="true" translate="no" className="t-display notranslate select-none">
             <span data-hero-line="1" className="block overflow-hidden whitespace-nowrap">
               Visibility,
             </span>
@@ -149,7 +150,9 @@ export function Hero() {
 
           <div className="grid-12 mt-6 gap-y-6 md:mt-8">
             <h1 id="hero-title" className="col-span-4 md:col-span-4" data-hero-fade>
-              <span className="block text-xl font-semibold tracking-tight md:text-2xl">{site.name}</span>{" "}
+              <span translate="no" className="notranslate block text-xl font-semibold tracking-tight md:text-2xl">
+                {site.name}
+              </span>{" "}
               <span className="t-label mt-1 block">{site.role}</span>
               <span className="sr-only"> — {site.tagline}</span>
             </h1>

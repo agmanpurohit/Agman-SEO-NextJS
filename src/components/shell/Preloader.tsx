@@ -96,7 +96,7 @@ export function Preloader() {
           <div data-pl-mark data-pl-notch className="w-24 text-bone md:w-32">
             <Logo variant="mark" title={null} accent={false} className="w-full" />
           </div>
-          <div data-pl-name className="t-label flex overflow-hidden !text-bone" style={{ letterSpacing: "0.32em" }}>
+          <div data-pl-name translate="no" className="t-label notranslate flex overflow-hidden !text-bone" style={{ letterSpacing: "0.32em" }}>
             {"AGMAN RAJPUROHIT".split("").map((c, i) => (
               <span key={i} className="inline-block">
                 {c === " " ? " " : c}

@@ -41,7 +41,12 @@ export function PageHero({
           <span className="t-label">
             <span className="ember">{index}</span> / {String(nav.length).padStart(2, "0")}
           </span>
-          <span className="t-label hidden sm:inline">Agman Rajpurohit — Index</span>
+          <span className="t-label hidden sm:inline">
+            <span translate="no" className="notranslate">
+              Agman Rajpurohit
+            </span>{" "}
+            — Index
+          </span>
         </div>
         <h1 className="mt-10 md:mt-14">
           <span data-ph-title className="block overflow-hidden whitespace-nowrap text-[min(12.2vw,15rem)] leading-[0.82] font-extrabold tracking-[-0.045em] uppercase" style={{ fontStretch: "100%" }}>

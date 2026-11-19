@@ -11,6 +11,7 @@ import { Magnetic } from "@/components/ui/Magnetic";
 import { ToolsMenu } from "@/components/shell/ToolsMenu";
 import { tools, TOOLS_HUB } from "@/content/tools";
 import { useSite } from "@/components/shell/SiteSettingsProvider";
+import { LanguageSwitch } from "@/components/shell/Language";
 
 const isActive = (pathname: string, href: string) => {
   if (href === "/") return pathname === "/";
@@ -108,7 +109,9 @@ export function Header() {
         <div className="wrap flex h-[var(--header-h)] items-center justify-between">
           <TLink href="/" aria-label="Agman Rajpurohit — home" className="relative z-[2] flex items-center gap-3" data-cursor="Home">
             <Logo variant="mark" title={null} className="h-7 w-auto text-bone md:h-8" />
-            <span className="t-label hidden !text-bone xl:inline">Agman Rajpurohit</span>
+            <span className="t-label notranslate hidden !text-bone xl:inline" translate="no">
+              Agman Rajpurohit
+            </span>
           </TLink>
 
           <nav aria-label="Primary" className="hidden lg:block">
@@ -135,6 +138,9 @@ export function Header() {
                   </li>
                 );
               })}
+              <li className="ml-2 border-l border-line pl-3 xl:ml-3 xl:pl-4">
+                <LanguageSwitch />
+              </li>
               <span ref={marker} aria-hidden="true" className="pointer-events-none absolute -bottom-0.5 left-0 h-px bg-ember opacity-0" style={{ width: 0 }} />
             </ul>
           </nav>
@@ -155,12 +161,13 @@ export function Header() {
           </div>
 
           {/* Below desktop: a compact audit button stays visible next to the menu toggle. */}
-          <div className="relative z-[2] flex items-center gap-4 lg:hidden">
+          <div className="relative z-[2] flex items-center gap-2.5 sm:gap-4 lg:hidden">
             {!pathname.startsWith(auditTool.href) && (
-              <TLink href={auditTool.href} className="btn btn-primary !h-9 !gap-2 !px-3.5 !text-[0.62rem]">
+              <TLink href={auditTool.href} className="btn btn-primary !h-9 !gap-2 !px-3 !text-[0.62rem] sm:!px-3.5">
                 Free audit
               </TLink>
             )}
+            <LanguageSwitch compact />
           <button
             ref={toggle}
             type="button"
@@ -223,7 +230,7 @@ export function Header() {
           </ul>
         </nav>
         <div data-m-fade className="wrap flex flex-col gap-3 pb-10">
-          <a href={`mailto:${liveSite.email}`} tabIndex={open ? 0 : -1} className="text-lg text-bone">
+          <a translate="no" href={`mailto:${liveSite.email}`} tabIndex={open ? 0 : -1} className="text-lg text-bone">
             {liveSite.email}
           </a>
           <div className="flex flex-wrap gap-x-6 gap-y-2">

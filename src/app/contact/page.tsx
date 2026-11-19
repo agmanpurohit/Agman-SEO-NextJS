@@ -56,7 +56,7 @@ export default async function ContactPage() {
 
             <div className="border-t border-line py-6">
               <p className="t-label">Email</p>
-              <a href={`mailto:${live.email}`} className="link-u mt-2 inline-block text-xl break-all text-bone" data-cursor="Email">
+              <a translate="no" href={`mailto:${live.email}`} className="link-u mt-2 inline-block text-xl break-all text-bone" data-cursor="Email">
                 {live.email}
               </a>
             </div>
@@ -77,7 +77,7 @@ export default async function ContactPage() {
                   Phone · {l.label}
                   {l.primary && <span className="ember"> · Primary</span>}
                 </p>
-                <a href={l.phoneHref} className="link-u mt-2 inline-block text-xl text-bone">
+                <a translate="no" href={l.phoneHref} className="link-u mt-2 inline-block text-xl text-bone">
                   {l.phone}
                 </a>
               </div>

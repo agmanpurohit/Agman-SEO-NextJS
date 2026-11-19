@@ -19,6 +19,7 @@ import { getSiteSettings } from "@/lib/site/settings";
 import { resolveSite } from "@/lib/site/settings-shared";
 import { SiteSettingsProvider } from "@/components/shell/SiteSettingsProvider";
 import { AnnouncementBar } from "@/components/shell/AnnouncementBar";
+import { HindiTranslator } from "@/components/shell/Language";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -62,8 +63,9 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-// Runs before paint: flags JS, reduced motion and returning visitors (skip the loader).
-const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');var r=matchMedia('(prefers-reduced-motion: reduce)').matches;if(r){d.classList.add('reduced');d.setAttribute('data-seen','')}try{if(sessionStorage.getItem('ar-seen'))d.setAttribute('data-seen','')}catch(e){}})();`;
+// Runs before paint: flags JS, reduced motion, returning visitors (skip the loader) and
+// Hindi mode (the language switch's googtrans cookie), so animations know not to split text.
+const bootScript = `(function(){var d=document.documentElement;d.classList.add('js');if(/(?:^|;\\s*)googtrans=\\/en\\/hi/.test(document.cookie))d.classList.add('lang-hi');var r=matchMedia('(prefers-reduced-motion: reduce)').matches;if(r){d.classList.add('reduced');d.setAttribute('data-seen','')}try{if(sessionStorage.getItem('ar-seen'))d.setAttribute('data-seen','')}catch(e){}})();`;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings();
@@ -91,6 +93,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <VersionWatch />
           <div className="grain" aria-hidden="true" />
           <AnnouncementBar />
+          <HindiTranslator />
         </TransitionProvider>
         </SiteSettingsProvider>
       </body>

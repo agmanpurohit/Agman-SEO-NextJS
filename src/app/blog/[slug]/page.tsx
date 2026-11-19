@@ -151,7 +151,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <div className="flex items-center gap-3">
               <Image src={asset(site.photo)} alt="" width={40} height={40} className="h-10 w-10 rounded-full object-cover object-top grayscale" />
               <div className="leading-tight">
-                <span className="block text-sm font-medium text-bone">{site.name}</span>
+                <span translate="no" className="notranslate block text-sm font-medium text-bone">{site.name}</span>
                 <span className="t-label !text-[0.62rem]">{site.role}</span>
               </div>
             </div>
@@ -232,7 +232,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <Image src={asset(site.photo)} alt={`${site.name}`} width={88} height={88} className="h-[88px] w-[88px] shrink-0 rounded-full object-cover object-top grayscale" />
                 <div>
                   <p className="t-label">Written by</p>
-                  <p className="mt-1 text-xl font-semibold text-bone">{site.name}</p>
+                  <p translate="no" className="notranslate mt-1 text-xl font-semibold text-bone">{site.name}</p>
                   <p className="t-body mt-2 text-sm">
                     SEO specialist in Ahmedabad, India, working with clients worldwide. I work on technical, local and ecommerce SEO for clinics, finance brands and local businesses, and build the WordPress fixes myself.
                   </p>

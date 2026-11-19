@@ -160,7 +160,7 @@ export default async function SeoAuditPage() {
             <p>
               You can see your results without giving any details. If you request the PDF report, your name and email are stored with the audit so the report can be sent and so Agman
               can follow up about it. Marketing emails are only sent if you tick the separate opt-in. To have your data deleted, email{" "}
-              <a href={`mailto:${live.email}`} className="link-u text-bone">
+              <a translate="no" href={`mailto:${live.email}`} className="link-u text-bone">
                 {live.email}
               </a>
               .
